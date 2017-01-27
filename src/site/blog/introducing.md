@@ -5,7 +5,8 @@ title: Introducing saguine
 
 
 [Saguine][saguine-git] is a very simple static content generator. All it does for now is create a
-structure of at most 1 depth.
+structure of depth 1 (meaning either a heading that leads to a page, or a heading that leads to a
+list of pages).
 
 It can also render code!
 
