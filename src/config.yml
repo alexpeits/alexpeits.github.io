@@ -1,0 +1,5 @@
+pages:
+    - Home: index.md
+    - Blog: blog
+    - About: about.md
+sitename: alexpeits
