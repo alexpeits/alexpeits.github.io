@@ -9,7 +9,7 @@ slow directives in the startup file (bashrc, zshrc or similar) can be very
 frustrating.
 
 For example, I use [nvm][nvm] for work right now, in order to write a react
-app in node v6, by porting some code that was written in node v2 (!!!).
+app in node v6, by using code that was written in an earlier version.
 
 What **nvm** does to install itself is simply clone the repository into your
 home directory, and append the following code into your shell startup (I use
