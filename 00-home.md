@@ -7,4 +7,3 @@ title: Home
 permalink: /
 ---
 
-![hacker]({{ site.url }}/assets/hacker.jpg)
