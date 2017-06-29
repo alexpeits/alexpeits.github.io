@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0"
+     xmlns:content="http://purl.org/rss/1.0/modules/content/"
+     xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+     xmlns:dc="http://purl.org/dc/elements/1.1/"
+     xmlns:atom="http://www.w3.org/2005/Atom"
+     xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+     xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+     xmlns:georss="http://www.georss.org/georss"
+     xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
+     xmlns:media="http://search.yahoo.com/mrss/"><channel>
+  <title>Avoid slow commands at shell startup</title>
+  <atom:link href="http://alexpeits.github.io/2017_06_29_avoid_slow_commands.xml" rel="self" type="application/rss+xml" />
+  <link>http://alexpeits.github.io</link>
+  <description><![CDATA[]]></description>
+  <language>en</language>
+  <pubDate>Thu, 29 Jun 2017 14:52:11 +0300</pubDate>
+  <lastBuildDate>Thu, 29 Jun 2017 14:52:11 +0300</lastBuildDate>
+  <generator>Emacs 24.5 Org-mode 9.0.9</generator>
+  <webMaster>alexpeitsinis@gmail.com (Alex Peitsinis)</webMaster>
+  <image>
+    <url>http://orgmode.org/img/org-mode-unicorn-logo.png</url>
+    <title>Avoid slow commands at shell startup</title>
+    <link>http://alexpeits.github.io</link>
+  </image>
+
+  <p>
+    If you are constantly starting up terminals to execute one-off commands, some
+    slow directives in the startup file (bashrc, zshrc or similar) can be very
+    frustrating.
+  </p>
+
+  <p>
+    For example, I use <a href="https://github.com/creationix/nvm">nvm</a> for work right now, in order to write a react
+    app in node v6, by porting some code that was written in node v2 (!!!).
+  </p>
+
+  <p>
+    What <b><b>nvm</b></b> does to install itself is simply clone the repository into your
+    home directory, and append the following code into your shell startup (I use
+    zsh):
+  </p>
+
+  <div class="org-src-container">
+    <pre class="src src-bash"><span style="color: #DCDCCC; font-weight: bold;">export</span> <span style="color: #DFAF8F;">NVM_DIR</span>=<span style="color: #CC9393;">"/home/alex/.nvm"</span>
+    [ -s <span style="color: #CC9393;">"$NVM_DIR/nvm.sh"</span> ] &amp;&amp; . <span style="color: #CC9393;">"$NVM_DIR/nvm.sh"</span>  <span style="color: #5F7F5F;"># </span><span style="color: #7F9F7F;">This loads nvm</span>
+    </pre>
+  </div>
+
+  <p>
+    Turns out the second line takes ~1s to complete, which, to me, is a bit annoying.
+    I also don't use node or npm that much, apart from this project, so I did the
+    following at first:
+  </p>
+
+  <div class="org-src-container">
+    <pre class="src src-bash"><span style="color: #93E0E3;">nvminit</span>() {
+    <span style="color: #DCDCCC; font-weight: bold;">unset</span> -f npm
+    <span style="color: #DCDCCC; font-weight: bold;">export</span> <span style="color: #DFAF8F;">NVM_DIR</span>=<span style="color: #CC9393;">"/home/alex/.nvm"</span>
+    [ -s <span style="color: #CC9393;">"$NVM_DIR/nvm.sh"</span> ] &amp;&amp; . <span style="color: #CC9393;">"$NVM_DIR/nvm.sh"</span>  <span style="color: #5F7F5F;"># </span><span style="color: #7F9F7F;">This loads nvm</span>
+    }
+    </pre>
+  </div>
+
+  <p>
+    So, whenever I needed to use `npm`, I would do `nvminit` then proceed. But what
+    about opening multiple shells to run several apps simultaneously? For example,
+    a node server, a react app with webpack or what have you. Having to remember to
+    do `nvminit` <b><b>every single time</b></b> is equally frustrating. So, why not have the shell
+    figure out if `npm` is loaded, and call `nvminit` if it is not?
+  </p>
+
+  <div class="org-src-container">
+    <pre class="src src-bash"><span style="color: #93E0E3;">nvminit</span>() {
+    <span style="color: #DCDCCC; font-weight: bold;">unset</span> -f npm
+    <span style="color: #DCDCCC; font-weight: bold;">export</span> <span style="color: #DFAF8F;">NVM_DIR</span>=<span style="color: #CC9393;">"/home/alex/.nvm"</span>
+    [ -s <span style="color: #CC9393;">"$NVM_DIR/nvm.sh"</span> ] &amp;&amp; . <span style="color: #CC9393;">"$NVM_DIR/nvm.sh"</span>  <span style="color: #5F7F5F;"># </span><span style="color: #7F9F7F;">This loads nvm</span>
+    }
+
+    <span style="color: #93E0E3;">npm</span>() {
+    <span style="color: #F0DFAF; font-weight: bold;">if</span> [ -x npm ]; <span style="color: #F0DFAF; font-weight: bold;">then</span>
+    command npm $<span style="color: #DFAF8F;">*</span>
+    <span style="color: #F0DFAF; font-weight: bold;">else</span>
+    nvminit &amp;&amp; command npm $<span style="color: #DFAF8F;">*</span>
+    <span style="color: #F0DFAF; font-weight: bold;">fi</span>
+    }
+    </pre>
+  </div>
+
+  <p>
+    Let's break it up. The `npm()` function serves as a wrapper around the `npm` command.
+    So, you can type, let's say, `npm start`, and it checks if `npm` is an executable. If
+    it is, then it means that you can run the regular one, passing any arguments to it.
+    The `command` command is there to avoid recursion, because calling `npm $*` would call
+    the `npm` <b><b>function</b></b>, and so on. If it's not defined, then run `nvminit`, and then
+    anything else.
+  </p>
+
+  <p>
+    Turns out that having a custom `npm` function while trying to source the nvm files also
+    leads to infinite recursion and breaks, so the simple solution is to unset the npm
+    <b><b>function</b></b> by using `unset -f`. So, after calling `nvminit`, your shell sees the npm
+    command as the regular one:
+  </p>
+
+  <pre class="example">
+    $ which npm
+    npm () {
+    if [ -x npm ]
+    then
+    command npm $*
+    else
+    nvminit &amp;&amp; command npm $*
+    fi
+    }
+    $ npm list
+    /home/alex
+    └── (empty)
+
+    $ which npm
+    /home/alex/.nvm/versions/node/v6.9.5/bin/npm
+  </pre>
+</channel>
+</rss>
