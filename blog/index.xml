@@ -14,8 +14,8 @@
   <link>http://alexpeits.github.io/blog/</link>
   <description><![CDATA[]]></description>
   <language>en</language>
-  <pubDate>Thu, 29 Jun 2017 16:41:47 +0300</pubDate>
-  <lastBuildDate>Thu, 29 Jun 2017 16:41:47 +0300</lastBuildDate>
+  <pubDate>Thu, 29 Jun 2017 18:23:32 +0300</pubDate>
+  <lastBuildDate>Thu, 29 Jun 2017 18:23:32 +0300</lastBuildDate>
   <generator>Emacs 24.5 Org-mode 9.0.9</generator>
   <webMaster>alexpeitsinis@gmail.com (Alex Peitsinis)</webMaster>
   <image>
@@ -25,14 +25,40 @@
   </image>
 
   <item>
-    <title>Avoid slow commands at shell startup</title>
-    <link>http://alexpeits.github.io/blog/2017_06_29_avoid_slow_commands.html</link>
+    <title>Tracking work time per project with org-mode</title>
+    <link>http://alexpeits.github.io/blog/2017_06_29_org_timesheet.html</link>
     <author>alexpeitsinis@gmail.com (Alex Peitsinis)</author>
-    <guid isPermaLink="false">http://alexpeits.github.io/blog/2017_06_29_avoid_slow_commands.html</guid>
+    <guid isPermaLink="false">http://alexpeits.github.io/blog/2017_06_29_org_timesheet.html</guid>
     <pubDate>Thu, 29 Jun 2017 00:00:00 +0300</pubDate>
 
     <description><![CDATA[<p>
     2017.06.29
+    </p>
+
+
+    <p>
+    Org-mode is a great productivity tool, and has a lot of functionality out of the box, including utilities
+    for tracking time spent on a task/project. For example, by pressing <code>C-c C-x C-i</code> on a heading, a timer is
+    added (clock-in), and by pressing <code>C-c C-x C-o</code> the timer stops (clock-out). Org-mode also supports adding
+    a report with <code>org-clock-report</code> (<code>C-c C-x C-r</code>), but, even with the customization it offers, it is not ideal
+    for having a fully custom report and be able to export it to csv and whatnot.
+    </p>
+
+    <p>
+    <a href="http://alexpeits.github.io/blog/2017_06_29_org_timesheet.html">Read More...</a>
+    </p>
+    <hr />
+    ]]></description>
+  </item>
+  <item>
+    <title>Avoid slow commands at shell startup</title>
+    <link>http://alexpeits.github.io/blog/2017_06_20_avoid_slow_commands.html</link>
+    <author>alexpeitsinis@gmail.com (Alex Peitsinis)</author>
+    <guid isPermaLink="false">http://alexpeits.github.io/blog/2017_06_20_avoid_slow_commands.html</guid>
+    <pubDate>Tue, 20 Jun 2017 00:00:00 +0300</pubDate>
+
+    <description><![CDATA[<p>
+    2017.06.20
     </p>
 
 
@@ -48,7 +74,7 @@
     </p>
 
     <p>
-    <a href="http://alexpeits.github.io/blog/2017_06_29_avoid_slow_commands.html">Read More...</a>
+    <a href="http://alexpeits.github.io/blog/2017_06_20_avoid_slow_commands.html">Read More...</a>
     </p>
     ]]></description>
   </item>

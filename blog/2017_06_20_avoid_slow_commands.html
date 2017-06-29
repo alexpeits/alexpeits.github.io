@@ -6,7 +6,7 @@
 <!-- 2017-06-29 Thu 18:23 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>alexpeits blog</title>
+<title>Avoid slow commands at shell startup</title>
 <meta name="generator" content="Org mode" />
 <meta name="author" content="Alex Peitsinis" />
 <style type="text/css">
@@ -256,36 +256,11 @@ for the JavaScript code in this tag.
   </nav>
 </div>
 <div id="content">
-<h1 class="title">alexpeits blog</h1>
-<div id="outline-container-org4f5e1ef" class="outline-2">
-<h2 id="org4f5e1ef"><a href="2017_06_29_org_timesheet.html">Tracking work time per project with org-mode</a></h2>
-<div class="outline-text-2" id="text-org4f5e1ef">
+<h1 class="title">Avoid slow commands at shell startup</h1>
+<div class="PREVIEW">
 <p>
-2017.06.29
-</p>
 
-
-<p>
-Org-mode is a great productivity tool, and has a lot of functionality out of the box, including utilities
-for tracking time spent on a task/project. For example, by pressing <code>C-c C-x C-i</code> on a heading, a timer is
-added (clock-in), and by pressing <code>C-c C-x C-o</code> the timer stops (clock-out). Org-mode also supports adding
-a report with <code>org-clock-report</code> (<code>C-c C-x C-r</code>), but, even with the customization it offers, it is not ideal
-for having a fully custom report and be able to export it to csv and whatnot.
 </p>
-
-<p>
-<a href="2017_06_29_org_timesheet.html">Read More&#x2026;</a>
-</p>
-<hr />
-</div>
-</div>
-<div id="outline-container-orgd649119" class="outline-2">
-<h2 id="orgd649119"><a href="2017_06_20_avoid_slow_commands.html">Avoid slow commands at shell startup</a></h2>
-<div class="outline-text-2" id="text-orgd649119">
-<p>
-2017.06.20
-</p>
-
 
 <p>
 If you are constantly starting up terminals to execute one-off commands, some
@@ -298,11 +273,86 @@ For example, I use <a href="https://github.com/creationix/nvm">nvm</a> for work 
 app in node v6, by porting some code that was written in node v2 (!!!).
 </p>
 
+</div>
+
 <p>
-<a href="2017_06_20_avoid_slow_commands.html">Read More&#x2026;</a>
+What <b><b>nvm</b></b> does to install itself is simply clone the repository into your
+home directory, and append the following code into your shell startup (I use
+zsh):
 </p>
-</div>
-</div>
+
+<div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">NVM_DIR</span><span class="o">=</span><span class="s2">&quot;/home/alex/.nvm&quot;</span>
+<span class="o">[</span> -s <span class="s2">&quot;</span><span class="nv">$NVM_DIR</span><span class="s2">/nvm.sh&quot;</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> . <span class="s2">&quot;</span><span class="nv">$NVM_DIR</span><span class="s2">/nvm.sh&quot;</span>  <span class="c1"># This loads nvm</span>
+</pre></div>
+
+<p>
+Turns out the second line takes ~1s to complete, which, to me, is a bit annoying.
+I also don't use node or npm that much, apart from this project, so I did the
+following at first:
+</p>
+
+<div class="highlight"><pre><span></span>nvminit<span class="o">()</span> <span class="o">{</span>
+    <span class="nb">unset</span> -f npm
+    <span class="nb">export</span> <span class="nv">NVM_DIR</span><span class="o">=</span><span class="s2">&quot;/home/alex/.nvm&quot;</span>
+    <span class="o">[</span> -s <span class="s2">&quot;</span><span class="nv">$NVM_DIR</span><span class="s2">/nvm.sh&quot;</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> . <span class="s2">&quot;</span><span class="nv">$NVM_DIR</span><span class="s2">/nvm.sh&quot;</span>  <span class="c1"># This loads nvm</span>
+<span class="o">}</span>
+</pre></div>
+
+<p>
+So, whenever I needed to use <code>npm</code>, I would do <code>nvminit</code> then proceed. But what
+about opening multiple shells to run several apps simultaneously? For example,
+a node server, a react app with webpack or what have you. Having to remember to
+do <code>nvminit</code> <b><b>every single time</b></b> is equally frustrating. So, why not have the shell
+figure out if <code>npm</code> is loaded, and call <code>nvminit</code> if it is not?
+</p>
+
+<div class="highlight"><pre><span></span>nvminit<span class="o">()</span> <span class="o">{</span>
+    <span class="nb">unset</span> -f npm
+    <span class="nb">export</span> <span class="nv">NVM_DIR</span><span class="o">=</span><span class="s2">&quot;/home/alex/.nvm&quot;</span>
+    <span class="o">[</span> -s <span class="s2">&quot;</span><span class="nv">$NVM_DIR</span><span class="s2">/nvm.sh&quot;</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> . <span class="s2">&quot;</span><span class="nv">$NVM_DIR</span><span class="s2">/nvm.sh&quot;</span>  <span class="c1"># This loads nvm</span>
+<span class="o">}</span>
+
+npm<span class="o">()</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">[</span> -x npm <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+        <span class="nb">command</span> npm <span class="nv">$*</span>
+    <span class="k">else</span>
+        nvminit <span class="o">&amp;&amp;</span> <span class="nb">command</span> npm <span class="nv">$*</span>
+    <span class="k">fi</span>
+<span class="o">}</span>
+</pre></div>
+
+<p>
+Let's break it up. The <code>npm()</code> function serves as a wrapper around the <code>npm</code> command.
+So, you can type, let's say, <code>npm start</code>, and it checks if <code>npm</code> is an executable. If
+it is, then it means that you can run the regular one, passing any arguments to it.
+The <code>command</code> command is there to avoid recursion, because calling <code>npm $*</code> would call
+the <code>npm</code> <b><b>function</b></b>, and so on. If it's not defined, then run <code>nvminit</code>, and then
+anything else.
+</p>
+
+<p>
+Turns out that having a custom <code>npm</code> function while trying to source the nvm files also
+leads to infinite recursion and breaks, so the simple solution is to unset the npm
+<b><b>function</b></b> by using <code>unset -f</code>. So, after calling <code>nvminit</code>, your shell sees the npm
+command as the regular one:
+</p>
+
+<div class="highlight"><pre><span></span>$ which npm
+npm () {
+      if [ -x npm ]
+      then
+              command npm $*
+      else
+              nvminit &amp;&amp; command npm $*
+      fi
+}
+$ npm list
+/home/alex
+└── (empty)
+
+$ which npm
+/home/alex/.nvm/versions/node/v6.9.5/bin/npm
+</pre></div>
 </div>
 <div id="postamble" class="status">
 
