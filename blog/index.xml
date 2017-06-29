@@ -14,8 +14,8 @@
   <link>http://alexpeits.github.io/blog/</link>
   <description><![CDATA[]]></description>
   <language>en</language>
-  <pubDate>Thu, 29 Jun 2017 15:04:31 +0300</pubDate>
-  <lastBuildDate>Thu, 29 Jun 2017 15:04:31 +0300</lastBuildDate>
+  <pubDate>Thu, 29 Jun 2017 15:50:56 +0300</pubDate>
+  <lastBuildDate>Thu, 29 Jun 2017 15:50:56 +0300</lastBuildDate>
   <generator>Emacs 24.5 Org-mode 9.0.9</generator>
   <webMaster>alexpeitsinis@gmail.com (Alex Peitsinis)</webMaster>
   <image>
@@ -24,9 +24,33 @@
     <link>http://alexpeits.github.io/blog/</link>
   </image>
 
-  <ul class="org-ul">
-    <li><a href="http://alexpeits.github.io/blog/asdf.html">2017.06.29 | test</a></li>
-    <li><a href="http://alexpeits.github.io/blog/2017_06_29_avoid_slow_commands.html">2017.06.29 | Avoid slow commands at shell startup</a></li>
-  </ul>
+  <item>
+    <title>Avoid slow commands at shell startup</title>
+    <link>http://alexpeits.github.io/blog/2017_06_29_avoid_slow_commands.html</link>
+    <author>alexpeitsinis@gmail.com (Alex Peitsinis)</author>
+    <guid isPermaLink="false">http://alexpeits.github.io/blog/2017_06_29_avoid_slow_commands.html</guid>
+    <pubDate>Thu, 29 Jun 2017 00:00:00 +0300</pubDate>
+
+    <description><![CDATA[<p>
+    2017.06.29
+    </p>
+
+
+    <p>
+    If you are constantly starting up terminals to execute one-off commands, some
+    slow directives in the startup file (bashrc, zshrc or similar) can be very
+    frustrating.
+    </p>
+
+    <p>
+    For example, I use <a href="https://github.com/creationix/nvm">nvm</a> for work right now, in order to write a react
+    app in node v6, by porting some code that was written in node v2 (!!!).
+    </p>
+
+    <p>
+    <a href="http://alexpeits.github.io/blog/2017_06_29_avoid_slow_commands.html">Read More...</a>
+    </p>
+    ]]></description>
+  </item>
 </channel>
 </rss>
