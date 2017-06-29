@@ -9,18 +9,18 @@
      xmlns:georss="http://www.georss.org/georss"
      xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
      xmlns:media="http://search.yahoo.com/mrss/"><channel>
-  <title>Blog</title>
+  <title>alexpeits blog</title>
   <atom:link href="http://alexpeits.github.io/blog/index.xml" rel="self" type="application/rss+xml" />
   <link>http://alexpeits.github.io/blog/</link>
   <description><![CDATA[]]></description>
   <language>en</language>
-  <pubDate>Thu, 29 Jun 2017 15:50:56 +0300</pubDate>
-  <lastBuildDate>Thu, 29 Jun 2017 15:50:56 +0300</lastBuildDate>
+  <pubDate>Thu, 29 Jun 2017 16:00:41 +0300</pubDate>
+  <lastBuildDate>Thu, 29 Jun 2017 16:00:41 +0300</lastBuildDate>
   <generator>Emacs 24.5 Org-mode 9.0.9</generator>
   <webMaster>alexpeitsinis@gmail.com (Alex Peitsinis)</webMaster>
   <image>
-    <url>http://orgmode.org/img/org-mode-unicorn-logo.png</url>
-    <title>Blog</title>
+    <url>http://assets-cdn.github.com/favicon.ico</url>
+    <title>alexpeits blog</title>
     <link>http://alexpeits.github.io/blog/</link>
   </image>
 
