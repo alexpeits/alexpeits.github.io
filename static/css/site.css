@@ -1,0 +1,52 @@
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 100px;
+  font-size: 16px;
+}
+
+.footer {
+  border-top: 1px solid #d1d1d1;
+  position: absolute;
+  color: #757575;
+  font-size: 90%;
+  width: 85%;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: 1rem;
+  text-align: center;
+  margin: auto;
+}
+
+#content {
+  width: 50%;
+  margin: auto;
+}
+
+pre {
+  font-family: 'Inconsolata', monospace;
+  font-size: 16px;
+  margin-top: 25px;
+  margin-bottom: 25px;
+}
+
+h1 {
+  padding-bottom: 40px;
+}
+
+footer img {
+  width: 32px;
+  height: 32px;
+}
+
+.footer-left {
+  text-align: left;
+}
+
+.footer-right {
+  text-align: right;
+}
