@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2017-06-29 Thu 14:16 -->
+<!-- 2017-06-29 Thu 14:36 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Avoid slow commands at shell startup</title>
@@ -179,6 +179,7 @@
   .org-svg { width: 90%; }
   /*]]>*/-->
 </style>
+<meta name='viewport' content='width=device-width, initial-scale=1.0'>
 <link rel='stylesheet' href='/static/css/bootstrap.min.css'/>
 <link rel='stylesheet' href='/static/css/bootstrap-theme.min.css'/>
 <link rel='stylesheet' href='/static/css/code.css'/>
@@ -350,22 +351,17 @@ $ which npm
 <footer class='footer'>
     <div class='container'>
         <div class='row vcenter'>
-            <div class='pull-left col-lg-4 footer-left'>
                 <p>blog created with <a href='http://orgmode.org'>org-mode</a></p>
-            </div>
-            <div class='pull-right col-lg-offset-4 footer-right'>
-                <p>
-                <a href='http://github.com/alexpeits'>github</a><span> | </span>
-                <a href='http://twitter.com/alexpeits'>twitter</a><span> | </span>
-                <a href='https://www.linkedin.com/in/alexandros-peitsinis-591624114/'>linkedin</a>
-                </p>
-            </div>
         </div>
     </div>
 </footer>
 <script src='/static/js/jquery-3.1.1.min.js'></script>
 <script src='/static/js/bootstrap.min.js'></script>
-<script>document.title = 'alexpeits - ' + document.title</script>
+<script>
+    document.title = 'alexpeits - ' + document.title;
+    var content = document.getElementById('content');
+    content.className += ' container container-fluid';
+</script>
 </div>
 </body>
 </html>
