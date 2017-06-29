@@ -11,17 +11,17 @@
      xmlns:media="http://search.yahoo.com/mrss/"><channel>
   <title>Avoid slow commands at shell startup</title>
   <atom:link href="http://alexpeits.github.io/blog/2017_06_29_avoid_slow_commands.xml" rel="self" type="application/rss+xml" />
-  <link>http://alexpeits.github.io/blog</link>
+  <link>http://alexpeits.github.io/blog/</link>
   <description><![CDATA[]]></description>
   <language>en</language>
-  <pubDate>Thu, 29 Jun 2017 14:54:19 +0300</pubDate>
-  <lastBuildDate>Thu, 29 Jun 2017 14:54:19 +0300</lastBuildDate>
+  <pubDate>Thu, 29 Jun 2017 15:04:32 +0300</pubDate>
+  <lastBuildDate>Thu, 29 Jun 2017 15:04:32 +0300</lastBuildDate>
   <generator>Emacs 24.5 Org-mode 9.0.9</generator>
   <webMaster>alexpeitsinis@gmail.com (Alex Peitsinis)</webMaster>
   <image>
     <url>http://orgmode.org/img/org-mode-unicorn-logo.png</url>
     <title>Avoid slow commands at shell startup</title>
-    <link>http://alexpeits.github.io/blog</link>
+    <link>http://alexpeits.github.io/blog/</link>
   </image>
 
   <p>
