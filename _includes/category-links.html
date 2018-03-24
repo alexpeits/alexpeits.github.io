@@ -1,13 +1,13 @@
 {% comment %}
   Dynamically generate list of links to all category pages
 {% endcomment %}
-{% assign pages_list = site.pages %}
+{% assign pages_list = site.pages | sort: 'sort' %}
 {% for node in pages_list %}
-  {% assign sidebartitle = node.sidebartitle | default: node.title %}
-  {% if sidebartitle != null %}
+  {% assign node_title = node.sidebartitle | default: node.title %}
+  {% if node_title != null %}
     {% if node.layout == "category" %}
       <a class="category-link {% if page.url == node.url %} active{% endif %}"
-          href="{{ site.baseurl }}{{ node.url }}">{{ sidebartitle }}</a>
+          href="{{ site.baseurl }}{{ node.url }}">{{ node_title }}</a>
     {% endif %}
   {% endif %}
 {% endfor %}

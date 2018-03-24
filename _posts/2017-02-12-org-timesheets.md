@@ -2,7 +2,7 @@
 layout: post
 title: "Formatting timesheet tables in org-mode"
 categories: programming
-tags: emacs
+tags: emacs other
 ---
 
 Org-mode is a great productivity tool, and has a lot of functionality out of
