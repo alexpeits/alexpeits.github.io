@@ -729,6 +729,14 @@ h2.post-title, h2.page-title {
     text-decoration: none; }
     .posts-list li a:hover small {
       color: inherit; }
+  .posts-list li info {
+    color: #999;
+    white-space: nowrap; }
+  .posts-list li a:hover {
+    color: #268bd2;
+    text-decoration: none; }
+    .posts-list li a:hover info {
+      color: inherit; }
 
 button.disqus-load {
   margin-top: 1em; }

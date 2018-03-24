@@ -4,10 +4,11 @@
 {% endcomment %}
 {% assign pages_list = site.pages %}
 {% for node in pages_list %}
-  {% if node.title != null %}
+  {% assign sidebartitle = node.sidebartitle | default: node.title %}
+  {% if sidebartitle != null %}
     {% if node.sidebar_link %}
       <a class="page-link {% if page.url == node.url %} active{% endif %}"
-          href="{{ site.baseurl }}{{ node.url }}">{{ node.title }}</a>
+          href="{{ site.baseurl }}{{ node.url }}">{{ sidebartitle }}</a>
     {% endif %}
   {% endif %}
 {% endfor %}

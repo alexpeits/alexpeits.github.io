@@ -19,10 +19,10 @@
 
       {% if category_page %}
         <a href="{{ site.baseurl }}{{ category_page.url }}">
-          {{ category }}
+          {{ category | capitalize }}
         </a>
       {% else %}
-        {{ category }}
+        {{ category | capitalize }}
       {% endif %}
     {% endfor %}
   </span>
