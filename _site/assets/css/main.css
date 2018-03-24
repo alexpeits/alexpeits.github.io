@@ -18,7 +18,7 @@ html {
   line-height: 1.5; }
   @media (min-width: 49rem) {
     html {
-      font-size: 1.25rem; } }
+      font-size: 1.15rem; } }
 
 body {
   -webkit-text-size-adjust: 100%;
@@ -501,7 +501,7 @@ body {
   #sidebar .site-title {
     font-family: "Abril Fatface", serif;
     font-weight: normal;
-    font-size: 1.25rem;
+    font-size: 1.15rem;
     color: rgba(255, 255, 255, 0.75);
     margin-top: 0;
     margin-bottom: 0.5rem; }
