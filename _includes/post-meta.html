@@ -25,5 +25,15 @@
         {{ category | capitalize }}
       {% endif %}
     {% endfor %}
+    {% if site.disqus.shortname %}
+    &bull;
+    <span onclick="loadDisqusComments()">
+      <a href="#disqus_thread" style="color: green;">
+        <span class="disqus-comment-count"
+              data-disqus-identifier="{{ page.url || absolute_url }}">
+        </span>
+      </a>
+    </span>
+    {% endif %}
   </span>
 </div>

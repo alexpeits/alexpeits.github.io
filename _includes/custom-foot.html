@@ -1,1 +1,4 @@
-<!-- Optional footer content -->
+{% if site.disqus.shortname %}
+<script id="dsq-count-scr" src="//{{ site.disqus.shortname }}.disqus.com/count.js" async></script>
+<a href="{{ page.url | absolute_url}}#disqus_thread">Comments</a>
+{% endif %}
