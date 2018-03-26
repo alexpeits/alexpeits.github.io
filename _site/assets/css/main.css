@@ -600,7 +600,7 @@ body {
         .container > header h1:last-child, .container > header h2:last-child {
           margin-bottom: 0.5rem; }
     .container > * {
-      max-width: 38rem;
+      max-width: 46rem;
       padding: 0; } }
 /* -----------------------------------------------------------
   Sidebar links + nav
