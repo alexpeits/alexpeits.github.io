@@ -5,6 +5,10 @@ categories: programming
 tags: emacs
 ---
 
+{:.note}
+This post is originally adapted from [this](https://emacs.stackexchange.com/questions/23808/how-to-plot-summaries-of-timestamps-of-different-projects-clocking-in-and-out/23862#23862)
+stackoverflow answer.
+
 Org-mode is a great productivity tool, and has a lot of functionality out of
 the box, including utilities for tracking time spent on a task/project. For
 example, by pressing `C-c C-x C-i` on a heading, a timer is added (clock-in),
