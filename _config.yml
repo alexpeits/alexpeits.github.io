@@ -50,4 +50,4 @@ conf:
 disqus:
     shortname: alexpeits-github-io
 
-#google_analytics: UA-116341417-1
+google_analytics: UA-116341417-1
