@@ -1,6 +1,12 @@
 {% if page.comments != false %}
+  <hr class="slender">
   <section class="comments">
-    <h3>Comments</h3>
+    <!--<div id="comments-container"><h2>Comments</h2></div>-->
+    <div id="comments-container">
+      <h2>
+        <a href="#disqus_thread" onClick="loadDisqusComments()">Load comments</a>
+      </h2>
+    </div>
     {% include disqus.html %}
   </section>
 {% endif %}

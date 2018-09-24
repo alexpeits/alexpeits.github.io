@@ -15,7 +15,7 @@ example, by pressing `C-c C-x C-i` on a heading, a timer is added (clock-in),
 and by pressing `C-c C-x C-o` the timer stops (clock-out). Org-mode also
 supports adding a report with `org-clock-report` (`C-c C-x C-r`), but, even
 with the customization it offers, it is not ideal for having a fully custom
-report and be able to export it to csv and whatnot.
+report and be able to export it to csv and whatnot.<!--more-->
 
 Fortunately, newer versions of org-mode come with a utility called
 *org-element*, which adds the ability to parse org-mode buffers as trees. This
@@ -24,7 +24,7 @@ in a table.
 
 To do this, we use the following elisp code block in the respective buffer:
 
-{% highlight none %}
+```
 #+BEGIN_SRC elisp
   (nconc
    '(("date" "project" "hours" "task"))
@@ -47,7 +47,7 @@ To do this, we use the following elisp code block in the respective buffer:
    '(hline)
    '(("" "total:" ":=vsum(@2..@-1);T" "")))
 #+END_SRC
-{% endhighlight %}
+```
 
 What this code block does is parse the buffer, and map the lambda function over all of the `clock` elements
 in the buffer. For each element, we get its value (which is the datetime range), and its header, which contains
@@ -61,7 +61,7 @@ a dashed line for making the table more presentable.
 
 Suppose the buffer looks like this:
 
-{% highlight none %}
+```
 #+BEGIN_SRC 
   * project 1
 
@@ -88,12 +88,12 @@ Suppose the buffer looks like this:
     :END:
     CLOCK: [2017-06-29 Thu 15:18]--[2017-06-29 Thu 18:18] =>  3:00
 #+END_SRC
-{% endhighlight %}
+```
 
 If the above code is wrapped in an `elisp` block and executed (`C-c C-c`), it outputs the
 following table:
 
-{% highlight none %}
+```
 #+BEGIN_SRC 
   | date          | project   |             hours | task   |
   |---------------+-----------+-------------------+--------|
@@ -105,7 +105,7 @@ following table:
   |---------------+-----------+-------------------+--------|
   |               | total:    | :=vsum(@2..@-1);T |        |
 #+END_SRC
-{% endhighlight %}
+```
 
 To run the formula, press `TAB` while in its cell.
 

@@ -1,22 +1,22 @@
 ---
 layout: default
 ---
+<h1>{{ page.title}}</h1>
+<p class="subtitle" style="display: inline; padding-right: 0.6rem;">{{ page.date | date: "%B %-d, %Y" }}</p>
+{% if site.disqus.shortname %}
+&bull;
+<span style="font-size: 140%; padding-left: 0.6rem;" onclick="loadDisqusComments()">
+  <a href="#disqus_thread" style="color: green;">
+    <span class="disqus-comment-count"
+          data-disqus-identifier="{{ page.url || absolute_url }}">
+    </span>
+  </a>
+</span>
+{% endif %}
 
-<header>
-  <h1 class="post-title">{{ page.title }}</h1>
-</header>
-<div class="content">
-  {% include post-meta.html post=page %}
+{{ content }}
 
-  <div class="post-body">
-    {{ content }}
-    {% include post-tags.html post=page %}
-  </div>
 
-  {% if site.conf.show_comments != false %}
-    {% include comments.html %}
-  {% endif %}
-  {% if site.conf.show_related != false %}
-    {% include related_posts.html %}
-  {% endif %}
-</div>
+{% if side.conf.show_comments != false %}
+  {% include comments.html %}
+{% endif %}

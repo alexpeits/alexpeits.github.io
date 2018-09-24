@@ -1,8 +1,5 @@
 {% if site.disqus.shortname %}
   <div id="disqus_thread">
-    <button class="disqus-load" onClick="loadDisqusComments()">
-      Load Comments
-    </button>
   </div>
   <script>
 
@@ -17,7 +14,10 @@
     this.page.identifier = "{{ page.url | absolute_url }}";
   }
   function loadDisqusComments() { // DON'T EDIT BELOW THIS LINE
-    var d = document, s = d.createElement('script');
+    var d = document;
+    var cc = d.getElementById('comments-container');
+    cc.innerHTML = '<h2>Comments</h2><br>';
+    var s = d.createElement('script');
     s.src = '//{{ site.disqus.shortname }}.disqus.com/embed.js';
     s.setAttribute('data-timestamp', +new Date());
     (d.head || d.body).appendChild(s);
