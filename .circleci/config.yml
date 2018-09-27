@@ -25,9 +25,4 @@ workflows:
   version: 2
   build:
     jobs:
-      - publish:
-          filters:
-            branches:
-              only:
-                -develop
-
+      - publish
