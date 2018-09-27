@@ -1,9 +1,6 @@
 version: 2
 jobs:
   publish:
-    branches:
-      only:
-        - develop
     docker:
       - image: circleci/ruby:2.4.1-node-browsers
     working_directory: ~/repo
@@ -28,4 +25,8 @@ workflows:
   version: 2
   build:
     jobs:
-      - publish
+    publish:
+      branches:
+        only:
+          -develop
+
