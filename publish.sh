@@ -8,6 +8,7 @@ git commit -am "Pre-publish"
 git push origin master
 
 tmpdir=/tmp/blog
+mkdir -p $tmpdir
 
 mv _site/* $tmpdir
 git checkout -B gh-pages
