@@ -14,7 +14,6 @@
     this.page.identifier = "{{ page.url | absolute_url }}";
   }
   function loadDisqusComments() { // DON'T EDIT BELOW THIS LINE
-    event.preventDefault();
     var d = document;
     var cc = d.getElementById('comments-container');
     cc.innerHTML = '<h2>Comments</h2><br>';
