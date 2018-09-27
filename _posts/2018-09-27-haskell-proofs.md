@@ -62,16 +62,20 @@ I'll also try to note why and when an extension should be enabled.
 
 I've already given some spoilers, so here it is: to achieve what we want to do I'm going to use
 whatever Haskell offers to simulate a dependently typed language. To better understand the what and
-how of dependent types, I suggest taking a look at any work by [Richard
-Eisenberg](https://cs.brynmawr.edu/~rae/), especially the extremely well written *Stitch* functional
-pearl{% sidenote 'stitch' 'Stitch: The Sound Type-Indexed Type
-Checker (Richard A. Eisenberg) <https://cs.brynmawr.edu/~rae/papers/2018/stitch/stitch.pdf>' %}.
-Another great resource for everything type-level related is the Book of Types{% sidenote
-'book-of-types' ' [Book of Types on Patreon](https://www.patreon.com/isovector)' %} by
-[Sandy Maguire](http://reasonablypolymorphic.com/) (consider supporting it, it's awesome).
-Finally, the Idris language tutorial{% sidenote 'idris-tutorial'
-'<http://docs.idris-lang.org/en/latest/tutorial/typesfuns.html>' %} is a great resource,
-especially to understand what needs to be done differently in Haskell and how.
+how of dependent types, I suggest taking a look at any work by
+[Richard Eisenberg](https://cs.brynmawr.edu/~rae/),
+especially the extremely well written *Stitch* functional pearl<label for='stitch' class='margin-toggle sidenote-number'></label>
+<input type='checkbox' id='stitch' class='margin-toggle'/>
+<span class='sidenote'>Stitch: The Sound Type-Indexed Type Checker (Richard A. Eisenberg) <https://cs.brynmawr.edu/~rae/papers/2018/stitch/stitch.pdf></span>
+Another great resource for everything type-level related is the Book of Types<label for='book-of-types' class='margin-toggle sidenote-number'></label>
+<input type='checkbox' id='book-of-types' class='margin-toggle'/>
+<span class='sidenote'>[Book of Types on Patreon](https://www.patreon.com/isovector)</span>
+by [Sandy Maguire](http://reasonablypolymorphic.com/)
+(consider supporting it, it's awesome).
+Finally, the Idris language tutorial<label for='idris-tutorial' class='margin-toggle sidenote-number'></label>
+<input type='checkbox' id='idris-tutorial' class='margin-toggle'/>
+<span class='sidenote'><http://docs.idris-lang.org/en/latest/tutorial/typesfuns.html></span>
+is a great resource, especially to understand what needs to be done differently in Haskell and how.
 
 Many of the following do not require dependent types and can probably be modeled using e.g. type
 classes, but I'm going to use dependent types here.
@@ -82,10 +86,9 @@ To prove theorems on natural number operations we first need a way to represent 
 the type level. The canonical way to do this is to use [Peano numbers](
 https://wiki.haskell.org/Peano_numbers):
 
-{% marginnote
-   'enable-data-kinds'
-   'Enable `DataKinds` to promote data constructors to types and types to kinds'
-%}
+<label for='enable-data-kinds' class='margin-toggle'></label>
+<input type='checkbox' id='enable-data-kinds' class='margin-toggle'/>
+<span class='marginnote'>Enable `DataKinds` to promote data constructors to types and types to kinds</span>
 ```haskell
 data Nat = Z | Succ Nat
 ```
@@ -119,10 +122,9 @@ There is a ridiculously simple way to convince the type system that two types ar
 propositional equality in the module
 [Data.Type.Equality](http://hackage.haskell.org/package/base-4.12.0.0/docs/Data-Type-Equality.html):
 
-{% marginnote
-   'enable-type-operators'
-   'Enable `TypeOperators` to allow infix type constructors'
-%}
+<label for='enable-type-operators' class='margin-toggle'></label>
+<input type='checkbox' id='enable-type-operators' class='margin-toggle'/>
+<span class='marginnote'>Enable `TypeOperators` to allow infix type constructors</span>
 ```haskell
 data a :~: b where
     Refl :: a :~: a
@@ -148,10 +150,9 @@ $$
 
 This can be achieved using a closed type family:
 
-{% marginnote
-   'enable-type-families'
-   'Enable `TypeFamilies` to turn on the type family syntax'
-%}
+<label for='enable-type-families' class='margin-toggle'></label>
+<input type='checkbox' id='enable-type-families' class='margin-toggle'/>
+<span class='marginnote'>Enable `TypeFamilies` to turn on the type family syntax</span>
 ```haskell
 type family a + b where
     a + Z   = a         -- (1)
@@ -245,10 +246,9 @@ Long story short, looking in `Data.Type.Equality` again, there is a function tha
 exactly that:
 [gcastWith](http://hackage.haskell.org/package/base-4.12.0.0/docs/Data-Type-Equality.html#v:gcastWith):
 
-{% marginnote
-   'enable-poly-kinds'
-   'Enable `PolyKinds` to allow `Nat` to be used'
-%}
+<label for='enable-poly-kinds' class='margin-toggle'></label>
+<input type='checkbox' id='enable-poly-kinds' class='margin-toggle'/>
+<span class='marginnote'>Enable `PolyKinds` to allow `Nat` to be used</span>
 ```haskell
 gcastWith :: (a :~: b) -> (a ~ b => r) -> r
 ```
@@ -285,10 +285,9 @@ types. This means that, when we have a singleton value `v` of type `T` then we k
 `v` always has the type `T` (that makes sense), but also that type `T` has only one inhabitant (only
 one possible value), and that is `v`. This is the singleton definition for our `Nat`:
 
-{% marginnote
-   'enable-gadts'
-   'Enable `GADTs` to turn on GADT syntax'
-%}
+<label for='enable-gadts' class='margin-toggle'></label>
+<input type='checkbox' id='enable-gadts' class='margin-toggle'/>
+<span class='marginnote'>Enable `GADTs` to turn on GADT syntax</span>
 ```haskell
 data SNat :: Nat -> * where
     SZ :: SNat Z
@@ -547,11 +546,11 @@ Bonus: using `ScopedTypeVariables` we can make it much prettier. We'll use a `fo
 `let` block to bring some fresh variables in scope, and define the steps inside it, using the
 same names in the types so that we don't have to pass variables to each step:
 
-{% marginnote
-   'enable-scoped-type-variables'
-   'Enable `ScopedTypeVariables` to allow for type variables to be reused in
-   type signatures in `let` and `where`'
-%}
+<label for='enable-scoped-type-variables' class='margin-toggle'></label>
+<input type='checkbox' id='enable-scoped-type-variables' class='margin-toggle'/>
+<span class='marginnote'>Enable `ScopedTypeVariables` to allow for type variables to be reused in
+type signatures in `let` and `where`
+</span>
 ```haskell
 plusAssoc :: SNat a -> SNat b -> SNat c -> ((a + b) + c) :~: (a + (b + c))
 plusAssoc a b SZ =
@@ -826,11 +825,11 @@ vlength _ = nat
 But I promised that we can have the length passed implicitly. Again, we'll use the typeclass
 with some help from `TypeApplications` and `ScopedTypeVariables`:
 
-{% marginnote
-   'enable-type-applications'
-   'Enable `TypeApplications` to be able to provide explicit types for polymorphic
-   type variables when calling functions'
-%}
+<label for='enable-type-applications' class='margin-toggle'></label>
+<input type='checkbox' id='enable-type-applications' class='margin-toggle'/>
+<span class='marginnote'>Enable `TypeApplications` to be able to provide explicit types for polymorphic
+type variables when calling functions
+</span>
 ```haskell
 (+++) :: forall n m a. (IsNat n, IsNat m) => Vec n a -> Vec m a -> Vec (n + m) a
 (+++) = append (nat @n) (nat @m)
