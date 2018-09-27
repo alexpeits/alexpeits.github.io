@@ -20,3 +20,13 @@ jobs:
             if [ $CIRCLE_BRANCH == 'develop' ]; then
               bash .circleci/publish.sh
             fi
+
+workflows:
+  version: 2
+  publish:
+    jobs:
+      - build:
+          filters:
+            branches:
+              only:
+                - develop
