@@ -10,10 +10,18 @@
   {% if site.data.options.lato_font_load %}
     <link href='//fonts.googleapis.com/css?family=Lato:400,400italic' rel='stylesheet' type='text/css'>
   {% endif %}
-  
+
   <!-- Load up MathJax script if needed ... specify in /_data/options.yml file-->
   {% if site.data.options.mathjax %}
-    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        processEscapes: true
+    }
+    });
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
   {% endif %}
 
   <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Inconsolata" />

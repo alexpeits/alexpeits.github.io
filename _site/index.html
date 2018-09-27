@@ -12,10 +12,18 @@
   
     <link href='//fonts.googleapis.com/css?family=Lato:400,400italic' rel='stylesheet' type='text/css'>
   
-  
+
   <!-- Load up MathJax script if needed ... specify in /_data/options.yml file-->
   
-    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        processEscapes: true
+    }
+    });
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
   
 
   <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Inconsolata" />
@@ -25,9 +33,9 @@
   <link rel="stylesheet" type="text/css" href="/css/friendly.css">
   <!-- <link rel="stylesheet" type="text/css" href="/css/print.css" media="print"> -->
 
-  <link rel="canonical" href="https://alexpeits.github.io/">
+  <link rel="canonical" href="http://localhost:4000/">
 
-  <link rel="alternate" type="application/rss+xml" title="Alex's blog" href="https://alexpeits.github.io/feed.xml" />
+  <link rel="alternate" type="application/rss+xml" title="Alex's blog" href="http://localhost:4000/feed.xml" />
 </head>
 
   <body>
@@ -96,7 +104,7 @@ type level was a blog post called <a href="http://www.madsbuch.com/blog/proving-
 Haskell</a> by Mads Buch. It is quite fun to
 follow so I’m not going to go into detail, but the gist is to use propositional equality to prove a
 theorem by showing that two haskell types are actually the same type.  So for example, if we wanted
-to prove that <span>​<script type="math/tex">a + b \equiv b + a</script></span> (commutativity of addition of natural numbers) then
+to prove that $a + b = b + a$ (commutativity of addition of natural numbers) then
 we’ll have a function whose type reflects exactly that property, rather than using actual values to
 prove it (more on that later).</p>
 
@@ -133,13 +141,17 @@ extensions:</p>
 
 <p>I’ve already given some spoilers, so here it is: to achieve what we want to do I’m going to use
 whatever Haskell offers to simulate a dependently typed language. To better understand the what and
-how of dependent types, I suggest taking a look at any work by Richard Eisenberg, especially the
-extremely well written <em>Stitch</em> functional pearl<label for="stitch" class="margin-toggle sidenote-number"></label><input type="checkbox" id="stitch" class="margin-toggle" /><span class="sidenote">Stitch: The Sound Type-Indexed Type
+how of dependent types, I suggest taking a look at any work by <a href="https://cs.brynmawr.edu/~rae/">Richard
+Eisenberg</a>, especially the extremely well written <em>Stitch</em> functional
+pearl<label for="stitch" class="margin-toggle sidenote-number"></label><input type="checkbox" id="stitch" class="margin-toggle" /><span class="sidenote">Stitch: The Sound Type-Indexed Type
 Checker (Richard A. Eisenberg) <a href="https://cs.brynmawr.edu/~rae/papers/2018/stitch/stitch.pdf">https://cs.brynmawr.edu/~rae/papers/2018/stitch/stitch.pdf</a> </span>.
-The Iris language tutorial<label for="idris-tutorial" class="margin-toggle sidenote-number"></label><input type="checkbox" id="idris-tutorial" class="margin-toggle" /><span class="sidenote"><a href="http://docs.idris-lang.org/en/latest/tutorial/typesfuns.html">http://docs.idris-lang.org/en/latest/tutorial/typesfuns.html</a> </span> is also a great resource,
-especially to understand what needs to be done differently in Haskell and how. Many of the following
-do not require dependent types and can probably be modeled using e.g. type classes, but I’m going to
-use dependent types here.</p>
+Another great resource for everything type-level related is the Book of Types<label for="book-of-types" class="margin-toggle sidenote-number"></label><input type="checkbox" id="book-of-types" class="margin-toggle" /><span class="sidenote"> <a href="https://www.patreon.com/isovector">Book of Types on Patreon</a> </span> by
+<a href="http://reasonablypolymorphic.com/">Sandy Maguire</a> (consider supporting it, it’s awesome).
+Finally, the Idris language tutorial<label for="idris-tutorial" class="margin-toggle sidenote-number"></label><input type="checkbox" id="idris-tutorial" class="margin-toggle" /><span class="sidenote"><a href="http://docs.idris-lang.org/en/latest/tutorial/typesfuns.html">http://docs.idris-lang.org/en/latest/tutorial/typesfuns.html</a> </span> is a great resource,
+especially to understand what needs to be done differently in Haskell and how.</p>
+
+<p>Many of the following do not require dependent types and can probably be modeled using e.g. type
+classes, but I’m going to use dependent types here.</p>
 
 <h2 id="natural-numbers">Natural numbers</h2>
 
@@ -191,12 +203,11 @@ same, which is exactly what we want to achieve in our proofs.</p>
 <p>In order to actually have something to prove, we’ll define addition at the type level as per the
 <a href="https://en.wikipedia.org/wiki/Peano_axioms#Addition">Peano axiom for addition</a>:</p>
 
-<div class="mathblock"><script type="math/tex; mode=display">
+<script type="math/tex; mode=display">% <![CDATA[
 \begin{align}
 a + 0    = a && \text{(1)}\\
 a + S(b) = S (a + b) && \text{(2)}\\
-\end{align}
-</script></div>
+\end{align} %]]></script>
 
 <p>This can be achieved using a closed type family:</p>
 
@@ -268,8 +279,8 @@ about left identity?</p>
 <p>However simple it seems, the type checker knows nothing about natural number addition, so we have to
 convince it that this is indeed correct. To prove that <code class="highlighter-rouge">Z + a = a</code> we need to do induction on <code class="highlighter-rouge">a</code>.
 By induction, I mean that we need to prove a base case, then assume that our hypothesis holds for
-<span>​<script type="math/tex">a</script></span> and prove that it holds for <span>​<script type="math/tex">S (a)</script></span>.  If we prove that, we have proven
-the theorem for all natural numbers. That’s because if we substitute <span>​<script type="math/tex">a</script></span> for <code class="highlighter-rouge">Z</code> then
+$a$ and prove that it holds for $S (a)$.  If we prove that, we have proven
+the theorem for all natural numbers. That’s because if we substitute $a$ for <code class="highlighter-rouge">Z</code> then
 our hypothesis holds because we’ve already proven for <code class="highlighter-rouge">Z</code>. So if we manage to prove for <code class="highlighter-rouge">S Z</code>, then
 we do the same for <code class="highlighter-rouge">S (S Z)</code> and so on.  We could try something like this:</p>
 
@@ -413,15 +424,14 @@ work too:</p>
 
 <p>The proof for left identity was a relatively simple one. Here it is in mathematical notation (copied
 from <a href="https://en.wikipedia.org/wiki/Proofs_involving_the_addition_of_natural_numbers">here</a> (I’ll
-refer to the addition axiom as <span>​<script type="math/tex">(1)</script></span> and <span>​<script type="math/tex">(2)</script></span>):</p>
+refer to the addition axiom as $(1)$ and $(2)$):</p>
 
-<div class="mathblock"><script type="math/tex; mode=display">
+<script type="math/tex; mode=display">% <![CDATA[
 \begin{align}
 & 0 + S(a)\\
 =\ & S(0 + a) && \text{by (2)}\\
 =\ & S(a) && \text{by the induction hypothesis}\\
-\end{align}
-</script></div>
+\end{align} %]]></script>
 
 <p>This means that in the proof we went from <code class="highlighter-rouge">Z + (S n)</code> to <code class="highlighter-rouge">S (Z + n)</code> by using the type family
 definition, and then proved what’s inside the <code class="highlighter-rouge">S</code> inductively. It makes sense that we want to work
@@ -434,24 +444,23 @@ on <code class="highlighter-rouge">Z + n</code>, since the error we first got sa
 <h2 id="proving-the-associativity-of-addition">Proving the associativity of addition</h2>
 
 <p>Let’s now try a proof that’s a bit more complex: associativity of addition. So we’ll prove that
-<span>​<script type="math/tex">(a + b) + c = a + (b + c)</script></span>. I am going to copy the mathematical notation for the proof
+$(a + b) + c = a + (b + c)$. I am going to copy the mathematical notation for the proof
 here and follow that verbatim, rather than explaining each step.</p>
 
 <p>For the base case c = 0:</p>
 
-<div class="mathblock"><script type="math/tex; mode=display">
+<script type="math/tex; mode=display">% <![CDATA[
 \begin{align}
 
 & (a + b) + 0\\
 =\ & a + b && \text{by (1) for}\ a + b\\
 =\ & a + (b + 0) && \text{by (1) for}\ b\\
 
-\end{align}
-</script></div>
+\end{align} %]]></script>
 
-<p>For the induction, assuming <span>​<script type="math/tex">(a + b) + c = a + (b + c)</script></span>:</p>
+<p>For the induction, assuming $(a + b) + c = a + (b + c)$:</p>
 
-<div class="mathblock"><script type="math/tex; mode=display">
+<script type="math/tex; mode=display">% <![CDATA[
 \begin{align}
 
 & (a + b) + S(c)\\
@@ -460,8 +469,7 @@ here and follow that verbatim, rather than explaining each step.</p>
 =\ & a + S(b + c) && \text{by (2)}\\
 =\ & a + (b + S(c)) && \text{by (2)}\\
 
-\end{align}
-</script></div>
+\end{align} %]]></script>
 
 <p>Let’s try to prove that in Haskell. First I’m going to take the long path and not assume that <code class="highlighter-rouge">(1)</code>
 and <code class="highlighter-rouge">(2)</code> are resolved automatically. This will help build some groundwork for later proofs. This
@@ -475,8 +483,8 @@ family:</p>
 <span class="n">n</span> <span class="o">!+</span> <span class="p">(</span><span class="kt">SS</span> <span class="n">m</span><span class="p">)</span> <span class="o">=</span> <span class="kt">SS</span> <span class="p">(</span><span class="n">n</span> <span class="o">!+</span> <span class="n">m</span><span class="p">)</span>
 </code></pre></div></div>
 
-<p>We’ll use this function to construct, for example, the <span>​<script type="math/tex">a + b</script></span> in the base case of
-the proof given <span>​<script type="math/tex">a</script></span> and <span>​<script type="math/tex">b</script></span>. Here it goes:</p>
+<p>We’ll use this function to construct, for example, the $a + b$ in the base case of
+the proof given $a$ and $b$. Here it goes:</p>
 
 <div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">plusAssoc</span> <span class="o">::</span> <span class="kt">SNat</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="kt">SNat</span> <span class="n">b</span> <span class="o">-&gt;</span> <span class="kt">SNat</span> <span class="n">c</span> <span class="o">-&gt;</span> <span class="p">((</span><span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">)</span> <span class="o">+</span> <span class="n">c</span><span class="p">)</span> <span class="o">:~:</span> <span class="p">(</span><span class="n">a</span> <span class="o">+</span> <span class="p">(</span><span class="n">b</span> <span class="o">+</span> <span class="n">c</span><span class="p">))</span>
 <span class="n">plusAssoc</span> <span class="n">a</span> <span class="n">b</span> <span class="kt">SZ</span> <span class="o">=</span>
@@ -489,7 +497,7 @@ the proof given <span>​<script type="math/tex">a</script></span> and <span>​
   <span class="kr">in</span> <span class="n">undefined</span>
 </code></pre></div></div>
 
-<p>What we do in those 2 steps is exactly what we do in the base case for <span>​<script type="math/tex">c = 0</script></span>.  I used
+<p>What we do in those 2 steps is exactly what we do in the base case for $c = 0$.  I used
 <code class="highlighter-rouge">x</code> and <code class="highlighter-rouge">y</code> to make it clear that we’re not talking about <code class="highlighter-rouge">a</code> and <code class="highlighter-rouge">b</code>, but just defining steps based
 on two numbers, even though we’re going to pass <code class="highlighter-rouge">a</code> and <code class="highlighter-rouge">b</code> in those methods. In the first step,
 just as in the first step of the proof, we want to say that <code class="highlighter-rouge">((x + y) + Z) ~ (x + y)</code>.  It’s the
@@ -601,18 +609,18 @@ same names in the types so that we don’t have to pass variables to each step:<
 <h2 id="commutativity">Commutativity</h2>
 
 <p>Here’s the proof (in mathematical notation) for the property of commutativity of addition. What
-we want to prove is <span>​<script type="math/tex">a + b = b + a</script></span>:</p>
+we want to prove is $a + b = b + a$:</p>
 
-<p>The base case <span>​<script type="math/tex">b = 0</script></span> is the left identity property.</p>
+<p>The base case $b = 0$ is the left identity property.</p>
 
-<p>For the second base case <span>​<script type="math/tex">b = 1</script></span>:</p>
+<p>For the second base case $b = 1$:</p>
 
-<p>- First we prove it for <span>​<script type="math/tex">a = 0</script></span>, which gives <span>​<script type="math/tex">0 + 1 = 1 + 0</script></span>, the
+<p>- First we prove it for $a = 0$, which gives $0 + 1 = 1 + 0$, the
 right identity property.</p>
 
-<p>- Then we prove inductively, assuming <span>​<script type="math/tex">a + 1 = 1 + a</script></span>:</p>
+<p>- Then we prove inductively, assuming $a + 1 = 1 + a$:</p>
 
-<div class="mathblock"><script type="math/tex; mode=display">
+<script type="math/tex; mode=display">% <![CDATA[
 \begin{align}
 
 & S(a) + 1\\
@@ -623,12 +631,11 @@ right identity property.</p>
 =\ & S(1 + a) && \text{by the induction hypothesis}\\
 =\ & 1 + S(a) && \text{by (2)}\\
 
-\end{align}
-</script></div>
+\end{align} %]]></script>
 
-<p>For the induction, assuming <span>​<script type="math/tex">a + b = b + a</script></span>:</p>
+<p>For the induction, assuming $a + b = b + a$:</p>
 
-<div class="mathblock"><script type="math/tex; mode=display">
+<script type="math/tex; mode=display">% <![CDATA[
 \begin{align}
 
 & a + S(b)\\
@@ -640,8 +647,7 @@ right identity property.</p>
 =\ & (b + 1) + a && \text{by associativity}\\
 =\ & S(b) + a && \text{by definition of natural numbers}\\
 
-\end{align}
-</script></div>
+\end{align} %]]></script>
 
 <p>The proof is left as an exercise, but using the same pattern as in the associativity proof it should
 be pretty straightforward. The signature should be:</p>
@@ -733,10 +739,10 @@ the first vector in the second case of <code class="highlighter-rouge">append</c
 
 <p>Where <code class="highlighter-rouge">n1</code> is the type of the result of <code class="highlighter-rouge">spred n</code>. Let’s construct a proof for that:</p>
 
-<p>We need to prove <span>​<script type="math/tex">S(a) + b = S(a + b)</script></span>. We can do an inductive proof which will be
+<p>We need to prove $S(a) + b = S(a + b)$. We can do an inductive proof which will be
 quicker (in the repo I use an inductive proof), but let’s try to do it in one pass:</p>
 
-<div class="mathblock"><script type="math/tex; mode=display">
+<script type="math/tex; mode=display">% <![CDATA[
 \begin{align}
 
 & S(a) + b\\
@@ -744,8 +750,7 @@ quicker (in the repo I use an inductive proof), but let’s try to do it in one 
 =\ & S(b + a) && \text{by (2)}\\
 =\ & S(a + b) && \text{by commutativity}\\
 
-\end{align}
-</script></div>
+\end{align} %]]></script>
 
 <p>And in Haskell:</p>
 
@@ -797,17 +802,7 @@ append lengthX lengthY x y
   :: Vec ('S ('S ('S ('S ('S ('S ('S ('S ('S 'Z))))))))) Integer
 </code></pre></div></div>
 
-<p>We can also remove the need to have the length in a variable beforehand this way:</p>
-
-<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">vlength</span> <span class="o">::</span> <span class="kt">IsNat</span> <span class="n">n</span> <span class="o">=&gt;</span> <span class="kt">Vec</span> <span class="n">n</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="kt">SNat</span> <span class="n">n</span>
-<span class="n">vlength</span> <span class="kr">_</span> <span class="o">=</span> <span class="n">nat</span>
-</code></pre></div></div>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt; append (vlength x) (vlength y) x y
-[1, 2, 3, 4, 5, 6, 7, 8, 9]
-</code></pre></div></div>
-
-<p>But I promised that we can have the length passed implicitly. To do that, we have to
+<p>We can also remove the need to have the length in a variable beforehand. To do that, we have to
 resort to type classes (again, this is described in the Stitch paper). We will construct a 
 type class with a single method that can magically give an <code class="highlighter-rouge">SNat</code> depending on the instance
 we are using:</p>
@@ -818,7 +813,19 @@ we are using:</p>
 <span class="kr">instance</span> <span class="kt">IsNat</span> <span class="n">n</span> <span class="o">=&gt;</span> <span class="kt">IsNat</span> <span class="p">(</span><span class="kt">S</span> <span class="n">n</span><span class="p">)</span> <span class="kr">where</span> <span class="n">nat</span> <span class="o">=</span> <span class="kt">SS</span> <span class="n">nat</span>
 </code></pre></div></div>
 
-<p>And this is the implicit version of <code class="highlighter-rouge">append</code>, using <code class="highlighter-rouge">TypeApplications</code>:</p>
+<p>Then we can just use <code class="highlighter-rouge">nat</code> to get the length. The instance of <code class="highlighter-rouge">IsNat</code> to use is resolved thanks
+to the fact that the <code class="highlighter-rouge">n</code> in the constraint <code class="highlighter-rouge">IsNat</code> is the same <code class="highlighter-rouge">n</code> that is the vector length:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">vlength</span> <span class="o">::</span> <span class="kt">IsNat</span> <span class="n">n</span> <span class="o">=&gt;</span> <span class="kt">Vec</span> <span class="n">n</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="kt">SNat</span> <span class="n">n</span>
+<span class="n">vlength</span> <span class="kr">_</span> <span class="o">=</span> <span class="n">nat</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt; append (vlength x) (vlength y) x y
+[1, 2, 3, 4, 5, 6, 7, 8, 9]
+</code></pre></div></div>
+
+<p>But I promised that we can have the length passed implicitly. Again, we’ll use the typeclass
+with some help from <code class="highlighter-rouge">TypeApplications</code> and <code class="highlighter-rouge">ScopedTypeVariables</code>:</p>
 
 <p><label for="enable-type-applications" class="margin-toggle"> ⊕</label><input type="checkbox" id="enable-type-applications" class="margin-toggle" /><span class="marginnote">Enable <code class="highlighter-rouge">TypeApplications</code> to be able to provide explicit types for polymorphic
    type variables when calling functions </span></p>

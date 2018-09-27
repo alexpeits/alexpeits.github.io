@@ -23,7 +23,7 @@ type level was a blog post called [Proving stuff in
 Haskell](http://www.madsbuch.com/blog/proving-stuff-in-haskell/) by Mads Buch. It is quite fun to
 follow so I'm not going to go into detail, but the gist is to use propositional equality to prove a
 theorem by showing that two haskell types are actually the same type.  So for example, if we wanted
-to prove that {% m %}a + b \equiv b + a{% em %} (commutativity of addition of natural numbers) then
+to prove that $a + b = b + a$ (commutativity of addition of natural numbers) then
 we'll have a function whose type reflects exactly that property, rather than using actual values to
 prove it (more on that later).
 
@@ -62,14 +62,19 @@ I'll also try to note why and when an extension should be enabled.
 
 I've already given some spoilers, so here it is: to achieve what we want to do I'm going to use
 whatever Haskell offers to simulate a dependently typed language. To better understand the what and
-how of dependent types, I suggest taking a look at any work by Richard Eisenberg, especially the
-extremely well written *Stitch* functional pearl{% sidenote 'stitch' 'Stitch: The Sound Type-Indexed Type
+how of dependent types, I suggest taking a look at any work by [Richard
+Eisenberg](https://cs.brynmawr.edu/~rae/), especially the extremely well written *Stitch* functional
+pearl{% sidenote 'stitch' 'Stitch: The Sound Type-Indexed Type
 Checker (Richard A. Eisenberg) <https://cs.brynmawr.edu/~rae/papers/2018/stitch/stitch.pdf>' %}.
-The Iris language tutorial{% sidenote 'idris-tutorial'
-'<http://docs.idris-lang.org/en/latest/tutorial/typesfuns.html>' %} is also a great resource,
-especially to understand what needs to be done differently in Haskell and how. Many of the following
-do not require dependent types and can probably be modeled using e.g. type classes, but I'm going to
-use dependent types here.
+Another great resource for everything type-level related is the Book of Types{% sidenote
+'book-of-types' ' [Book of Types on Patreon](https://www.patreon.com/isovector)' %} by
+[Sandy Maguire](http://reasonablypolymorphic.com/) (consider supporting it, it's awesome).
+Finally, the Idris language tutorial{% sidenote 'idris-tutorial'
+'<http://docs.idris-lang.org/en/latest/tutorial/typesfuns.html>' %} is a great resource,
+especially to understand what needs to be done differently in Haskell and how.
+
+Many of the following do not require dependent types and can probably be modeled using e.g. type
+classes, but I'm going to use dependent types here.
 
 ## Natural numbers
 
@@ -133,12 +138,12 @@ same, which is exactly what we want to achieve in our proofs.
 In order to actually have something to prove, we'll define addition at the type level as per the
 [Peano axiom for addition](https://en.wikipedia.org/wiki/Peano_axioms#Addition):
 
-{% math %}
+$$
 \begin{align}
 a + 0    = a && \text{(1)}\\
 a + S(b) = S (a + b) && \text{(2)}\\
 \end{align}
-{% endmath %}
+$$
 
 
 This can be achieved using a closed type family:
@@ -221,8 +226,8 @@ Which, when compiled, unfortunately fails:
 However simple it seems, the type checker knows nothing about natural number addition, so we have to
 convince it that this is indeed correct. To prove that `Z + a = a` we need to do induction on `a`.
 By induction, I mean that we need to prove a base case, then assume that our hypothesis holds for
-{% m %}a{% em %} and prove that it holds for {% m %}S (a){% em %}.  If we prove that, we have proven
-the theorem for all natural numbers. That's because if we substitute {% m %}a{% em %} for `Z` then
+$a$ and prove that it holds for $S (a)$.  If we prove that, we have proven
+the theorem for all natural numbers. That's because if we substitute $a$ for `Z` then
 our hypothesis holds because we've already proven for `Z`. So if we manage to prove for `S Z`, then
 we do the same for `S (S Z)` and so on.  We could try something like this:
 
@@ -384,15 +389,15 @@ plusRightId' n = gcastWith (given1 n) Refl
 
 The proof for left identity was a relatively simple one. Here it is in mathematical notation (copied
 from [here](https://en.wikipedia.org/wiki/Proofs_involving_the_addition_of_natural_numbers) (I'll
-refer to the addition axiom as {% m %}(1){% em %} and {% m %}(2){% em %}):
+refer to the addition axiom as $(1)$ and $(2)$):
 
-{% math %}
+$$
 \begin{align}
 & 0 + S(a)\\
 =\ & S(0 + a) && \text{by (2)}\\
 =\ & S(a) && \text{by the induction hypothesis}\\
 \end{align}
-{% endmath %}
+$$
 
 This means that in the proof we went from `Z + (S n)` to `S (Z + n)` by using the type family
 definition, and then proved what's inside the `S` inductively. It makes sense that we want to work
@@ -406,12 +411,12 @@ on `Z + n`, since the error we first got said exactly that:
 ## Proving the associativity of addition
 
 Let's now try a proof that's a bit more complex: associativity of addition. So we'll prove that
-{% m %}(a + b) + c = a + (b + c){% em %}. I am going to copy the mathematical notation for the proof
+$(a + b) + c = a + (b + c)$. I am going to copy the mathematical notation for the proof
 here and follow that verbatim, rather than explaining each step.
 
 For the base case c = 0:
 
-{% math %}
+$$
 \begin{align}
 
 & (a + b) + 0\\
@@ -419,11 +424,11 @@ For the base case c = 0:
 =\ & a + (b + 0) && \text{by (1) for}\ b\\
 
 \end{align}
-{% endmath %}
+$$
 
-For the induction, assuming {% m %}(a + b) + c = a + (b + c){% em %}:
+For the induction, assuming $(a + b) + c = a + (b + c)$:
 
-{% math %}
+$$
 \begin{align}
 
 & (a + b) + S(c)\\
@@ -433,7 +438,7 @@ For the induction, assuming {% m %}(a + b) + c = a + (b + c){% em %}:
 =\ & a + (b + S(c)) && \text{by (2)}\\
 
 \end{align}
-{% endmath %}
+$$
 
 Let's try to prove that in Haskell. First I'm going to take the long path and not assume that `(1)`
 and `(2)` are resolved automatically. This will help build some groundwork for later proofs. This
@@ -448,8 +453,8 @@ n !+ SZ     = n
 n !+ (SS m) = SS (n !+ m)
 ```
 
-We'll use this function to construct, for example, the {% m %}a + b{% em %} in the base case of
-the proof given {% m %}a{% em %} and {% m %}b{% em %}. Here it goes:
+We'll use this function to construct, for example, the $a + b$ in the base case of
+the proof given $a$ and $b$. Here it goes:
 
 ```haskell
 plusAssoc :: SNat a -> SNat b -> SNat c -> ((a + b) + c) :~: (a + (b + c))
@@ -463,7 +468,7 @@ plusAssoc a b SZ =
   in undefined
 ```
 
-What we do in those 2 steps is exactly what we do in the base case for {% m %}c = 0{% em %}.  I used
+What we do in those 2 steps is exactly what we do in the base case for $c = 0$.  I used
 `x` and `y` to make it clear that we're not talking about `a` and `b`, but just defining steps based
 on two numbers, even though we're going to pass `a` and `b` in those methods. In the first step,
 just as in the first step of the proof, we want to say that `((x + y) + Z) ~ (x + y)`.  It's the
@@ -583,18 +588,18 @@ plusAssoc a b (SS c) =
 ## Commutativity
 
 Here's the proof (in mathematical notation) for the property of commutativity of addition. What
-we want to prove is {% m %}a + b = b + a{% em %}:
+we want to prove is $a + b = b + a$:
 
-The base case {% m %}b = 0{% em %} is the left identity property.
+The base case $b = 0$ is the left identity property.
 
-For the second base case {% m %}b = 1{% em %}:
+For the second base case $b = 1$:
 
-\- First we prove it for {% m %}a = 0{% em %}, which gives {% m %}0 + 1 = 1 + 0{% em %}, the
+\- First we prove it for $a = 0$, which gives $0 + 1 = 1 + 0$, the
 right identity property.
 
-\- Then we prove inductively, assuming {% m %}a + 1 = 1 + a{% em %}:
+\- Then we prove inductively, assuming $a + 1 = 1 + a$:
 
-{% math %}
+$$
 \begin{align}
 
 & S(a) + 1\\
@@ -606,11 +611,11 @@ right identity property.
 =\ & 1 + S(a) && \text{by (2)}\\
 
 \end{align}
-{% endmath %}
+$$
 
-For the induction, assuming {% m %}a + b = b + a{% em %}:
+For the induction, assuming $a + b = b + a$:
 
-{% math %}
+$$
 \begin{align}
 
 & a + S(b)\\
@@ -623,7 +628,7 @@ For the induction, assuming {% m %}a + b = b + a{% em %}:
 =\ & S(b) + a && \text{by definition of natural numbers}\\
 
 \end{align}
-{% endmath %}
+$$
 
 The proof is left as an exercise, but using the same pattern as in the associativity proof it should
 be pretty straightforward. The signature should be:
@@ -725,10 +730,10 @@ This time we get this error:
 
 Where `n1` is the type of the result of `spred n`. Let's construct a proof for that:
 
-We need to prove {% m %}S(a) + b = S(a + b){% em %}. We can do an inductive proof which will be
+We need to prove $S(a) + b = S(a + b)$. We can do an inductive proof which will be
 quicker (in the repo I use an inductive proof), but let's try to do it in one pass:
 
-{% math %}
+$$
 \begin{align}
 
 & S(a) + b\\
@@ -737,7 +742,7 @@ quicker (in the repo I use an inductive proof), but let's try to do it in one pa
 =\ & S(a + b) && \text{by commutativity}\\
 
 \end{align}
-{% endmath %}
+$$
 
 And in Haskell:
 
@@ -793,19 +798,7 @@ append lengthX lengthY x y
   :: Vec ('S ('S ('S ('S ('S ('S ('S ('S ('S 'Z))))))))) Integer
 ```
 
-We can also remove the need to have the length in a variable beforehand this way:
-
-```haskell
-vlength :: IsNat n => Vec n a -> SNat n
-vlength _ = nat
-```
-
-```
-> append (vlength x) (vlength y) x y
-[1, 2, 3, 4, 5, 6, 7, 8, 9]
-```
-
-But I promised that we can have the length passed implicitly. To do that, we have to
+We can also remove the need to have the length in a variable beforehand. To do that, we have to
 resort to type classes (again, this is described in the Stitch paper). We will construct a 
 type class with a single method that can magically give an `SNat` depending on the instance
 we are using:
@@ -817,7 +810,21 @@ instance            IsNat Z     where nat = SZ
 instance IsNat n => IsNat (S n) where nat = SS nat
 ```
 
-And this is the implicit version of `append`, using `TypeApplications`:
+Then we can just use `nat` to get the length. The instance of `IsNat` to use is resolved thanks
+to the fact that the `n` in the constraint `IsNat` is the same `n` that is the vector length:
+
+```haskell
+vlength :: IsNat n => Vec n a -> SNat n
+vlength _ = nat
+```
+
+```
+> append (vlength x) (vlength y) x y
+[1, 2, 3, 4, 5, 6, 7, 8, 9]
+```
+
+But I promised that we can have the length passed implicitly. Again, we'll use the typeclass
+with some help from `TypeApplications` and `ScopedTypeVariables`:
 
 {% marginnote
    'enable-type-applications'

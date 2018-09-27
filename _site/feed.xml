@@ -3,10 +3,10 @@
   <channel>
     <title>Alex's blog</title>
     <description></description>
-    <link>https://alexpeits.github.io/</link>
-    <atom:link href="https://alexpeits.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 27 Sep 2018 01:38:20 +0100</pubDate>
-    <lastBuildDate>Thu, 27 Sep 2018 01:38:20 +0100</lastBuildDate>
+    <link>http://localhost:4000/</link>
+    <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
+    <pubDate>Thu, 27 Sep 2018 10:49:27 +0100</pubDate>
+    <lastBuildDate>Thu, 27 Sep 2018 10:49:27 +0100</lastBuildDate>
     <generator>Jekyll v3.8.4</generator>
     
       <item>
@@ -26,7 +26,7 @@ type level was a blog post called &lt;a href=&quot;http://www.madsbuch.com/blog/
 Haskell&lt;/a&gt; by Mads Buch. It is quite fun to
 follow so I’m not going to go into detail, but the gist is to use propositional equality to prove a
 theorem by showing that two haskell types are actually the same type.  So for example, if we wanted
-to prove that &lt;span&gt;​&lt;script type=&quot;math/tex&quot;&gt;a + b \equiv b + a&lt;/script&gt;&lt;/span&gt; (commutativity of addition of natural numbers) then
+to prove that $a + b = b + a$ (commutativity of addition of natural numbers) then
 we’ll have a function whose type reflects exactly that property, rather than using actual values to
 prove it (more on that later).&lt;/p&gt;
 
@@ -63,13 +63,17 @@ extensions:&lt;/p&gt;
 
 &lt;p&gt;I’ve already given some spoilers, so here it is: to achieve what we want to do I’m going to use
 whatever Haskell offers to simulate a dependently typed language. To better understand the what and
-how of dependent types, I suggest taking a look at any work by Richard Eisenberg, especially the
-extremely well written &lt;em&gt;Stitch&lt;/em&gt; functional pearl&lt;label for=&quot;stitch&quot; class=&quot;margin-toggle sidenote-number&quot;&gt;&lt;/label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;stitch&quot; class=&quot;margin-toggle&quot; /&gt;&lt;span class=&quot;sidenote&quot;&gt;Stitch: The Sound Type-Indexed Type
+how of dependent types, I suggest taking a look at any work by &lt;a href=&quot;https://cs.brynmawr.edu/~rae/&quot;&gt;Richard
+Eisenberg&lt;/a&gt;, especially the extremely well written &lt;em&gt;Stitch&lt;/em&gt; functional
+pearl&lt;label for=&quot;stitch&quot; class=&quot;margin-toggle sidenote-number&quot;&gt;&lt;/label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;stitch&quot; class=&quot;margin-toggle&quot; /&gt;&lt;span class=&quot;sidenote&quot;&gt;Stitch: The Sound Type-Indexed Type
 Checker (Richard A. Eisenberg) &lt;a href=&quot;https://cs.brynmawr.edu/~rae/papers/2018/stitch/stitch.pdf&quot;&gt;https://cs.brynmawr.edu/~rae/papers/2018/stitch/stitch.pdf&lt;/a&gt; &lt;/span&gt;.
-The Iris language tutorial&lt;label for=&quot;idris-tutorial&quot; class=&quot;margin-toggle sidenote-number&quot;&gt;&lt;/label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;idris-tutorial&quot; class=&quot;margin-toggle&quot; /&gt;&lt;span class=&quot;sidenote&quot;&gt;&lt;a href=&quot;http://docs.idris-lang.org/en/latest/tutorial/typesfuns.html&quot;&gt;http://docs.idris-lang.org/en/latest/tutorial/typesfuns.html&lt;/a&gt; &lt;/span&gt; is also a great resource,
-especially to understand what needs to be done differently in Haskell and how. Many of the following
-do not require dependent types and can probably be modeled using e.g. type classes, but I’m going to
-use dependent types here.&lt;/p&gt;
+Another great resource for everything type-level related is the Book of Types&lt;label for=&quot;book-of-types&quot; class=&quot;margin-toggle sidenote-number&quot;&gt;&lt;/label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;book-of-types&quot; class=&quot;margin-toggle&quot; /&gt;&lt;span class=&quot;sidenote&quot;&gt; &lt;a href=&quot;https://www.patreon.com/isovector&quot;&gt;Book of Types on Patreon&lt;/a&gt; &lt;/span&gt; by
+&lt;a href=&quot;http://reasonablypolymorphic.com/&quot;&gt;Sandy Maguire&lt;/a&gt; (consider supporting it, it’s awesome).
+Finally, the Idris language tutorial&lt;label for=&quot;idris-tutorial&quot; class=&quot;margin-toggle sidenote-number&quot;&gt;&lt;/label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;idris-tutorial&quot; class=&quot;margin-toggle&quot; /&gt;&lt;span class=&quot;sidenote&quot;&gt;&lt;a href=&quot;http://docs.idris-lang.org/en/latest/tutorial/typesfuns.html&quot;&gt;http://docs.idris-lang.org/en/latest/tutorial/typesfuns.html&lt;/a&gt; &lt;/span&gt; is a great resource,
+especially to understand what needs to be done differently in Haskell and how.&lt;/p&gt;
+
+&lt;p&gt;Many of the following do not require dependent types and can probably be modeled using e.g. type
+classes, but I’m going to use dependent types here.&lt;/p&gt;
 
 &lt;h2 id=&quot;natural-numbers&quot;&gt;Natural numbers&lt;/h2&gt;
 
@@ -121,12 +125,11 @@ same, which is exactly what we want to achieve in our proofs.&lt;/p&gt;
 &lt;p&gt;In order to actually have something to prove, we’ll define addition at the type level as per the
 &lt;a href=&quot;https://en.wikipedia.org/wiki/Peano_axioms#Addition&quot;&gt;Peano axiom for addition&lt;/a&gt;:&lt;/p&gt;
 
-&lt;div class=&quot;mathblock&quot;&gt;&lt;script type=&quot;math/tex; mode=display&quot;&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
 \begin{align}
 a + 0    = a &amp;&amp; \text{(1)}\\
 a + S(b) = S (a + b) &amp;&amp; \text{(2)}\\
-\end{align}
-&lt;/script&gt;&lt;/div&gt;
+\end{align} %]]&gt;&lt;/script&gt;
 
 &lt;p&gt;This can be achieved using a closed type family:&lt;/p&gt;
 
@@ -198,8 +201,8 @@ about left identity?&lt;/p&gt;
 &lt;p&gt;However simple it seems, the type checker knows nothing about natural number addition, so we have to
 convince it that this is indeed correct. To prove that &lt;code class=&quot;highlighter-rouge&quot;&gt;Z + a = a&lt;/code&gt; we need to do induction on &lt;code class=&quot;highlighter-rouge&quot;&gt;a&lt;/code&gt;.
 By induction, I mean that we need to prove a base case, then assume that our hypothesis holds for
-&lt;span&gt;​&lt;script type=&quot;math/tex&quot;&gt;a&lt;/script&gt;&lt;/span&gt; and prove that it holds for &lt;span&gt;​&lt;script type=&quot;math/tex&quot;&gt;S (a)&lt;/script&gt;&lt;/span&gt;.  If we prove that, we have proven
-the theorem for all natural numbers. That’s because if we substitute &lt;span&gt;​&lt;script type=&quot;math/tex&quot;&gt;a&lt;/script&gt;&lt;/span&gt; for &lt;code class=&quot;highlighter-rouge&quot;&gt;Z&lt;/code&gt; then
+$a$ and prove that it holds for $S (a)$.  If we prove that, we have proven
+the theorem for all natural numbers. That’s because if we substitute $a$ for &lt;code class=&quot;highlighter-rouge&quot;&gt;Z&lt;/code&gt; then
 our hypothesis holds because we’ve already proven for &lt;code class=&quot;highlighter-rouge&quot;&gt;Z&lt;/code&gt;. So if we manage to prove for &lt;code class=&quot;highlighter-rouge&quot;&gt;S Z&lt;/code&gt;, then
 we do the same for &lt;code class=&quot;highlighter-rouge&quot;&gt;S (S Z)&lt;/code&gt; and so on.  We could try something like this:&lt;/p&gt;
 
@@ -343,15 +346,14 @@ work too:&lt;/p&gt;
 
 &lt;p&gt;The proof for left identity was a relatively simple one. Here it is in mathematical notation (copied
 from &lt;a href=&quot;https://en.wikipedia.org/wiki/Proofs_involving_the_addition_of_natural_numbers&quot;&gt;here&lt;/a&gt; (I’ll
-refer to the addition axiom as &lt;span&gt;​&lt;script type=&quot;math/tex&quot;&gt;(1)&lt;/script&gt;&lt;/span&gt; and &lt;span&gt;​&lt;script type=&quot;math/tex&quot;&gt;(2)&lt;/script&gt;&lt;/span&gt;):&lt;/p&gt;
+refer to the addition axiom as $(1)$ and $(2)$):&lt;/p&gt;
 
-&lt;div class=&quot;mathblock&quot;&gt;&lt;script type=&quot;math/tex; mode=display&quot;&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
 \begin{align}
 &amp; 0 + S(a)\\
 =\ &amp; S(0 + a) &amp;&amp; \text{by (2)}\\
 =\ &amp; S(a) &amp;&amp; \text{by the induction hypothesis}\\
-\end{align}
-&lt;/script&gt;&lt;/div&gt;
+\end{align} %]]&gt;&lt;/script&gt;
 
 &lt;p&gt;This means that in the proof we went from &lt;code class=&quot;highlighter-rouge&quot;&gt;Z + (S n)&lt;/code&gt; to &lt;code class=&quot;highlighter-rouge&quot;&gt;S (Z + n)&lt;/code&gt; by using the type family
 definition, and then proved what’s inside the &lt;code class=&quot;highlighter-rouge&quot;&gt;S&lt;/code&gt; inductively. It makes sense that we want to work
@@ -364,24 +366,23 @@ on &lt;code class=&quot;highlighter-rouge&quot;&gt;Z + n&lt;/code&gt;, since the
 &lt;h2 id=&quot;proving-the-associativity-of-addition&quot;&gt;Proving the associativity of addition&lt;/h2&gt;
 
 &lt;p&gt;Let’s now try a proof that’s a bit more complex: associativity of addition. So we’ll prove that
-&lt;span&gt;​&lt;script type=&quot;math/tex&quot;&gt;(a + b) + c = a + (b + c)&lt;/script&gt;&lt;/span&gt;. I am going to copy the mathematical notation for the proof
+$(a + b) + c = a + (b + c)$. I am going to copy the mathematical notation for the proof
 here and follow that verbatim, rather than explaining each step.&lt;/p&gt;
 
 &lt;p&gt;For the base case c = 0:&lt;/p&gt;
 
-&lt;div class=&quot;mathblock&quot;&gt;&lt;script type=&quot;math/tex; mode=display&quot;&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
 \begin{align}
 
 &amp; (a + b) + 0\\
 =\ &amp; a + b &amp;&amp; \text{by (1) for}\ a + b\\
 =\ &amp; a + (b + 0) &amp;&amp; \text{by (1) for}\ b\\
 
-\end{align}
-&lt;/script&gt;&lt;/div&gt;
+\end{align} %]]&gt;&lt;/script&gt;
 
-&lt;p&gt;For the induction, assuming &lt;span&gt;​&lt;script type=&quot;math/tex&quot;&gt;(a + b) + c = a + (b + c)&lt;/script&gt;&lt;/span&gt;:&lt;/p&gt;
+&lt;p&gt;For the induction, assuming $(a + b) + c = a + (b + c)$:&lt;/p&gt;
 
-&lt;div class=&quot;mathblock&quot;&gt;&lt;script type=&quot;math/tex; mode=display&quot;&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
 \begin{align}
 
 &amp; (a + b) + S(c)\\
@@ -390,8 +391,7 @@ here and follow that verbatim, rather than explaining each step.&lt;/p&gt;
 =\ &amp; a + S(b + c) &amp;&amp; \text{by (2)}\\
 =\ &amp; a + (b + S(c)) &amp;&amp; \text{by (2)}\\
 
-\end{align}
-&lt;/script&gt;&lt;/div&gt;
+\end{align} %]]&gt;&lt;/script&gt;
 
 &lt;p&gt;Let’s try to prove that in Haskell. First I’m going to take the long path and not assume that &lt;code class=&quot;highlighter-rouge&quot;&gt;(1)&lt;/code&gt;
 and &lt;code class=&quot;highlighter-rouge&quot;&gt;(2)&lt;/code&gt; are resolved automatically. This will help build some groundwork for later proofs. This
@@ -405,8 +405,8 @@ family:&lt;/p&gt;
 &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!+&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;SS&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;m&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;SS&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;m&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;We’ll use this function to construct, for example, the &lt;span&gt;​&lt;script type=&quot;math/tex&quot;&gt;a + b&lt;/script&gt;&lt;/span&gt; in the base case of
-the proof given &lt;span&gt;​&lt;script type=&quot;math/tex&quot;&gt;a&lt;/script&gt;&lt;/span&gt; and &lt;span&gt;​&lt;script type=&quot;math/tex&quot;&gt;b&lt;/script&gt;&lt;/span&gt;. Here it goes:&lt;/p&gt;
+&lt;p&gt;We’ll use this function to construct, for example, the $a + b$ in the base case of
+the proof given $a$ and $b$. Here it goes:&lt;/p&gt;
 
 &lt;div class=&quot;language-haskell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;plusAssoc&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;::&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;SNat&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;SNat&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;SNat&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;c&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:~:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
 &lt;span class=&quot;n&quot;&gt;plusAssoc&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;SZ&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;
@@ -419,7 +419,7 @@ the proof given &lt;span&gt;​&lt;script type=&quot;math/tex&quot;&gt;a&lt;/scr
   &lt;span class=&quot;kr&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;undefined&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;What we do in those 2 steps is exactly what we do in the base case for &lt;span&gt;​&lt;script type=&quot;math/tex&quot;&gt;c = 0&lt;/script&gt;&lt;/span&gt;.  I used
+&lt;p&gt;What we do in those 2 steps is exactly what we do in the base case for $c = 0$.  I used
 &lt;code class=&quot;highlighter-rouge&quot;&gt;x&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;y&lt;/code&gt; to make it clear that we’re not talking about &lt;code class=&quot;highlighter-rouge&quot;&gt;a&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;b&lt;/code&gt;, but just defining steps based
 on two numbers, even though we’re going to pass &lt;code class=&quot;highlighter-rouge&quot;&gt;a&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;b&lt;/code&gt; in those methods. In the first step,
 just as in the first step of the proof, we want to say that &lt;code class=&quot;highlighter-rouge&quot;&gt;((x + y) + Z) ~ (x + y)&lt;/code&gt;.  It’s the
@@ -531,18 +531,18 @@ same names in the types so that we don’t have to pass variables to each step:&
 &lt;h2 id=&quot;commutativity&quot;&gt;Commutativity&lt;/h2&gt;
 
 &lt;p&gt;Here’s the proof (in mathematical notation) for the property of commutativity of addition. What
-we want to prove is &lt;span&gt;​&lt;script type=&quot;math/tex&quot;&gt;a + b = b + a&lt;/script&gt;&lt;/span&gt;:&lt;/p&gt;
+we want to prove is $a + b = b + a$:&lt;/p&gt;
 
-&lt;p&gt;The base case &lt;span&gt;​&lt;script type=&quot;math/tex&quot;&gt;b = 0&lt;/script&gt;&lt;/span&gt; is the left identity property.&lt;/p&gt;
+&lt;p&gt;The base case $b = 0$ is the left identity property.&lt;/p&gt;
 
-&lt;p&gt;For the second base case &lt;span&gt;​&lt;script type=&quot;math/tex&quot;&gt;b = 1&lt;/script&gt;&lt;/span&gt;:&lt;/p&gt;
+&lt;p&gt;For the second base case $b = 1$:&lt;/p&gt;
 
-&lt;p&gt;- First we prove it for &lt;span&gt;​&lt;script type=&quot;math/tex&quot;&gt;a = 0&lt;/script&gt;&lt;/span&gt;, which gives &lt;span&gt;​&lt;script type=&quot;math/tex&quot;&gt;0 + 1 = 1 + 0&lt;/script&gt;&lt;/span&gt;, the
+&lt;p&gt;- First we prove it for $a = 0$, which gives $0 + 1 = 1 + 0$, the
 right identity property.&lt;/p&gt;
 
-&lt;p&gt;- Then we prove inductively, assuming &lt;span&gt;​&lt;script type=&quot;math/tex&quot;&gt;a + 1 = 1 + a&lt;/script&gt;&lt;/span&gt;:&lt;/p&gt;
+&lt;p&gt;- Then we prove inductively, assuming $a + 1 = 1 + a$:&lt;/p&gt;
 
-&lt;div class=&quot;mathblock&quot;&gt;&lt;script type=&quot;math/tex; mode=display&quot;&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
 \begin{align}
 
 &amp; S(a) + 1\\
@@ -553,12 +553,11 @@ right identity property.&lt;/p&gt;
 =\ &amp; S(1 + a) &amp;&amp; \text{by the induction hypothesis}\\
 =\ &amp; 1 + S(a) &amp;&amp; \text{by (2)}\\
 
-\end{align}
-&lt;/script&gt;&lt;/div&gt;
+\end{align} %]]&gt;&lt;/script&gt;
 
-&lt;p&gt;For the induction, assuming &lt;span&gt;​&lt;script type=&quot;math/tex&quot;&gt;a + b = b + a&lt;/script&gt;&lt;/span&gt;:&lt;/p&gt;
+&lt;p&gt;For the induction, assuming $a + b = b + a$:&lt;/p&gt;
 
-&lt;div class=&quot;mathblock&quot;&gt;&lt;script type=&quot;math/tex; mode=display&quot;&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
 \begin{align}
 
 &amp; a + S(b)\\
@@ -570,8 +569,7 @@ right identity property.&lt;/p&gt;
 =\ &amp; (b + 1) + a &amp;&amp; \text{by associativity}\\
 =\ &amp; S(b) + a &amp;&amp; \text{by definition of natural numbers}\\
 
-\end{align}
-&lt;/script&gt;&lt;/div&gt;
+\end{align} %]]&gt;&lt;/script&gt;
 
 &lt;p&gt;The proof is left as an exercise, but using the same pattern as in the associativity proof it should
 be pretty straightforward. The signature should be:&lt;/p&gt;
@@ -663,10 +661,10 @@ the first vector in the second case of &lt;code class=&quot;highlighter-rouge&qu
 
 &lt;p&gt;Where &lt;code class=&quot;highlighter-rouge&quot;&gt;n1&lt;/code&gt; is the type of the result of &lt;code class=&quot;highlighter-rouge&quot;&gt;spred n&lt;/code&gt;. Let’s construct a proof for that:&lt;/p&gt;
 
-&lt;p&gt;We need to prove &lt;span&gt;​&lt;script type=&quot;math/tex&quot;&gt;S(a) + b = S(a + b)&lt;/script&gt;&lt;/span&gt;. We can do an inductive proof which will be
+&lt;p&gt;We need to prove $S(a) + b = S(a + b)$. We can do an inductive proof which will be
 quicker (in the repo I use an inductive proof), but let’s try to do it in one pass:&lt;/p&gt;
 
-&lt;div class=&quot;mathblock&quot;&gt;&lt;script type=&quot;math/tex; mode=display&quot;&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
 \begin{align}
 
 &amp; S(a) + b\\
@@ -674,8 +672,7 @@ quicker (in the repo I use an inductive proof), but let’s try to do it in one 
 =\ &amp; S(b + a) &amp;&amp; \text{by (2)}\\
 =\ &amp; S(a + b) &amp;&amp; \text{by commutativity}\\
 
-\end{align}
-&lt;/script&gt;&lt;/div&gt;
+\end{align} %]]&gt;&lt;/script&gt;
 
 &lt;p&gt;And in Haskell:&lt;/p&gt;
 
@@ -727,17 +724,7 @@ append lengthX lengthY x y
   :: Vec ('S ('S ('S ('S ('S ('S ('S ('S ('S 'Z))))))))) Integer
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;We can also remove the need to have the length in a variable beforehand this way:&lt;/p&gt;
-
-&lt;div class=&quot;language-haskell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;vlength&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;::&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;IsNat&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Vec&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;SNat&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;vlength&lt;/span&gt; &lt;span class=&quot;kr&quot;&gt;_&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nat&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;gt; append (vlength x) (vlength y) x y
-[1, 2, 3, 4, 5, 6, 7, 8, 9]
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;But I promised that we can have the length passed implicitly. To do that, we have to
+&lt;p&gt;We can also remove the need to have the length in a variable beforehand. To do that, we have to
 resort to type classes (again, this is described in the Stitch paper). We will construct a 
 type class with a single method that can magically give an &lt;code class=&quot;highlighter-rouge&quot;&gt;SNat&lt;/code&gt; depending on the instance
 we are using:&lt;/p&gt;
@@ -748,7 +735,19 @@ we are using:&lt;/p&gt;
 &lt;span class=&quot;kr&quot;&gt;instance&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;IsNat&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;IsNat&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;S&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;kr&quot;&gt;where&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nat&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;SS&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nat&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;And this is the implicit version of &lt;code class=&quot;highlighter-rouge&quot;&gt;append&lt;/code&gt;, using &lt;code class=&quot;highlighter-rouge&quot;&gt;TypeApplications&lt;/code&gt;:&lt;/p&gt;
+&lt;p&gt;Then we can just use &lt;code class=&quot;highlighter-rouge&quot;&gt;nat&lt;/code&gt; to get the length. The instance of &lt;code class=&quot;highlighter-rouge&quot;&gt;IsNat&lt;/code&gt; to use is resolved thanks
+to the fact that the &lt;code class=&quot;highlighter-rouge&quot;&gt;n&lt;/code&gt; in the constraint &lt;code class=&quot;highlighter-rouge&quot;&gt;IsNat&lt;/code&gt; is the same &lt;code class=&quot;highlighter-rouge&quot;&gt;n&lt;/code&gt; that is the vector length:&lt;/p&gt;
+
+&lt;div class=&quot;language-haskell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;vlength&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;::&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;IsNat&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Vec&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;SNat&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;vlength&lt;/span&gt; &lt;span class=&quot;kr&quot;&gt;_&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nat&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;gt; append (vlength x) (vlength y) x y
+[1, 2, 3, 4, 5, 6, 7, 8, 9]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;But I promised that we can have the length passed implicitly. Again, we’ll use the typeclass
+with some help from &lt;code class=&quot;highlighter-rouge&quot;&gt;TypeApplications&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;ScopedTypeVariables&lt;/code&gt;:&lt;/p&gt;
 
 &lt;p&gt;&lt;label for=&quot;enable-type-applications&quot; class=&quot;margin-toggle&quot;&gt; ⊕&lt;/label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;enable-type-applications&quot; class=&quot;margin-toggle&quot; /&gt;&lt;span class=&quot;marginnote&quot;&gt;Enable &lt;code class=&quot;highlighter-rouge&quot;&gt;TypeApplications&lt;/code&gt; to be able to provide explicit types for polymorphic
    type variables when calling functions &lt;/span&gt;&lt;/p&gt;
@@ -779,8 +778,8 @@ practical software engineering using Haskell.&lt;/p&gt;
 &lt;p&gt;(I’m not that madman)&lt;/p&gt;
 </description>
         <pubDate>Thu, 27 Sep 2018 00:00:00 +0100</pubDate>
-        <link>https://alexpeits.github.io/articles/18/haskell-proofs</link>
-        <guid isPermaLink="true">https://alexpeits.github.io/articles/18/haskell-proofs</guid>
+        <link>http://localhost:4000/articles/18/haskell-proofs</link>
+        <guid isPermaLink="true">http://localhost:4000/articles/18/haskell-proofs</guid>
         
         <category>haskell</category>
         
@@ -896,8 +895,8 @@ following table:&lt;/p&gt;
 &lt;p&gt;Afterwards, the table can be exported to csv with &lt;code class=&quot;highlighter-rouge&quot;&gt;org-table-export&lt;/code&gt;.&lt;/p&gt;
 </description>
         <pubDate>Sun, 12 Feb 2017 00:00:00 +0000</pubDate>
-        <link>https://alexpeits.github.io/articles/17/org-timesheets</link>
-        <guid isPermaLink="true">https://alexpeits.github.io/articles/17/org-timesheets</guid>
+        <link>http://localhost:4000/articles/17/org-timesheets</link>
+        <guid isPermaLink="true">http://localhost:4000/articles/17/org-timesheets</guid>
         
         <category>emacs</category>
         
