@@ -2,20 +2,20 @@
 
 set -e
 
-git checkout master
+git checkout develop
 git add .
 git commit -am "Pre-publish"
-git push origin master
+git push origin develop
 
 tmpdir=/tmp/blog
 mkdir -p $tmpdir
 
 mv _site/* $tmpdir
-git checkout -B gh-pages
+git checkout -B master
 rm -rf *
 mv $tmpdir/* .
 rm -rf $tmpdir
 git add .
 git commit -am "Publish"
-git push origin gh-pages --force
-git checkout master
+git push origin master --force
+git checkout develop
