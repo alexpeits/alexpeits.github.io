@@ -10,7 +10,7 @@ markdown_ext: "markdown,mkdown,mkdn,mkd,md"
 plugins:
     - jekyll-feed
 
-permalink: /articles/:short_year/:title
+permalink: /articles/:short_year/:title.html
 
 timezone: Europe/London
 excerpt_separator: <!--more-->

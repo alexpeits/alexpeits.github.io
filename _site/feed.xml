@@ -5,8 +5,8 @@
     <description></description>
     <link>https://alexpeits.github.io/</link>
     <atom:link href="https://alexpeits.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 27 Sep 2018 01:18:05 +0100</pubDate>
-    <lastBuildDate>Thu, 27 Sep 2018 01:18:05 +0100</lastBuildDate>
+    <pubDate>Thu, 27 Sep 2018 01:21:57 +0100</pubDate>
+    <lastBuildDate>Thu, 27 Sep 2018 01:21:57 +0100</lastBuildDate>
     <generator>Jekyll v3.8.4</generator>
     
       <item>
@@ -779,8 +779,8 @@ practical software engineering using Haskell.&lt;/p&gt;
 &lt;p&gt;(I’m not that madman)&lt;/p&gt;
 </description>
         <pubDate>Thu, 27 Sep 2018 00:00:00 +0100</pubDate>
-        <link>https://alexpeits.github.io/articles/18/haskell-proofs</link>
-        <guid isPermaLink="true">https://alexpeits.github.io/articles/18/haskell-proofs</guid>
+        <link>https://alexpeits.github.io/articles/18/haskell-proofs.html</link>
+        <guid isPermaLink="true">https://alexpeits.github.io/articles/18/haskell-proofs.html</guid>
         
         <category>haskell</category>
         
@@ -896,8 +896,8 @@ following table:&lt;/p&gt;
 &lt;p&gt;Afterwards, the table can be exported to csv with &lt;code class=&quot;highlighter-rouge&quot;&gt;org-table-export&lt;/code&gt;.&lt;/p&gt;
 </description>
         <pubDate>Sun, 12 Feb 2017 00:00:00 +0000</pubDate>
-        <link>https://alexpeits.github.io/articles/17/org-timesheets</link>
-        <guid isPermaLink="true">https://alexpeits.github.io/articles/17/org-timesheets</guid>
+        <link>https://alexpeits.github.io/articles/17/org-timesheets.html</link>
+        <guid isPermaLink="true">https://alexpeits.github.io/articles/17/org-timesheets.html</guid>
         
         <category>emacs</category>
         
