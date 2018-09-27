@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  publish:
+  build:
     branches:
       only:
         - develop
