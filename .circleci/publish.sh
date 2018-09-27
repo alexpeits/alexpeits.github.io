@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 git config user.name "$USER_NAME"
 git config user.email "$USER_EMAIL"
 
