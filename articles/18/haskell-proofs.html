@@ -5,8 +5,8 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Alex's blog</title>
-  <meta name="description" content="">
+  <title>Writing and using proofs in Haskell</title>
+  <meta name="description" content="This post is still work in progress, consider this early accessThis post has an accompanying github repo.IntroHaskell’s type system has long been sort of a l...">
 
   <!-- Google Fonts loaded here depending on setting in _data/options.yml true loads font, blank does not-->
   
@@ -33,7 +33,7 @@
   <link rel="stylesheet" type="text/css" href="/css/friendly.css">
   <!-- <link rel="stylesheet" type="text/css" href="/css/print.css" media="print"> -->
 
-  <link rel="canonical" href="https://alexpeits.github.io/">
+  <link rel="canonical" href="https://alexpeits.github.io/articles/18/haskell-proofs">
 
   <link rel="alternate" type="application/rss+xml" title="Alex's blog" href="https://alexpeits.github.io/feed.xml" />
 </head>
@@ -52,7 +52,7 @@
   	
 		
 		    
-		      <a class="active" href="/" class="active">Alex's blog</a>
+		      <a href="/">Alex's blog</a>
 		    
 	    
   	
@@ -82,14 +82,20 @@
 <br>
 
     <article class="group">
-      <h1 class="content-listing-header sans">Articles</h1>
-<ul class="content-listing ">
-        
-      <li class="listing">
-        <hr class="slender">
-        <a href="/articles/18/haskell-proofs"><h3 class="contrast">Writing and using proofs in Haskell</h3></a>
-        <br><span class="smaller">September 27, 2018</span>  <br/>
-        <!--<div><p class="note">This post is still work in progress, consider this early access</p>
+      <h1>Writing and using proofs in Haskell</h1>
+<p class="subtitle" style="display: inline; padding-right: 0.6rem;">September 27, 2018</p>
+
+&bull;
+<span style="font-size: 140%; padding-left: 0.6rem;" onclick="loadDisqusComments()">
+  <a href="#disqus_thread" style="color: green;" class="group">
+    <span class="disqus-comment-count"
+          data-disqus-identifier="https://alexpeits.github.io/articles/18/haskell-proofs">
+    </span>
+  </a>
+</span>
+
+
+<p class="note">This post is still work in progress, consider this early access</p>
 
 <p>This post has an accompanying <a href="https://github.com/alexpeits/haskell-proofs">github repo</a>.</p>
 
@@ -876,31 +882,57 @@ practical software engineering using Haskell.</p>
 </blockquote>
 
 <p>(I’m not that madman)</p>
-</div> -->
-      </li>
-        
-      <li class="listing">
-        <hr class="slender">
-        <a href="/articles/17/org-timesheets"><h3 class="contrast">Formatting timesheet tables in org-mode</h3></a>
-        <br><span class="smaller">February 12, 2017</span>  <br/>
-        <!--<div><p class="note">This post is originally adapted from <a href="https://emacs.stackexchange.com/questions/23808/how-to-plot-summaries-of-timestamps-of-different-projects-clocking-in-and-out/23862#23862">this</a>
-stackoverflow answer.</p>
 
-<p>Org-mode is a great productivity tool, and has a lot of functionality out of
-the box, including utilities for tracking time spent on a task/project. For
-example, by pressing <code class="highlighter-rouge">C-c C-x C-i</code> on a heading, a timer is added (clock-in),
-and by pressing <code class="highlighter-rouge">C-c C-x C-o</code> the timer stops (clock-out). Org-mode also
-supports adding a report with <code class="highlighter-rouge">org-clock-report</code> (<code class="highlighter-rouge">C-c C-x C-r</code>), but, even
-with the customization it offers, it is not ideal for having a fully custom
-report and be able to export it to csv and whatnot.</p>
 
-</div> -->
-      </li>
+
+
   
-</ul>
+  <hr class="slender">
+  <section class="comments">
+    <div id="comments-container">
+      <h2>
+        <a href="#" onClick="loadDisqusComments()">Click to load comments</a>
+      </h2>
+    </div>
+    
+  <div id="disqus_thread">
+  </div>
+  <script>
+
+  /**
+  *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW
+  *  TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+  *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT:s
+  *  https://disqus.com/admin/universalcode/#configuration-variables
+  */
+  var disqus_config = function () {
+    this.page.url = "https://alexpeits.github.io/articles/18/haskell-proofs";
+    this.page.identifier = "https://alexpeits.github.io/articles/18/haskell-proofs";
+  }
+  function loadDisqusComments() { // DON'T EDIT BELOW THIS LINE
+    var d = document;
+    var cc = d.getElementById('comments-container');
+    cc.innerHTML = '<h2>Comments</h2><br>';
+    var s = d.createElement('script');
+    s.src = '//alexpeits-github-io.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+  }
+  </script>
+  <noscript>
+    Please enable JavaScript to view the
+    <a href="https://disqus.com/?ref_noscript">comments powered by Disqus</a>.
+  </noscript>
+
+
+
+  </section>
+
+
+
 
     </article>
-    <span class="print-footer">Alex's blog - Alex Peitsinis</span>
+    <span class="print-footer">Writing and using proofs in Haskell - September 27, 2018 - Alex Peitsinis</span>
     <footer>
   <hr class="slender">
   <ul class="footer-links">
