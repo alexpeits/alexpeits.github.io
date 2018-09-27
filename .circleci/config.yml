@@ -1,6 +1,9 @@
 version: 2
 jobs:
   publish:
+    branches:
+      only:
+        - develop
     docker:
       - image: circleci/ruby:2.4.1-node-browsers
     working_directory: ~/repo
@@ -20,9 +23,3 @@ jobs:
             if [ $CIRCLE_BRANCH == 'develop' ]; then
               bash .circleci/publish.sh
             fi
-
-workflows:
-  version: 2
-  build:
-    jobs:
-      - publish
