@@ -90,7 +90,7 @@ https://wiki.haskell.org/Peano_numbers):
 <input type='checkbox' id='enable-data-kinds' class='margin-toggle'/>
 <span class='marginnote'>Enable `DataKinds` to promote data constructors to types and types to kinds</span>
 ```haskell
-data Nat = Z | Succ Nat
+data Nat = Z | S Nat
 ```
 
 We have the base case which is the number zero (here `Z` for brevity later), and then we recursively
@@ -848,11 +848,10 @@ Magic!
 This was a lengthy blog post, and the ideas presented fall into the obscure side of things.
 Should there be a need to resort to dependent types, the above might prove useful. Nevertheless,
 it's a fun way to explore both dependent types and translating mathematical proofs to Haskell.
-After all, as a user named **jessekempf** said in the [functional programming
+After all, as someone said in the [functional programming
 slack](https://fpchat-invite.herokuapp.com/),
 
 > A relatively large number of people making zygosynchroid semi-applicative plesiofunctors, one
 > madman pushing the type system to its limits, and like three people concerning themselves with
 > practical software engineering using Haskell.
 
-(I'm not that madman)
