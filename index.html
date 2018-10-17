@@ -167,7 +167,7 @@ the type level. The canonical way to do this is to use <a href="https://wiki.has
 <p><label for="enable-data-kinds" class="margin-toggle"></label>
 <input type="checkbox" id="enable-data-kinds" class="margin-toggle" />
 <span class="marginnote">Enable <code class="highlighter-rouge">DataKinds</code> to promote data constructors to types and types to kinds</span></p>
-<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">data</span> <span class="kt">Nat</span> <span class="o">=</span> <span class="kt">Z</span> <span class="o">|</span> <span class="kt">Succ</span> <span class="kt">Nat</span>
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">data</span> <span class="kt">Nat</span> <span class="o">=</span> <span class="kt">Z</span> <span class="o">|</span> <span class="kt">S</span> <span class="kt">Nat</span>
 </code></pre></div></div>
 
 <p>We have the base case which is the number zero (here <code class="highlighter-rouge">Z</code> for brevity later), and then we recursively
@@ -866,7 +866,7 @@ type variables when calling functions
 <p>This was a lengthy blog post, and the ideas presented fall into the obscure side of things.
 Should there be a need to resort to dependent types, the above might prove useful. Nevertheless,
 it’s a fun way to explore both dependent types and translating mathematical proofs to Haskell.
-After all, as a user named <strong>jessekempf</strong> said in the <a href="https://fpchat-invite.herokuapp.com/">functional programming
+After all, as someone said in the <a href="https://fpchat-invite.herokuapp.com/">functional programming
 slack</a>,</p>
 
 <blockquote>
@@ -875,7 +875,6 @@ madman pushing the type system to its limits, and like three people concerning t
 practical software engineering using Haskell.</p>
 </blockquote>
 
-<p>(I’m not that madman)</p>
 </div> -->
       </li>
         
