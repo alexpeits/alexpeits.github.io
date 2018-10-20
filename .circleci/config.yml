@@ -14,6 +14,8 @@ jobs:
           name: build blog
           command: |
             bundle exec jekyll build
+          environment:
+            JEKYLL_ENV: production
       - deploy:
           name: deploy to master
           command: |
