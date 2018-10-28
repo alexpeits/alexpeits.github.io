@@ -156,18 +156,11 @@ extensions:</p>
 whatever Haskell offers to simulate a dependently typed language. To better understand the what and
 how of dependent types, I suggest taking a look at any work by
 <a href="https://cs.brynmawr.edu/~rae/">Richard Eisenberg</a>,
-especially the extremely well written <em>Stitch</em> functional pearl<label for="stitch" class="margin-toggle sidenote-number"></label>
-<input type="checkbox" id="stitch" class="margin-toggle" />
-<span class="sidenote">Stitch: The Sound Type-Indexed Type Checker (Richard A. Eisenberg) <a href="https://cs.brynmawr.edu/~rae/papers/2018/stitch/stitch.pdf">https://cs.brynmawr.edu/~rae/papers/2018/stitch/stitch.pdf</a></span>
-Another great resource for everything type-level related is the Book of Types<label for="book-of-types" class="margin-toggle sidenote-number"></label>
-<input type="checkbox" id="book-of-types" class="margin-toggle" />
-<span class="sidenote"><a href="https://www.patreon.com/isovector">Book of Types on Patreon</a></span>
-by <a href="http://reasonablypolymorphic.com/">Sandy Maguire</a>
-(consider supporting it, it’s awesome).
-Finally, the Idris language tutorial<label for="idris-tutorial" class="margin-toggle sidenote-number"></label>
-<input type="checkbox" id="idris-tutorial" class="margin-toggle" />
-<span class="sidenote"><a href="http://docs.idris-lang.org/en/latest/tutorial/typesfuns.html">http://docs.idris-lang.org/en/latest/tutorial/typesfuns.html</a></span>
-is a great resource, especially to understand what needs to be done differently in Haskell and how.</p>
+especially the extremely well written <em>Stitch</em> functional pearl.<label for="stitch" class="margin-toggle sidenote-number"></label><input type="checkbox" id="stitch" class="margin-toggle" /><span class="sidenote">Stitch: The Sound Type-Indexed Type Checker (Richard A. Eisenberg)
+<a href="https://cs.brynmawr.edu/~rae/papers/2018/stitch/stitch.pdf">https://cs.brynmawr.edu/~rae/papers/2018/stitch/stitch.pdf</a> </span>
+Another great resource for everything type-level related is the Book of Types<label for="book-of-types" class="margin-toggle sidenote-number"></label><input type="checkbox" id="book-of-types" class="margin-toggle" /><span class="sidenote"><a href="https://www.patreon.com/isovector">Book of Types on Patreon</a> </span> by <a href="http://reasonablypolymorphic.com/">Sandy Maguire</a> (consider supporting it, it’s awesome).
+Finally, the Idris language tutorial<label for="idris-tutorial" class="margin-toggle sidenote-number"></label><input type="checkbox" id="idris-tutorial" class="margin-toggle" /><span class="sidenote"><a href="http://docs.idris-lang.org/en/latest/tutorial/typesfuns.html">http://docs.idris-lang.org/en/latest/tutorial/typesfuns.html</a> </span> is a great resource, especially
+to understand what needs to be done differently in Haskell and how.</p>
 
 <p>Many of the following do not require dependent types and can probably be modeled using e.g. type
 classes, but I’m going to use dependent types here.</p>
@@ -177,9 +170,7 @@ classes, but I’m going to use dependent types here.</p>
 <p>To prove theorems on natural number operations we first need a way to represent natural numbers at
 the type level. The canonical way to do this is to use <a href="https://wiki.haskell.org/Peano_numbers">Peano numbers</a>:</p>
 
-<p><label for="enable-data-kinds" class="margin-toggle"></label>
-<input type="checkbox" id="enable-data-kinds" class="margin-toggle" />
-<span class="marginnote">Enable <code class="highlighter-rouge">DataKinds</code> to promote data constructors to types and types to kinds</span></p>
+<p><label for="enable-data-kinds" class="margin-toggle"> ⊕</label><input type="checkbox" id="enable-data-kinds" class="margin-toggle" /><span class="marginnote">Enable <code class="highlighter-rouge">DataKinds</code> to promote data constructors to types and types to kinds </span></p>
 <div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">data</span> <span class="kt">Nat</span> <span class="o">=</span> <span class="kt">Z</span> <span class="o">|</span> <span class="kt">S</span> <span class="kt">Nat</span>
 </code></pre></div></div>
 
@@ -210,9 +201,7 @@ have to use <code class="highlighter-rouge">*</code>, which, in some cases, woul
 propositional equality in the module
 <a href="http://hackage.haskell.org/package/base-4.12.0.0/docs/Data-Type-Equality.html">Data.Type.Equality</a>:</p>
 
-<p><label for="enable-type-operators" class="margin-toggle"></label>
-<input type="checkbox" id="enable-type-operators" class="margin-toggle" />
-<span class="marginnote">Enable <code class="highlighter-rouge">TypeOperators</code> to allow infix type constructors</span></p>
+<p><label for="enable-type-operators" class="margin-toggle"> ⊕</label><input type="checkbox" id="enable-type-operators" class="margin-toggle" /><span class="marginnote">Enable <code class="highlighter-rouge">TypeOperators</code> to allow infix type constructors </span></p>
 <div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">data</span> <span class="n">a</span> <span class="o">:~:</span> <span class="n">b</span> <span class="kr">where</span>
     <span class="kt">Refl</span> <span class="o">::</span> <span class="n">a</span> <span class="o">:~:</span> <span class="n">a</span>
 </code></pre></div></div>
@@ -234,9 +223,7 @@ a + S(b) = S (a + b) && \text{(2)}\\
 
 <p>This can be achieved using a closed type family:</p>
 
-<p><label for="enable-type-families" class="margin-toggle"></label>
-<input type="checkbox" id="enable-type-families" class="margin-toggle" />
-<span class="marginnote">Enable <code class="highlighter-rouge">TypeFamilies</code> to turn on the type family syntax</span></p>
+<p><label for="enable-type-families" class="margin-toggle"> ⊕</label><input type="checkbox" id="enable-type-families" class="margin-toggle" /><span class="marginnote">Enable <code class="highlighter-rouge">TypeFamilies</code> to turn on the type family syntax </span></p>
 <div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">type</span> <span class="n">family</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span> <span class="kr">where</span>
     <span class="n">a</span> <span class="o">+</span> <span class="kt">Z</span>   <span class="o">=</span> <span class="n">a</span>         <span class="c1">-- (1)</span>
     <span class="n">a</span> <span class="o">+</span> <span class="kt">S</span> <span class="n">b</span> <span class="o">=</span> <span class="kt">S</span> <span class="p">(</span><span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">)</span> <span class="c1">-- (2)</span>
@@ -322,9 +309,7 @@ we do the same for <code class="highlighter-rouge">S (S Z)</code> and so on.  We
 exactly that:
 <a href="http://hackage.haskell.org/package/base-4.12.0.0/docs/Data-Type-Equality.html#v:gcastWith">gcastWith</a>:</p>
 
-<p><label for="enable-poly-kinds" class="margin-toggle"></label>
-<input type="checkbox" id="enable-poly-kinds" class="margin-toggle" />
-<span class="marginnote">Enable <code class="highlighter-rouge">PolyKinds</code> to allow <code class="highlighter-rouge">Nat</code> to be used</span></p>
+<p><label for="enable-poly-kinds" class="margin-toggle"> ⊕</label><input type="checkbox" id="enable-poly-kinds" class="margin-toggle" /><span class="marginnote">Enable <code class="highlighter-rouge">PolyKinds</code> to allow <code class="highlighter-rouge">Nat</code> to be used </span></p>
 <div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">gcastWith</span> <span class="o">::</span> <span class="p">(</span><span class="n">a</span> <span class="o">:~:</span> <span class="n">b</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">a</span> <span class="o">~</span> <span class="n">b</span> <span class="o">=&gt;</span> <span class="n">r</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">r</span>
 </code></pre></div></div>
 
@@ -359,9 +344,7 @@ types. This means that, when we have a singleton value <code class="highlighter-
 <code class="highlighter-rouge">v</code> always has the type <code class="highlighter-rouge">T</code> (that makes sense), but also that type <code class="highlighter-rouge">T</code> has only one inhabitant (only
 one possible value), and that is <code class="highlighter-rouge">v</code>. This is the singleton definition for our <code class="highlighter-rouge">Nat</code>:</p>
 
-<p><label for="enable-gadts" class="margin-toggle"></label>
-<input type="checkbox" id="enable-gadts" class="margin-toggle" />
-<span class="marginnote">Enable <code class="highlighter-rouge">GADTs</code> to turn on GADT syntax</span></p>
+<p><label for="enable-gadts" class="margin-toggle"> ⊕</label><input type="checkbox" id="enable-gadts" class="margin-toggle" /><span class="marginnote">Enable <code class="highlighter-rouge">GADTs</code> to turn on GADT syntax </span></p>
 <div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">data</span> <span class="kt">SNat</span> <span class="o">::</span> <span class="kt">Nat</span> <span class="o">-&gt;</span> <span class="o">*</span> <span class="kr">where</span>
     <span class="kt">SZ</span> <span class="o">::</span> <span class="kt">SNat</span> <span class="kt">Z</span>
     <span class="kt">SS</span> <span class="o">::</span> <span class="kt">SNat</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="kt">SNat</span> <span class="p">(</span><span class="kt">S</span> <span class="n">a</span><span class="p">)</span>
@@ -601,11 +584,8 @@ long proof shows a lot on how to take a mathematical proof and directly apply it
 <code class="highlighter-rouge">let</code> block to bring some fresh variables in scope, and define the steps inside it, using the
 same names in the types so that we don’t have to pass variables to each step:</p>
 
-<p><label for="enable-scoped-type-variables" class="margin-toggle"></label>
-<input type="checkbox" id="enable-scoped-type-variables" class="margin-toggle" />
-<span class="marginnote">Enable <code class="highlighter-rouge">ScopedTypeVariables</code> to allow for type variables to be reused in
-type signatures in <code class="highlighter-rouge">let</code> and <code class="highlighter-rouge">where</code>
-</span></p>
+<p><label for="enable-scoped-type-variables" class="margin-toggle"> ⊕</label><input type="checkbox" id="enable-scoped-type-variables" class="margin-toggle" /><span class="marginnote">Enable <code class="highlighter-rouge">ScopedTypeVariables</code> to allow for type
+variables to be reused in type signatures in <code class="highlighter-rouge">let</code> and <code class="highlighter-rouge">where</code> </span></p>
 <div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">plusAssoc</span> <span class="o">::</span> <span class="kt">SNat</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="kt">SNat</span> <span class="n">b</span> <span class="o">-&gt;</span> <span class="kt">SNat</span> <span class="n">c</span> <span class="o">-&gt;</span> <span class="p">((</span><span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">)</span> <span class="o">+</span> <span class="n">c</span><span class="p">)</span> <span class="o">:~:</span> <span class="p">(</span><span class="n">a</span> <span class="o">+</span> <span class="p">(</span><span class="n">b</span> <span class="o">+</span> <span class="n">c</span><span class="p">))</span>
 <span class="n">plusAssoc</span> <span class="n">a</span> <span class="n">b</span> <span class="kt">SZ</span> <span class="o">=</span>
   <span class="kr">let</span> <span class="n">proof</span> <span class="o">::</span> <span class="n">forall</span> <span class="n">x</span> <span class="n">y</span><span class="o">.</span> <span class="kt">SNat</span> <span class="n">x</span> <span class="o">-&gt;</span> <span class="kt">SNat</span> <span class="n">y</span> <span class="o">-&gt;</span> <span class="p">((</span><span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="p">)</span> <span class="o">+</span> <span class="kt">Z</span><span class="p">)</span> <span class="o">:~:</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="p">(</span><span class="n">y</span> <span class="o">+</span> <span class="kt">Z</span><span class="p">))</span>
@@ -859,11 +839,8 @@ to the fact that the <code class="highlighter-rouge">n</code> in the constraint 
 <p>But I promised that we can have the length passed implicitly. Again, we’ll use the typeclass
 with some help from <code class="highlighter-rouge">TypeApplications</code> and <code class="highlighter-rouge">ScopedTypeVariables</code>:</p>
 
-<p><label for="enable-type-applications" class="margin-toggle"></label>
-<input type="checkbox" id="enable-type-applications" class="margin-toggle" />
-<span class="marginnote">Enable <code class="highlighter-rouge">TypeApplications</code> to be able to provide explicit types for polymorphic
-type variables when calling functions
-</span></p>
+<p><label for="enable-type-applications" class="margin-toggle"> ⊕</label><input type="checkbox" id="enable-type-applications" class="margin-toggle" /><span class="marginnote">Enable <code class="highlighter-rouge">TypeApplications</code> to be able to provide explicit
+types for polymorphic type variables when calling functions </span></p>
 <div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">(</span><span class="o">+++</span><span class="p">)</span> <span class="o">::</span> <span class="n">forall</span> <span class="n">n</span> <span class="n">m</span> <span class="n">a</span><span class="o">.</span> <span class="p">(</span><span class="kt">IsNat</span> <span class="n">n</span><span class="p">,</span> <span class="kt">IsNat</span> <span class="n">m</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="kt">Vec</span> <span class="n">n</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="kt">Vec</span> <span class="n">m</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="kt">Vec</span> <span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="n">m</span><span class="p">)</span> <span class="n">a</span>
 <span class="p">(</span><span class="o">+++</span><span class="p">)</span> <span class="o">=</span> <span class="n">append</span> <span class="p">(</span><span class="n">nat</span> <span class="o">@</span><span class="n">n</span><span class="p">)</span> <span class="p">(</span><span class="n">nat</span> <span class="o">@</span><span class="n">m</span><span class="p">)</span>
 </code></pre></div></div>

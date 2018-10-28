@@ -5,8 +5,8 @@
     <description></description>
     <link>https://alexpeits.github.io/</link>
     <atom:link href="https://alexpeits.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sat, 20 Oct 2018 13:59:25 +0100</pubDate>
-    <lastBuildDate>Sat, 20 Oct 2018 13:59:25 +0100</lastBuildDate>
+    <pubDate>Sun, 28 Oct 2018 11:43:51 +0000</pubDate>
+    <lastBuildDate>Sun, 28 Oct 2018 11:43:51 +0000</lastBuildDate>
     <generator>Jekyll v3.8.4</generator>
     
       <item>
@@ -65,18 +65,11 @@ extensions:&lt;/p&gt;
 whatever Haskell offers to simulate a dependently typed language. To better understand the what and
 how of dependent types, I suggest taking a look at any work by
 &lt;a href=&quot;https://cs.brynmawr.edu/~rae/&quot;&gt;Richard Eisenberg&lt;/a&gt;,
-especially the extremely well written &lt;em&gt;Stitch&lt;/em&gt; functional pearl&lt;label for=&quot;stitch&quot; class=&quot;margin-toggle sidenote-number&quot;&gt;&lt;/label&gt;
-&lt;input type=&quot;checkbox&quot; id=&quot;stitch&quot; class=&quot;margin-toggle&quot; /&gt;
-&lt;span class=&quot;sidenote&quot;&gt;Stitch: The Sound Type-Indexed Type Checker (Richard A. Eisenberg) &lt;a href=&quot;https://cs.brynmawr.edu/~rae/papers/2018/stitch/stitch.pdf&quot;&gt;https://cs.brynmawr.edu/~rae/papers/2018/stitch/stitch.pdf&lt;/a&gt;&lt;/span&gt;
-Another great resource for everything type-level related is the Book of Types&lt;label for=&quot;book-of-types&quot; class=&quot;margin-toggle sidenote-number&quot;&gt;&lt;/label&gt;
-&lt;input type=&quot;checkbox&quot; id=&quot;book-of-types&quot; class=&quot;margin-toggle&quot; /&gt;
-&lt;span class=&quot;sidenote&quot;&gt;&lt;a href=&quot;https://www.patreon.com/isovector&quot;&gt;Book of Types on Patreon&lt;/a&gt;&lt;/span&gt;
-by &lt;a href=&quot;http://reasonablypolymorphic.com/&quot;&gt;Sandy Maguire&lt;/a&gt;
-(consider supporting it, it’s awesome).
-Finally, the Idris language tutorial&lt;label for=&quot;idris-tutorial&quot; class=&quot;margin-toggle sidenote-number&quot;&gt;&lt;/label&gt;
-&lt;input type=&quot;checkbox&quot; id=&quot;idris-tutorial&quot; class=&quot;margin-toggle&quot; /&gt;
-&lt;span class=&quot;sidenote&quot;&gt;&lt;a href=&quot;http://docs.idris-lang.org/en/latest/tutorial/typesfuns.html&quot;&gt;http://docs.idris-lang.org/en/latest/tutorial/typesfuns.html&lt;/a&gt;&lt;/span&gt;
-is a great resource, especially to understand what needs to be done differently in Haskell and how.&lt;/p&gt;
+especially the extremely well written &lt;em&gt;Stitch&lt;/em&gt; functional pearl.&lt;label for=&quot;stitch&quot; class=&quot;margin-toggle sidenote-number&quot;&gt;&lt;/label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;stitch&quot; class=&quot;margin-toggle&quot; /&gt;&lt;span class=&quot;sidenote&quot;&gt;Stitch: The Sound Type-Indexed Type Checker (Richard A. Eisenberg)
+&lt;a href=&quot;https://cs.brynmawr.edu/~rae/papers/2018/stitch/stitch.pdf&quot;&gt;https://cs.brynmawr.edu/~rae/papers/2018/stitch/stitch.pdf&lt;/a&gt; &lt;/span&gt;
+Another great resource for everything type-level related is the Book of Types&lt;label for=&quot;book-of-types&quot; class=&quot;margin-toggle sidenote-number&quot;&gt;&lt;/label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;book-of-types&quot; class=&quot;margin-toggle&quot; /&gt;&lt;span class=&quot;sidenote&quot;&gt;&lt;a href=&quot;https://www.patreon.com/isovector&quot;&gt;Book of Types on Patreon&lt;/a&gt; &lt;/span&gt; by &lt;a href=&quot;http://reasonablypolymorphic.com/&quot;&gt;Sandy Maguire&lt;/a&gt; (consider supporting it, it’s awesome).
+Finally, the Idris language tutorial&lt;label for=&quot;idris-tutorial&quot; class=&quot;margin-toggle sidenote-number&quot;&gt;&lt;/label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;idris-tutorial&quot; class=&quot;margin-toggle&quot; /&gt;&lt;span class=&quot;sidenote&quot;&gt;&lt;a href=&quot;http://docs.idris-lang.org/en/latest/tutorial/typesfuns.html&quot;&gt;http://docs.idris-lang.org/en/latest/tutorial/typesfuns.html&lt;/a&gt; &lt;/span&gt; is a great resource, especially
+to understand what needs to be done differently in Haskell and how.&lt;/p&gt;
 
 &lt;p&gt;Many of the following do not require dependent types and can probably be modeled using e.g. type
 classes, but I’m going to use dependent types here.&lt;/p&gt;
@@ -86,9 +79,7 @@ classes, but I’m going to use dependent types here.&lt;/p&gt;
 &lt;p&gt;To prove theorems on natural number operations we first need a way to represent natural numbers at
 the type level. The canonical way to do this is to use &lt;a href=&quot;https://wiki.haskell.org/Peano_numbers&quot;&gt;Peano numbers&lt;/a&gt;:&lt;/p&gt;
 
-&lt;p&gt;&lt;label for=&quot;enable-data-kinds&quot; class=&quot;margin-toggle&quot;&gt;&lt;/label&gt;
-&lt;input type=&quot;checkbox&quot; id=&quot;enable-data-kinds&quot; class=&quot;margin-toggle&quot; /&gt;
-&lt;span class=&quot;marginnote&quot;&gt;Enable &lt;code class=&quot;highlighter-rouge&quot;&gt;DataKinds&lt;/code&gt; to promote data constructors to types and types to kinds&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;label for=&quot;enable-data-kinds&quot; class=&quot;margin-toggle&quot;&gt; ⊕&lt;/label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;enable-data-kinds&quot; class=&quot;margin-toggle&quot; /&gt;&lt;span class=&quot;marginnote&quot;&gt;Enable &lt;code class=&quot;highlighter-rouge&quot;&gt;DataKinds&lt;/code&gt; to promote data constructors to types and types to kinds &lt;/span&gt;&lt;/p&gt;
 &lt;div class=&quot;language-haskell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kr&quot;&gt;data&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Nat&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Z&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;S&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Nat&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
@@ -119,9 +110,7 @@ have to use &lt;code class=&quot;highlighter-rouge&quot;&gt;*&lt;/code&gt;, whic
 propositional equality in the module
 &lt;a href=&quot;http://hackage.haskell.org/package/base-4.12.0.0/docs/Data-Type-Equality.html&quot;&gt;Data.Type.Equality&lt;/a&gt;:&lt;/p&gt;
 
-&lt;p&gt;&lt;label for=&quot;enable-type-operators&quot; class=&quot;margin-toggle&quot;&gt;&lt;/label&gt;
-&lt;input type=&quot;checkbox&quot; id=&quot;enable-type-operators&quot; class=&quot;margin-toggle&quot; /&gt;
-&lt;span class=&quot;marginnote&quot;&gt;Enable &lt;code class=&quot;highlighter-rouge&quot;&gt;TypeOperators&lt;/code&gt; to allow infix type constructors&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;label for=&quot;enable-type-operators&quot; class=&quot;margin-toggle&quot;&gt; ⊕&lt;/label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;enable-type-operators&quot; class=&quot;margin-toggle&quot; /&gt;&lt;span class=&quot;marginnote&quot;&gt;Enable &lt;code class=&quot;highlighter-rouge&quot;&gt;TypeOperators&lt;/code&gt; to allow infix type constructors &lt;/span&gt;&lt;/p&gt;
 &lt;div class=&quot;language-haskell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kr&quot;&gt;data&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:~:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;kr&quot;&gt;where&lt;/span&gt;
     &lt;span class=&quot;kt&quot;&gt;Refl&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;::&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:~:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
@@ -143,9 +132,7 @@ a + S(b) = S (a + b) &amp;&amp; \text{(2)}\\
 
 &lt;p&gt;This can be achieved using a closed type family:&lt;/p&gt;
 
-&lt;p&gt;&lt;label for=&quot;enable-type-families&quot; class=&quot;margin-toggle&quot;&gt;&lt;/label&gt;
-&lt;input type=&quot;checkbox&quot; id=&quot;enable-type-families&quot; class=&quot;margin-toggle&quot; /&gt;
-&lt;span class=&quot;marginnote&quot;&gt;Enable &lt;code class=&quot;highlighter-rouge&quot;&gt;TypeFamilies&lt;/code&gt; to turn on the type family syntax&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;label for=&quot;enable-type-families&quot; class=&quot;margin-toggle&quot;&gt; ⊕&lt;/label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;enable-type-families&quot; class=&quot;margin-toggle&quot; /&gt;&lt;span class=&quot;marginnote&quot;&gt;Enable &lt;code class=&quot;highlighter-rouge&quot;&gt;TypeFamilies&lt;/code&gt; to turn on the type family syntax &lt;/span&gt;&lt;/p&gt;
 &lt;div class=&quot;language-haskell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kr&quot;&gt;type&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;family&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;kr&quot;&gt;where&lt;/span&gt;
     &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Z&lt;/span&gt;   &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;         &lt;span class=&quot;c1&quot;&gt;-- (1)&lt;/span&gt;
     &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;S&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;S&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;-- (2)&lt;/span&gt;
@@ -231,9 +218,7 @@ we do the same for &lt;code class=&quot;highlighter-rouge&quot;&gt;S (S Z)&lt;/c
 exactly that:
 &lt;a href=&quot;http://hackage.haskell.org/package/base-4.12.0.0/docs/Data-Type-Equality.html#v:gcastWith&quot;&gt;gcastWith&lt;/a&gt;:&lt;/p&gt;
 
-&lt;p&gt;&lt;label for=&quot;enable-poly-kinds&quot; class=&quot;margin-toggle&quot;&gt;&lt;/label&gt;
-&lt;input type=&quot;checkbox&quot; id=&quot;enable-poly-kinds&quot; class=&quot;margin-toggle&quot; /&gt;
-&lt;span class=&quot;marginnote&quot;&gt;Enable &lt;code class=&quot;highlighter-rouge&quot;&gt;PolyKinds&lt;/code&gt; to allow &lt;code class=&quot;highlighter-rouge&quot;&gt;Nat&lt;/code&gt; to be used&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;label for=&quot;enable-poly-kinds&quot; class=&quot;margin-toggle&quot;&gt; ⊕&lt;/label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;enable-poly-kinds&quot; class=&quot;margin-toggle&quot; /&gt;&lt;span class=&quot;marginnote&quot;&gt;Enable &lt;code class=&quot;highlighter-rouge&quot;&gt;PolyKinds&lt;/code&gt; to allow &lt;code class=&quot;highlighter-rouge&quot;&gt;Nat&lt;/code&gt; to be used &lt;/span&gt;&lt;/p&gt;
 &lt;div class=&quot;language-haskell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;gcastWith&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;::&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:~:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;~&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;r&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
@@ -268,9 +253,7 @@ types. This means that, when we have a singleton value &lt;code class=&quot;high
 &lt;code class=&quot;highlighter-rouge&quot;&gt;v&lt;/code&gt; always has the type &lt;code class=&quot;highlighter-rouge&quot;&gt;T&lt;/code&gt; (that makes sense), but also that type &lt;code class=&quot;highlighter-rouge&quot;&gt;T&lt;/code&gt; has only one inhabitant (only
 one possible value), and that is &lt;code class=&quot;highlighter-rouge&quot;&gt;v&lt;/code&gt;. This is the singleton definition for our &lt;code class=&quot;highlighter-rouge&quot;&gt;Nat&lt;/code&gt;:&lt;/p&gt;
 
-&lt;p&gt;&lt;label for=&quot;enable-gadts&quot; class=&quot;margin-toggle&quot;&gt;&lt;/label&gt;
-&lt;input type=&quot;checkbox&quot; id=&quot;enable-gadts&quot; class=&quot;margin-toggle&quot; /&gt;
-&lt;span class=&quot;marginnote&quot;&gt;Enable &lt;code class=&quot;highlighter-rouge&quot;&gt;GADTs&lt;/code&gt; to turn on GADT syntax&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;label for=&quot;enable-gadts&quot; class=&quot;margin-toggle&quot;&gt; ⊕&lt;/label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;enable-gadts&quot; class=&quot;margin-toggle&quot; /&gt;&lt;span class=&quot;marginnote&quot;&gt;Enable &lt;code class=&quot;highlighter-rouge&quot;&gt;GADTs&lt;/code&gt; to turn on GADT syntax &lt;/span&gt;&lt;/p&gt;
 &lt;div class=&quot;language-haskell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kr&quot;&gt;data&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;SNat&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;::&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Nat&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;kr&quot;&gt;where&lt;/span&gt;
     &lt;span class=&quot;kt&quot;&gt;SZ&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;::&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;SNat&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Z&lt;/span&gt;
     &lt;span class=&quot;kt&quot;&gt;SS&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;::&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;SNat&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;SNat&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;S&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
@@ -510,11 +493,8 @@ long proof shows a lot on how to take a mathematical proof and directly apply it
 &lt;code class=&quot;highlighter-rouge&quot;&gt;let&lt;/code&gt; block to bring some fresh variables in scope, and define the steps inside it, using the
 same names in the types so that we don’t have to pass variables to each step:&lt;/p&gt;
 
-&lt;p&gt;&lt;label for=&quot;enable-scoped-type-variables&quot; class=&quot;margin-toggle&quot;&gt;&lt;/label&gt;
-&lt;input type=&quot;checkbox&quot; id=&quot;enable-scoped-type-variables&quot; class=&quot;margin-toggle&quot; /&gt;
-&lt;span class=&quot;marginnote&quot;&gt;Enable &lt;code class=&quot;highlighter-rouge&quot;&gt;ScopedTypeVariables&lt;/code&gt; to allow for type variables to be reused in
-type signatures in &lt;code class=&quot;highlighter-rouge&quot;&gt;let&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;where&lt;/code&gt;
-&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;label for=&quot;enable-scoped-type-variables&quot; class=&quot;margin-toggle&quot;&gt; ⊕&lt;/label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;enable-scoped-type-variables&quot; class=&quot;margin-toggle&quot; /&gt;&lt;span class=&quot;marginnote&quot;&gt;Enable &lt;code class=&quot;highlighter-rouge&quot;&gt;ScopedTypeVariables&lt;/code&gt; to allow for type
+variables to be reused in type signatures in &lt;code class=&quot;highlighter-rouge&quot;&gt;let&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;where&lt;/code&gt; &lt;/span&gt;&lt;/p&gt;
 &lt;div class=&quot;language-haskell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;plusAssoc&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;::&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;SNat&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;SNat&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;SNat&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;c&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:~:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
 &lt;span class=&quot;n&quot;&gt;plusAssoc&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;SZ&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;
   &lt;span class=&quot;kr&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;proof&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;::&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;forall&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;SNat&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;SNat&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;y&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Z&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:~:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Z&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
@@ -768,11 +748,8 @@ to the fact that the &lt;code class=&quot;highlighter-rouge&quot;&gt;n&lt;/code&
 &lt;p&gt;But I promised that we can have the length passed implicitly. Again, we’ll use the typeclass
 with some help from &lt;code class=&quot;highlighter-rouge&quot;&gt;TypeApplications&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;ScopedTypeVariables&lt;/code&gt;:&lt;/p&gt;
 
-&lt;p&gt;&lt;label for=&quot;enable-type-applications&quot; class=&quot;margin-toggle&quot;&gt;&lt;/label&gt;
-&lt;input type=&quot;checkbox&quot; id=&quot;enable-type-applications&quot; class=&quot;margin-toggle&quot; /&gt;
-&lt;span class=&quot;marginnote&quot;&gt;Enable &lt;code class=&quot;highlighter-rouge&quot;&gt;TypeApplications&lt;/code&gt; to be able to provide explicit types for polymorphic
-type variables when calling functions
-&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;label for=&quot;enable-type-applications&quot; class=&quot;margin-toggle&quot;&gt; ⊕&lt;/label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;enable-type-applications&quot; class=&quot;margin-toggle&quot; /&gt;&lt;span class=&quot;marginnote&quot;&gt;Enable &lt;code class=&quot;highlighter-rouge&quot;&gt;TypeApplications&lt;/code&gt; to be able to provide explicit
+types for polymorphic type variables when calling functions &lt;/span&gt;&lt;/p&gt;
 &lt;div class=&quot;language-haskell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+++&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;::&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;forall&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;m&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;IsNat&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;IsNat&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;m&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Vec&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Vec&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;m&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Vec&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;m&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;
 &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+++&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;append&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;nat&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;@&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;nat&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;@&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;m&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
