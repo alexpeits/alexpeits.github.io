@@ -1,17 +1,7 @@
 ---
-layout: default
-title: Alex's blog
-sort: 1
+title: Home
 ---
 
-<h1 class="content-listing-header sans">Articles</h1>
-<ul class="content-listing ">
-  {% for post in site.posts %}      
-      <li class="listing">
-        <hr class="slender">
-        <a href="{{ post.url | prepend: site.baseurl }}"><h3 class="contrast">{{ post.title }}</h3></a>
-        <br><span class="smaller">{{ post.date | date: "%B %-d, %Y" }}</span>  <br/>
-        <!--<div>{{ post.excerpt }}</div> -->
-      </li>
-  {% endfor %}
-</ul>
+$partial("templates/post-list.html")$
+
+<p>…or you can find more in the <a href="/archive.html">archives</a>.</p>

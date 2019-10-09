@@ -1,0 +1,18 @@
+<table class="posts-table">
+  <tbody>
+    $for(posts)$
+    <tr>
+      <td class="posts-table-date">$shortDate$</td>
+      <td>
+        <a href="$url$" class="posts-table-title">$title$</a>
+        $if(tags)$
+        <br>
+        <div class="posts-table-tags">
+          $tags$
+        </div>
+        $endif$
+      </td>
+    </tr>
+    $endfor$
+  </tbody>
+</table>
