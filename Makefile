@@ -11,3 +11,6 @@ cabal-configure:
 
 ghcid:
 	ghcid -a --command="cabal new-repl"
+
+push-cache:
+	nix-store -qR --include-outputs $$(nix-instantiate default.nix -A site) | cachix push alexpeits-travis
