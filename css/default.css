@@ -39,6 +39,11 @@ nav a {
 a {
   color: #2380c2;
   text-decoration: none;
+  white-space: pre-wrap;
+  white-space: -moz-pre-wrap;
+  white-space: -pre-wrap;
+  white-space: -o-pre-wrap;
+  word-wrap: break-word;
 }
 
 footer {
@@ -101,10 +106,20 @@ tr, td {
 .posts-table-title {
 }
 
-.posts-table-tags a {
-  color: #555 !important;
+.tags a {
+  color: #79871b !important;
   text-decoration: none;
-  font-size: 80%;
+}
+
+.posts-table-tags, .posts-table-tags a {
+  /* color: #555 !important; */
+  font-size: 1.3rem;
+}
+
+.posts-table-description {
+  color: #838383;
+  font-style: italic;
+  font-size: 85%;
 }
 
 .posts-table tr:first-child td {
@@ -117,12 +132,19 @@ tr, td {
 }
 
 sup {
-  font-size: x-small;
+  vertical-align: super;
+  font-size: small;
+}
+
+li:target {
+  background-color: #dff2f0;
 }
 
 .MathJax_Display {
   margin: 0 !important;
   font-size: 98%;
+  overflow-y: hidden;
+  display: block;
 }
 
 .info {
@@ -161,7 +183,7 @@ sup {
   font-size: 90%;
 }
 
-@media (max-width: 319px) {
+@media (max-width: 419px) {
   body {
     width: 90%;
     margin: 0;
@@ -190,7 +212,7 @@ sup {
   }
 }
 
-@media (min-width: 320px) {
+@media (min-width: 420px) {
   body {
     width: 90%;
     margin: 0;

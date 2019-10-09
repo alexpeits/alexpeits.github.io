@@ -12,6 +12,11 @@ p > code {
   color: #BF616A;
   background-color: #F9F9F9;
   padding: 0.3em;
+  white-space: pre-wrap;
+  white-space: -moz-pre-wrap;
+  white-space: -pre-wrap;
+  white-space: -o-pre-wrap;
+  word-wrap: break-word;   
 }
 div.sourceCode, .text {
   margin: 1em 0;

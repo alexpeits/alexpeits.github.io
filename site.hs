@@ -68,7 +68,7 @@ main = do
         let
           indexCtx
             =  listField "posts" (postCtxWithTags tags) (return posts)
-            <> constField "title" "Home"
+            <> constField "title" "Posts"
             <> defaultContext
 
         getResourceBody
@@ -126,11 +126,10 @@ defaultCtxWithTags tags = listField "tags" tagsCtx getAllTags         `mappend`
 postCtxWithTags :: Tags -> Context String
 postCtxWithTags tags
   =  tagsField "tags" tags
-  <> dateField "date" "%B %e, %Y"
-  <> dateField "shortDate" "%Y.%m.%d"
-  <> defaultContext
+  <> postCtx
 
 postCtx :: Context String
 postCtx
   =  dateField "date" "%B %e, %Y"
+  <> dateField "shortDate" "%Y.%m.%d"
   <> defaultContext

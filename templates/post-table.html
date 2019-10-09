@@ -5,9 +5,13 @@
       <td class="posts-table-date">$shortDate$</td>
       <td>
         <a href="$url$" class="posts-table-title">$title$</a>
+        $if(description)$
+        <div class="posts-table-description">
+          $description$
+        </div>
+        $endif$
         $if(tags)$
-        <br>
-        <div class="posts-table-tags">
+        <div class="posts-table-tags tags">
           $tags$
         </div>
         $endif$
