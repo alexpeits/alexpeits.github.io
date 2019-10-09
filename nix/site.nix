@@ -5,11 +5,11 @@
 pkgs.stdenv.mkDerivation {
   name = "alexpeits-github-io-site";
   src = lib.sourceByRegex ../. [
+    "posts(.*)?"
+    "templates(.*)?"
+    "css(.*)?"
     ".*.md"
     ".*.html"
-    "posts"
-    "templates"
-    "css"
   ];
   LANG = "en_US.UTF-8";
   LOCALE_ARCHIVE = "${pkgs.glibcLocales}/lib/locale/locale-archive";
