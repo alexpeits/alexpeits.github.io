@@ -28,3 +28,8 @@ jobs:
         keep_history: true
         target_branch: master
         local_dir: site
+        on:
+          repo: alexpeits/alexpeits.github.io
+          branches:
+            only:
+              - develop
