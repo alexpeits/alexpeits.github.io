@@ -142,7 +142,6 @@ li:target {
 
 .MathJax_Display {
   margin: 0 !important;
-  font-size: 98%;
   overflow-y: hidden;
   display: block;
 }
@@ -241,6 +240,18 @@ li:target {
   }
 }
 
+@media (max-width: 449px) {
+  .MathJax_Display {
+    font-size: 75%;
+  }
+}
+
+@media (min-width: 450px) {
+  .MathJax_Display {
+    font-size: 90%;
+  }
+}
+
 @media (min-width: 850px) {
   body {
     width: 65rem;
@@ -269,5 +280,8 @@ li:target {
   .logo a {
     float: left;
     font-size: 1.8rem;
+  }
+  .MathJax_Display {
+    font-size: 98%;
   }
 }

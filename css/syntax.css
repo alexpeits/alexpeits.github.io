@@ -1,12 +1,26 @@
 a.sourceLine { display: inline-block; line-height: 1.25; }
 a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
 a.sourceLine:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
+
+.sourceCode {
+  overflow: visible;
+}
+
+@media (max-width: 449px) {
+  pre > code {
+    font-size: 93%;
+  }
+}
+
+@media (min-width: 450px) {
+  pre > code {
+    font-size: 100%;
+  }
+}
+
 code {
   white-space: pre;
   position: relative;
-  /*font-family: 'Source Code Pro', monospace; */
-  font-size: 98%;
 }
 p > code {
   color: #BF616A;
@@ -16,7 +30,7 @@ p > code {
   white-space: -moz-pre-wrap;
   white-space: -pre-wrap;
   white-space: -o-pre-wrap;
-  word-wrap: break-word;   
+  word-wrap: break-word;
 }
 div.sourceCode, .text {
   margin: 1em 0;
