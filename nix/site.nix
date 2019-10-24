@@ -7,7 +7,8 @@ pkgs.stdenv.mkDerivation {
   src = lib.sourceByRegex ../. [
     "posts(.*)?"
     "templates(.*)?"
-    "static(.*)?"
+    "css(.*)?"
+    "images(.*)?"
     ".*.md"
     ".*.html"
   ];
