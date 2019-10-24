@@ -9,16 +9,7 @@ let
   else
     pkgs.haskell.packages.${compiler};
 
-  hakyll-src = pkgs.fetchFromGitHub {
-    owner = "jaspervdj";
-    repo = "hakyll";
-    rev = "a312fd4972f9add0736a9f8335bcd51e0e163b06";
-    sha256 = "0mz5k81rmh5fwj4dflljjhv4c03ygamsb1xncx459rldlma8w1l4";
-  };
-
-  alexpeits-github-io = haskellPackages.callPackage ./nix/alexpeits-github-io.nix {
-    hakyll = pkgs.haskellPackages.callCabal2nix "hakyll" hakyll-src { };
-  };
+  alexpeits-github-io = haskellPackages.callPackage ./nix/alexpeits-github-io.nix { };
 
   shell = pkgs.mkShell {
     inputsFrom = [ alexpeits-github-io.env ];

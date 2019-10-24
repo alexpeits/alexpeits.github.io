@@ -6,8 +6,11 @@ watch:
 build:
 	cabal new-exec site build
 
+clean:
+	cabal new-exec site clean
+
 cabal-configure:
-	nix-shell --command 'cabal new-configure -w $$(which ghc)'
+	nix-shell -A shell --command 'cabal new-configure -w $$(which ghc)'
 
 ghcid:
 	ghcid -a --command="cabal new-repl"
