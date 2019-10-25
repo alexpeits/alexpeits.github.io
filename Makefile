@@ -1,6 +1,6 @@
 .PHONY: ghcid
 
-watch:
+watch: clean
 	cabal new-exec site watch
 
 build:

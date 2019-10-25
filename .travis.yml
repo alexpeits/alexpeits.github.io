@@ -18,6 +18,7 @@ jobs:
         - nix-env -iA cachix -f https://cachix.org/api/v1/install
         - cachix use alexpeits-travis
         - cachix push alexpeits-travis --watch-store&
+        - date > .timestamp
         - nix-build -A site -o site
         - sleep 10
 
