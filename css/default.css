@@ -285,11 +285,3 @@ li:target {
     font-size: 98%;
   }
 }
-
-@media (min-width: 2000px) {
-  body {
-    width: 100rem;
-    margin: 0 auto;
-    padding: 0;
-  }
-}
