@@ -10,8 +10,9 @@ I am interested in good software, algorithms, type theory and of course
 [Emacs](https://github.com/alexpeits/emacs.d).
 By night, I'm also a jazz guitarist.
 
-You can find me at
+You can find me on
 [github](https://github.com/alexpeits),
 [twitter](https://twitter.com/alexpeits),
 [reddit](https://reddit.com/u/primitiveinds)
+[keybase](https://keybase.io/alexpeits),
 and by email at `alexpeitsinis [at] gmail [dot] com`.
