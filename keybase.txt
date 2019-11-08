@@ -1,0 +1,57 @@
+==================================================================
+https://keybase.io/alexpeits
+--------------------------------------------------------------------
+
+I hereby claim:
+
+  * I am an admin of https://alexpeits.github.io
+  * I am alexpeits (https://keybase.io/alexpeits) on keybase.
+  * I have a public key ASBkzMWNzHoNsIahaO1f-W9OMi1UYdWQ5rlPLs1MdyWmego
+
+To do so, I am signing this object:
+
+{
+  "body": {
+    "key": {
+      "eldest_kid": "01202d671c758548cb057f70f533507132d7fbc5ead6077a9f862a5ed419d4f2831c0a",
+      "host": "keybase.io",
+      "kid": "012064ccc58dcc7a0db086a168ed5ff96f4e322d5461d590e6b94f2ecd4c7725a67a0a",
+      "uid": "99f2c82d6a2b0ebc3e513a52d5fa2f19",
+      "username": "alexpeits"
+    },
+    "merkle_root": {
+      "ctime": 1573203892,
+      "hash": "fbf5b61c122be1e94cd03f51a96cc6976cf29a0e5285938306cfc466a33a2561725723e57d4511e85333aedb69616abe0b69cb9d114d76db12cf3ed80f3f7537",
+      "hash_meta": "99ee55191f9fe2fcd4a6dd8ee3e8d0ed980565367ec9c87d1da1e9da82939429",
+      "seqno": 8932864
+    },
+    "service": {
+      "entropy": "5EMe69l8x0iJ8GqmRRHVdWQH",
+      "hostname": "alexpeits.github.io",
+      "protocol": "https:"
+    },
+    "type": "web_service_binding",
+    "version": 2
+  },
+  "client": {
+    "name": "keybase.io go client",
+    "version": "4.3.1"
+  },
+  "ctime": 1573203905,
+  "expire_in": 504576000,
+  "prev": "583da580ba034e83d7732f1cc505754b2989942990f0c509992e9c3f9d706c4e",
+  "seqno": 8,
+  "tag": "signature"
+}
+
+which yields the signature:
+
+hKRib2R5hqhkZXRhY2hlZMOpaGFzaF90eXBlCqNrZXnEIwEgZMzFjcx6DbCGoWjtX/lvTjItVGHVkOa5Ty7NTHclpnoKp3BheWxvYWTESpcCCMQgWD2lgLoDToPXcy8cxQV1SymJlCmQ8MUJmS6cP51wbE7EIBTd35ELj7PF1nRwvfKM7jx2kbD/O0qKIDyN1VIshIVoAgHCo3NpZ8RADZ9Xui6pUsv3rhGmdbzWj9CC0WdvRbw6CY6CMH/LumBXHSBDk8gv9rm+P36lmdw4J2LMEZVmRw10kzhtSFZZB6hzaWdfdHlwZSCkaGFzaIKkdHlwZQildmFsdWXEIPLU+/LyulXpHVaPnBpATB7dERgOhDoIPAhxRIKEsYVeo3RhZ80CAqd2ZXJzaW9uAQ==
+
+And finally, I am proving ownership of this host by posting or
+appending to this document.
+
+View my publicly-auditable identity here: https://keybase.io/alexpeits
+
+==================================================================
+
