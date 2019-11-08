@@ -11,6 +11,7 @@ pkgs.stdenv.mkDerivation {
     "images(.*)?"
     ".*.md"
     ".*.html"
+    "extra_files(.*)?"
   ];
   LANG = "en_US.UTF-8";
   LOCALE_ARCHIVE = "${pkgs.glibcLocales}/lib/locale/locale-archive";
