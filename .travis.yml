@@ -19,9 +19,6 @@ jobs:
         - cachix use alexpeits-travis
         - cachix push alexpeits-travis --watch-store&
         - nix-build -A site -o site
-        - ls -la
-        - ls -la site
-        - cp -R extra_files/* site/
         - sleep 10
 
       deploy:

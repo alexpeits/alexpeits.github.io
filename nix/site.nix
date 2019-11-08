@@ -25,5 +25,6 @@ pkgs.stdenv.mkDerivation {
 
   installPhase = ''
     cp -R _site $out
+    cp -R extra_files/* $out
   '';
 }
