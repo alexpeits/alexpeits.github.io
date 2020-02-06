@@ -131,6 +131,10 @@ tr, td {
   /* border-bottom: 1px solid black; */
 }
 
+.talks-location {
+  color: #79871b !important;
+}
+
 sup {
   vertical-align: super;
   font-size: small;
