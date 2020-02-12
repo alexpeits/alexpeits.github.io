@@ -1,35 +1,37 @@
-<!doctype html>
+  <!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Alex's blog - Writing and using proofs in Haskell</title>
-    <link rel="shortcut icon" type="image/png" href="../images/favicon.png" />
-    <link rel="stylesheet" href="../css/default.css" />
-    <link rel="stylesheet" href="../css/syntax.css" />
+    <link rel="shortcut icon" type="image/png" href="/static/images/favicon.png"/>
+    <link rel="stylesheet" href="/static/css/default.css" />
+    <link rel="stylesheet" href="/static/css/syntax.css" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700%7CPT+Sans:400" />
     <script type="text/x-mathjax-config">
-      MathJax.Hub.Config({
-        "HTML-CSS": { linebreaks: { automatic: true } },
-        SVG: { linebreaks: { automatic: true } },
-        messageStyle: "none"
-      });
+     MathJax.Hub.Config({
+       "HTML-CSS": { linebreaks: { automatic: true } },
+       SVG: { linebreaks: { automatic: true } },
+       messageStyle: "none"
+     });
     </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript">
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
+      type="text/javascript">
     </script>
   </head>
   <body>
     <header>
       <div class="logo">
-        <a href="../">Alex's blog</a>
+        <a href="/">Alex's blog</a>
       </div>
       <nav>
-        <a class="nav-link" href="../">Home</a>
-        <a class="nav-link" href="../tags.html">Tags</a>
-        <a class="nav-link" href="../projects.html">Projects</a>
-        <a class="nav-link" href="../talks.html">Talks</a>
-        <a class="nav-link" href="../about.html">About</a>
+        <a class="nav-link" href="/">Home</a>
+        <a class="nav-link" href="/tags.html">Tags</a>
+        <a class="nav-link" href="/projects.html">Projects</a>
+        <a class="nav-link" href="/talks.html">Talks</a>
+        <a class="nav-link" href="/about.html">About</a>
       </nav>
     </header>
 
@@ -38,12 +40,9 @@
       <article>
   <section class="header">
     Posted on September 27, 2018
-    
   </section>
   <section class="header tags">
-    
-    Tags: <a href="../tags/haskell.html">haskell</a>, <a href="../tags/dependent%20types.html">dependent types</a>
-    
+    Tags: <a href="/tags/haskell.html">haskell</a>, <a href="/tags/dependent-types.html">dependent-types</a>
   </section>
   <section>
     <p><span class="info">This post is still work in progress, consider this early access</span></p>
@@ -98,26 +97,26 @@ a + S(b) = S (a + b) &amp;&amp; \text{(2)}\\
 <div class="sourceCode" id="cb6"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb6-1"><a href="#cb6-1"></a><span class="ot">testEquality ::</span> (<span class="dt">Z</span> <span class="op">+</span> <span class="dt">Z</span>) <span class="op">:~:</span> <span class="dt">Z</span></span>
 <span id="cb6-2"><a href="#cb6-2"></a>testEquality <span class="ot">=</span> <span class="dt">Refl</span></span></code></pre></div>
 <p>This type checks because <code>Refl</code> says “ok, I need <code>Z + Z</code> to be the same as <code>Z</code>. But when the type checker sees <code>Z + Z</code>, it uses <code>(1)</code> to say that <code>Z + Z = Z</code>, where <code>a = Z</code>, and our equality stands. This is the first proof! The fact that we don’t need to give any values or”nudge" the type system in any way means that the elaboration happens automatically, and this equality stands every time. Let’s also try not with concrete types, but with a type variable:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb7-1"><a href="#cb7-1"></a><span class="ot">testEquality' ::</span> (a <span class="op">+</span> <span class="dt">Z</span>) <span class="op">:~:</span> a</span>
-<span id="cb7-2"><a href="#cb7-2"></a>testEquality' <span class="ot">=</span> <span class="dt">Refl</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb7-1"><a href="#cb7-1"></a><span class="ot">testEquality&#39; ::</span> (a <span class="op">+</span> <span class="dt">Z</span>) <span class="op">:~:</span> a</span>
+<span id="cb7-2"><a href="#cb7-2"></a>testEquality&#39; <span class="ot">=</span> <span class="dt">Refl</span></span></code></pre></div>
 <p>This type checks, again thanks to <code>(1)</code>. Let’s try <code>(2)</code>:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb8-1"><a href="#cb8-1"></a><span class="ot">testEquality'' ::</span> (a <span class="op">+</span> <span class="dt">S</span> b) <span class="op">:~:</span> <span class="dt">S</span> (a <span class="op">+</span> b)</span>
-<span id="cb8-2"><a href="#cb8-2"></a>testEquality'' <span class="ot">=</span> <span class="dt">Refl</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb8-1"><a href="#cb8-1"></a><span class="ot">testEquality&#39;&#39; ::</span> (a <span class="op">+</span> <span class="dt">S</span> b) <span class="op">:~:</span> <span class="dt">S</span> (a <span class="op">+</span> b)</span>
+<span id="cb8-2"><a href="#cb8-2"></a>testEquality&#39;&#39; <span class="ot">=</span> <span class="dt">Refl</span></span></code></pre></div>
 <p>And yet again, this type checks, this time thanks to <code>(2)</code>. Now let’s try something that is not immediately apparent. With <code>testEquality'</code>, we proved the right identity property of addition. What about left identity?</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb9-1"><a href="#cb9-1"></a><span class="ot">plusLeftId ::</span> (<span class="dt">Z</span> <span class="op">+</span> a) <span class="op">:~:</span> a</span>
 <span id="cb9-2"><a href="#cb9-2"></a>plusLeftId <span class="ot">=</span> <span class="dt">Refl</span></span></code></pre></div>
 <p>Which, when compiled, unfortunately fails:</p>
-<pre class="text"><code>• Couldn't match type ‘a’ with ‘'Z + a’
+<pre class="text"><code>• Couldn&#39;t match type ‘a’ with ‘&#39;Z + a’
     ‘a’ is a rigid type variable bound by
     the type signature for:
-        plusLeftId :: forall (a :: Nat). ('Z + a) :~: a
+        plusLeftId :: forall (a :: Nat). (&#39;Z + a) :~: a
     at ...
-    Expected type: ('Z + a) :~: a
+    Expected type: (&#39;Z + a) :~: a
     Actual type: a :~: a
 • In the expression: Refl
     In an equation for ‘plusLeftId’: plusLeftId = Refl
 • Relevant bindings include
-    plusLeftId :: ('Z + a) :~: a
+    plusLeftId :: (&#39;Z + a) :~: a
         (bound at ...)
 |
 70 | plusLeftId = Refl
@@ -157,10 +156,10 @@ a + S(b) = S (a + b) &amp;&amp; \text{(2)}\\
 <span id="cb17-2"><a href="#cb17-2"></a>plusLeftId <span class="dt">SZ</span>     <span class="ot">=</span> <span class="dt">Refl</span></span>
 <span id="cb17-3"><a href="#cb17-3"></a>plusLeftId (<span class="dt">SS</span> n) <span class="ot">=</span> <span class="dt">Refl</span></span></code></pre></div>
 <p>But this fails:</p>
-<pre class="text"><code>• Could not deduce: ('Z + n) ~ n
-  from the context: m ~ 'S n
+<pre class="text"><code>• Could not deduce: (&#39;Z + n) ~ n
+  from the context: m ~ &#39;S n
     bound by a pattern with constructor:
-               SS :: forall (m :: Nat). SNat m -&gt; SNat ('S m),
+               SS :: forall (m :: Nat). SNat m -&gt; SNat (&#39;S m),
              in an equation for ‘plusLeftId’</code></pre>
 <p>(I have made the error message a bit more readable)</p>
 <p>Which makes sense: we have to <em>tell</em> the type checker that the equality holds for <code>n</code>. So, as described earlier, we’ll use <code>gcastWith</code>:</p>
@@ -182,8 +181,8 @@ a + S(b) = S (a + b) &amp;&amp; \text{(2)}\\
 <span id="cb21-7"><a href="#cb21-7"></a><span class="ot">plusRightId ::</span> <span class="dt">SNat</span> a <span class="ot">-&gt;</span> (a <span class="op">+</span> <span class="dt">Z</span>) <span class="op">:~:</span> a</span>
 <span id="cb21-8"><a href="#cb21-8"></a>plusRightId <span class="ot">=</span> given1</span></code></pre></div>
 <p>Of course the first two don’t need anything further to be proved. The same applies for right identity, but here I used <code>given1</code> to demonstrate the use of a proof in another proof. This would work too:</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb22-1"><a href="#cb22-1"></a><span class="ot">plusRightId' ::</span> <span class="dt">SNat</span> a <span class="ot">-&gt;</span> (a <span class="op">+</span> <span class="dt">Z</span>) <span class="op">:~:</span> a</span>
-<span id="cb22-2"><a href="#cb22-2"></a>plusRightId' n <span class="ot">=</span> gcastWith (given1 n) <span class="dt">Refl</span></span></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb22-1"><a href="#cb22-1"></a><span class="ot">plusRightId&#39; ::</span> <span class="dt">SNat</span> a <span class="ot">-&gt;</span> (a <span class="op">+</span> <span class="dt">Z</span>) <span class="op">:~:</span> a</span>
+<span id="cb22-2"><a href="#cb22-2"></a>plusRightId&#39; n <span class="ot">=</span> gcastWith (given1 n) <span class="dt">Refl</span></span></code></pre></div>
 <h2 id="proofs-with-multiple-steps">Proofs with multiple steps</h2>
 <p>The proof for left identity was a relatively simple one. Here it is in mathematical notation (copied from <a href="https://en.wikipedia.org/wiki/Proofs_involving_the_addition_of_natural_numbers">here</a> (I’ll refer to the addition axiom as <span class="math inline">\((1)\)</span> and <span class="math inline">\((2)\)</span>):</p>
 <p><span class="math display">\[
@@ -194,8 +193,8 @@ a + S(b) = S (a + b) &amp;&amp; \text{(2)}\\
 \end{align}
 \]</span></p>
 <p>This means that in the proof we went from <code>Z + (S n)</code> to <code>S (Z + n)</code> by using the type family definition, and then proved what’s inside the <code>S</code> inductively. It makes sense that we want to work on <code>Z + n</code>, since the error we first got said exactly that:</p>
-<pre class="text"><code>• Could not deduce: ('Z + n) ~ n
-  from the context: m ~ 'S n</code></pre>
+<pre class="text"><code>• Could not deduce: (&#39;Z + n) ~ n
+  from the context: m ~ &#39;S n</code></pre>
 <h2 id="proving-the-associativity-of-addition">Proving the associativity of addition</h2>
 <p>Let’s now try a proof that’s a bit more complex: associativity of addition. So we’ll prove that <span class="math inline">\((a + b) + c = a + (b + c)\)</span>. I am going to copy the mathematical notation for the proof here and follow that verbatim, rather than explaining each step.</p>
 <p>For the base case c = 0:</p>
@@ -349,18 +348,18 @@ a + S(b) = S (a + b) &amp;&amp; \text{(2)}\\
 <p>One common example is appending two vectors. It is apparent that if one has length <code>n</code> and the other has length <code>m</code>, then the resulting vector will have length <code>n + m</code>. A naive first attemt would be the following:</p>
 <div class="sourceCode" id="cb33"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb33-1"><a href="#cb33-1"></a><span class="ot">append ::</span> <span class="dt">Vec</span> n a <span class="ot">-&gt;</span> <span class="dt">Vec</span> m a <span class="ot">-&gt;</span> <span class="dt">Vec</span> (n <span class="op">+</span> m) a</span>
 <span id="cb33-2"><a href="#cb33-2"></a>append <span class="dt">V0</span>      ys <span class="ot">=</span> ys</span>
-<span id="cb33-3"><a href="#cb33-3"></a>append (x<span class="op">:&gt;</span>xs) ys <span class="ot">=</span> <span class="fu">undefined</span> <span class="co">-- let's wait for now</span></span></code></pre></div>
+<span id="cb33-3"><a href="#cb33-3"></a>append (x<span class="op">:&gt;</span>xs) ys <span class="ot">=</span> <span class="fu">undefined</span> <span class="co">-- let&#39;s wait for now</span></span></code></pre></div>
 <p>But even the base case fails to typecheck:</p>
-<pre class="text"><code>• Could not deduce: ('Z + m) ~ m
-      from the context: n ~ 'Z</code></pre>
+<pre class="text"><code>• Could not deduce: (&#39;Z + m) ~ m
+      from the context: n ~ &#39;Z</code></pre>
 <p>The error says that the only concrete information we have is <code>n ~ Z</code>, because the first vector is the empty vector. And because we return <code>ys</code>, which has length <code>m</code>, the resulting type <code>Z + m</code> should be the same as <code>m</code>, but the type checker is not convinced. Let’s notice that what we need is to use the left identity property, and convince the checker:</p>
 <div class="sourceCode" id="cb35"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb35-1"><a href="#cb35-1"></a><span class="ot">append ::</span> <span class="dt">Vec</span> n a <span class="ot">-&gt;</span> <span class="dt">Vec</span> m a <span class="ot">-&gt;</span> <span class="dt">Vec</span> (n <span class="op">+</span> m) a</span>
 <span id="cb35-2"><a href="#cb35-2"></a>append <span class="dt">V0</span>      ys <span class="ot">=</span> gcastWith (plusLeftId <span class="op">?</span>) ys</span>
-<span id="cb35-3"><a href="#cb35-3"></a>append (x<span class="op">:&gt;</span>xs) ys <span class="ot">=</span> <span class="fu">undefined</span> <span class="co">-- let's wait for now</span></span></code></pre></div>
+<span id="cb35-3"><a href="#cb35-3"></a>append (x<span class="op">:&gt;</span>xs) ys <span class="ot">=</span> <span class="fu">undefined</span> <span class="co">-- let&#39;s wait for now</span></span></code></pre></div>
 <p>There is one important part missing: the actual length. All our proofs used singletons to help drive the checking process, but here there is no mention of a singleton. So let’s add it for now, and later we’ll try to make this process implicit. We’ll explicitly pass the lengths of both vectors:</p>
 <div class="sourceCode" id="cb36"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb36-1"><a href="#cb36-1"></a><span class="ot">append ::</span> <span class="dt">SNat</span> n <span class="ot">-&gt;</span> <span class="dt">SNat</span> m <span class="ot">-&gt;</span> <span class="dt">Vec</span> n a <span class="ot">-&gt;</span> <span class="dt">Vec</span> m a <span class="ot">-&gt;</span> <span class="dt">Vec</span> (n <span class="op">+</span> m) a</span>
 <span id="cb36-2"><a href="#cb36-2"></a>append <span class="dt">SZ</span> m <span class="dt">V0</span>      ys <span class="ot">=</span> gcastWith (plusLeftId m) ys</span>
-<span id="cb36-3"><a href="#cb36-3"></a>append n  m (x<span class="op">:&gt;</span>xs) ys <span class="ot">=</span> <span class="fu">undefined</span> <span class="co">-- let's wait for now</span></span></code></pre></div>
+<span id="cb36-3"><a href="#cb36-3"></a>append n  m (x<span class="op">:&gt;</span>xs) ys <span class="ot">=</span> <span class="fu">undefined</span> <span class="co">-- let&#39;s wait for now</span></span></code></pre></div>
 <p>OK, this works. Let’s try to do the next case where the first vector is nonempty. We’ll make it fail just to see the error message:</p>
 <div class="sourceCode" id="cb37"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb37-1"><a href="#cb37-1"></a><span class="ot">append ::</span> <span class="dt">SNat</span> n <span class="ot">-&gt;</span> <span class="dt">SNat</span> m <span class="ot">-&gt;</span> <span class="dt">Vec</span> n a <span class="ot">-&gt;</span> <span class="dt">Vec</span> m a <span class="ot">-&gt;</span> <span class="dt">Vec</span> (n <span class="op">+</span> m) a</span>
 <span id="cb37-2"><a href="#cb37-2"></a>append <span class="dt">SZ</span> m <span class="dt">V0</span>      ys <span class="ot">=</span> gcastWith (plusLeftId m) ys</span>
@@ -373,8 +372,8 @@ a + S(b) = S (a + b) &amp;&amp; \text{(2)}\\
 <span id="cb39-2"><a href="#cb39-2"></a>append <span class="dt">SZ</span> m <span class="dt">V0</span>      ys <span class="ot">=</span> gcastWith (plusLeftId m) ys</span>
 <span id="cb39-3"><a href="#cb39-3"></a>append n  m (x<span class="op">:&gt;</span>xs) ys <span class="ot">=</span> x <span class="op">:&gt;</span> append (spred n) m xs ys</span></code></pre></div>
 <p>This time we get this error:</p>
-<pre class="text"><code>• Could not deduce: ('S n1 + m) ~ 'S (n1 + m)
-  from the context: n ~ 'S n1</code></pre>
+<pre class="text"><code>• Could not deduce: (&#39;S n1 + m) ~ &#39;S (n1 + m)
+  from the context: n ~ &#39;S n1</code></pre>
 <p>Where <code>n1</code> is the type of the result of <code>spred n</code>. Let’s construct a proof for that:</p>
 <p>We need to prove <span class="math inline">\(S(a) + b = S(a + b)\)</span>. We can do an inductive proof which will be quicker (in the repo I use an inductive proof), but let’s try to do it in one pass:</p>
 <p><span class="math display">\[
@@ -405,7 +404,7 @@ a + S(b) = S (a + b) &amp;&amp; \text{(2)}\\
 <p>And that’s the proof. Now appending two vectors should work. First, here’s an instance of <code>Show</code> for <code>Vec</code>:</p>
 <div class="sourceCode" id="cb42"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb42-1"><a href="#cb42-1"></a><span class="kw">instance</span> (<span class="dt">Show</span> a) <span class="ot">=&gt;</span> <span class="dt">Show</span> (<span class="dt">Vec</span> n a) <span class="kw">where</span></span>
 <span id="cb42-2"><a href="#cb42-2"></a>  <span class="fu">show</span> v <span class="ot">=</span> <span class="st">&quot;[&quot;</span> <span class="op">++</span> go v</span>
-<span id="cb42-3"><a href="#cb42-3"></a>    <span class="kw">where</span><span class="ot"> go ::</span> (<span class="dt">Show</span> a') <span class="ot">=&gt;</span> <span class="dt">Vec</span> n' a' <span class="ot">-&gt;</span> <span class="dt">String</span></span>
+<span id="cb42-3"><a href="#cb42-3"></a>    <span class="kw">where</span><span class="ot"> go ::</span> (<span class="dt">Show</span> a&#39;) <span class="ot">=&gt;</span> <span class="dt">Vec</span> n&#39; a&#39; <span class="ot">-&gt;</span> <span class="dt">String</span></span>
 <span id="cb42-4"><a href="#cb42-4"></a>          go v <span class="ot">=</span> <span class="kw">case</span> v <span class="kw">of</span></span>
 <span id="cb42-5"><a href="#cb42-5"></a>            <span class="dt">V0</span>        <span class="ot">-&gt;</span> <span class="st">&quot;]&quot;</span></span>
 <span id="cb42-6"><a href="#cb42-6"></a>            (x <span class="op">:&gt;</span> xs) <span class="ot">-&gt;</span> <span class="fu">show</span> x <span class="op">++</span> sep <span class="op">++</span> go xs</span>
@@ -422,7 +421,7 @@ a + S(b) = S (a + b) &amp;&amp; \text{(2)}\\
 [1, 2, 3, 4, 5, 6, 7, 8, 9]
 &gt; :t append lengthX lengthY x y
 append lengthX lengthY x y
-  :: Vec ('S ('S ('S ('S ('S ('S ('S ('S ('S 'Z))))))))) Integer</code></pre>
+  :: Vec (&#39;S (&#39;S (&#39;S (&#39;S (&#39;S (&#39;S (&#39;S (&#39;S (&#39;S &#39;Z))))))))) Integer</code></pre>
 <p>We can also remove the need to have the length in a variable beforehand. To do that, we have to resort to type classes (again, this is described in the Stitch paper). We will construct a type class with a single method that can magically give an <code>SNat</code> depending on the instance we are using:</p>
 <div class="sourceCode" id="cb45"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb45-1"><a href="#cb45-1"></a><span class="kw">class</span> <span class="dt">IsNat</span> (<span class="ot">n ::</span> <span class="dt">Nat</span>) <span class="kw">where</span><span class="ot"> nat ::</span> <span class="dt">SNat</span> n</span>
 <span id="cb45-2"><a href="#cb45-2"></a></span>
@@ -453,14 +452,15 @@ append lengthX lengthY x y
 <li id="fn4" role="doc-endnote"><p><a href="http://docs.idris-lang.org/en/latest/tutorial/typesfuns.html" class="uri">http://docs.idris-lang.org/en/latest/tutorial/typesfuns.html</a><a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
+
   </section>
 </article>
 
     </main>
 
     <footer>
-      Site proudly generated by
-      <a href="http://jaspervdj.be/hakyll">Hakyll</a>
+      Site generated using <a href="https://github.com/alexpeits/alexpeits.github.io/blob/develop/default.nix">nix</a>
     </footer>
   </body>
 </html>
+

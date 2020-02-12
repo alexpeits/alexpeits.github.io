@@ -1,35 +1,37 @@
-<!doctype html>
+  <!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Alex's blog - Formatting timesheet tables in org-mode</title>
-    <link rel="shortcut icon" type="image/png" href="../images/favicon.png" />
-    <link rel="stylesheet" href="../css/default.css" />
-    <link rel="stylesheet" href="../css/syntax.css" />
+    <link rel="shortcut icon" type="image/png" href="/static/images/favicon.png"/>
+    <link rel="stylesheet" href="/static/css/default.css" />
+    <link rel="stylesheet" href="/static/css/syntax.css" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700%7CPT+Sans:400" />
     <script type="text/x-mathjax-config">
-      MathJax.Hub.Config({
-        "HTML-CSS": { linebreaks: { automatic: true } },
-        SVG: { linebreaks: { automatic: true } },
-        messageStyle: "none"
-      });
+     MathJax.Hub.Config({
+       "HTML-CSS": { linebreaks: { automatic: true } },
+       SVG: { linebreaks: { automatic: true } },
+       messageStyle: "none"
+     });
     </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript">
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
+      type="text/javascript">
     </script>
   </head>
   <body>
     <header>
       <div class="logo">
-        <a href="../">Alex's blog</a>
+        <a href="/">Alex's blog</a>
       </div>
       <nav>
-        <a class="nav-link" href="../">Home</a>
-        <a class="nav-link" href="../tags.html">Tags</a>
-        <a class="nav-link" href="../projects.html">Projects</a>
-        <a class="nav-link" href="../talks.html">Talks</a>
-        <a class="nav-link" href="../about.html">About</a>
+        <a class="nav-link" href="/">Home</a>
+        <a class="nav-link" href="/tags.html">Tags</a>
+        <a class="nav-link" href="/projects.html">Projects</a>
+        <a class="nav-link" href="/talks.html">Talks</a>
+        <a class="nav-link" href="/about.html">About</a>
       </nav>
     </header>
 
@@ -38,12 +40,9 @@
       <article>
   <section class="header">
     Posted on February 12, 2017
-    
   </section>
   <section class="header tags">
-    
-    Tags: <a href="../tags/emacs.html">emacs</a>
-    
+    Tags: <a href="/tags/emacs.html">emacs</a>
   </section>
   <section>
     <p><span class="info">This post is originally adapted from <a href="https://emacs.stackexchange.com/questions/23808/how-to-plot-summaries-of-timestamps-of-different-projects-clocking-in-and-out/23862#23862">this</a> stackoverflow answer.</span></p>
@@ -52,10 +51,10 @@
 <p>To do this, we use the following elisp code block in the respective buffer:</p>
 <pre class="text"><code>#+BEGIN_SRC elisp
   (nconc
-   '((&quot;date&quot; &quot;project&quot; &quot;hours&quot; &quot;task&quot;))
-   '(hline)
-   (let ((ast (org-element-parse-buffer 'element)))
-     (org-element-map ast 'clock
+   &#39;((&quot;date&quot; &quot;project&quot; &quot;hours&quot; &quot;task&quot;))
+   &#39;(hline)
+   (let ((ast (org-element-parse-buffer &#39;element)))
+     (org-element-map ast &#39;clock
        (lambda (x)
          (let* ((val (org-element-property :value x))
                 (task (org-element-property
@@ -71,8 +70,8 @@
              ,(org-element-property :duration x)
              ,(org-element-property :title task)
              )))))
-   '(hline)
-   '((&quot;&quot; &quot;total:&quot; &quot;:=vsum(@2..@-1);T&quot; &quot;&quot;)))
+   &#39;(hline)
+   &#39;((&quot;&quot; &quot;total:&quot; &quot;:=vsum(@2..@-1);T&quot; &quot;&quot;)))
 #+END_SRC</code></pre>
 <p>What this code block does is parse the buffer, and map the lambda function over all of the <code>clock</code> elements in the buffer. For each element, we get its value (which is the datetime range), and its header, which contains some properties, such as the project name. The name of the task is the header name.</p>
 <p>By prepending a list, we can also add headers. At the end, a <code>calc</code> formula can be used for adding the times to get a total. This formula sums the current column (hence the empty strings before and after), from the second row (not including the header), up to the second to last row (not including the formula itself). The <code>;T</code> after the formula instructs it to add time, rather than numbers. Finally, the <code>hline</code> function inserts a dashed line for making the table more presentable.</p>
@@ -117,14 +116,15 @@
 #+END_SRC</code></pre>
 <p>To run the formula, press <code>TAB</code> while in its cell.</p>
 <p>Afterwards, the table can be exported to csv with <code>org-table-export</code>.</p>
+
   </section>
 </article>
 
     </main>
 
     <footer>
-      Site proudly generated by
-      <a href="http://jaspervdj.be/hakyll">Hakyll</a>
+      Site generated using <a href="https://github.com/alexpeits/alexpeits.github.io/blob/develop/default.nix">nix</a>
     </footer>
   </body>
 </html>
+
