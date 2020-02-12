@@ -1,8 +1,7 @@
 ---
-layout: post
-title: "Writing and using proofs in Haskell"
-categories: programming
-tags: haskell, dependent types
+title: Writing and using proofs in Haskell
+tags: haskell
+      dependent-types
 ---
 
 [This post is still work in progress, consider this early access]{.info}

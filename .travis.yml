@@ -15,11 +15,11 @@ jobs:
   include:
     - stage: deploy
       script:
-        - nix-env -iA cachix -f https://cachix.org/api/v1/install
-        - cachix use alexpeits-travis
-        - cachix push alexpeits-travis --watch-store&
-        - nix-build -A site -o site
-        - sleep 10
+        # - nix-env -iA cachix -f https://cachix.org/api/v1/install
+        # - cachix use alexpeits-travis
+        # - cachix push alexpeits-travis --watch-store&
+        - ./run.sh -b
+        # - sleep 10
 
       deploy:
         provider: pages
