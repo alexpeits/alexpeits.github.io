@@ -251,9 +251,16 @@ let
     in
       b.concatStringsSep "\n" (map script otherPages);
 
+  buildInfo = "build-info.txt";
+  buildInfoScript = ''
+    rm -f $out/${buildInfo}
+    touch $out/${buildInfo}
+    git -C ${./.} log -1 --format=%H >> $out/${buildInfo}
+    git -C ${./.} log -1 --format=%cd >> $out/${buildInfo}
+  '';
 in
 
-pkgs.runCommand "blog" {} ''
+pkgs.runCommand "blog" { buildInputs = [ pkgs.git ]; } ''
   # static files
   mkdir -p $out/static
   cp -R ${./static}/* $out/static
@@ -281,4 +288,6 @@ pkgs.runCommand "blog" {} ''
 
   # extra files, copy as-is
   cp -R ${./extra_files}/* $out/
+
+  ${buildInfoScript}
 ''
