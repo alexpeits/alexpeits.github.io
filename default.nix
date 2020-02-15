@@ -6,12 +6,10 @@ let
     navPages = [ ./projects.nix ./talks.nix ./about.md ];
     rootDir = ./.;
     postsDir = ./posts;
-    staticDir = ./static;
-    extraFilesDir = ./extra_files;
     htmlHead = ''
-      <link rel="shortcut icon" type="image/png" href="/static/images/favicon.png"/>
-      <link rel="stylesheet" href="/static/css/default.css" />
-      <link rel="stylesheet" href="/static/css/syntax.css" />
+      <link rel="shortcut icon" type="image/png" href="/images/favicon.png"/>
+      <link rel="stylesheet" href="/css/default.css" />
+      <link rel="stylesheet" href="/css/syntax.css" />
       <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700%7CPT+Sans:400" />
       <script type="text/x-mathjax-config">
        MathJax.Hub.Config({
@@ -30,8 +28,8 @@ let
   statue-src-github = pkgs.fetchFromGitHub {
     owner = "alexpeits";
     repo = "statue";
-    rev = "5828b98a655cc139f75deddfea126c21c09f5ad3";
-    sha256 = "084m82gf29ri7iiysa17a5nqamgpc7asmiy6v91dhlyq0mvb95pj";
+    rev = "9e4836c04680d987f7a9a4f4898044c2b24923fa";
+    sha256 = "15mzkgdm1dbym8y301l5rd4vflycmsvwpkpdhlzh1g0m17qqfsbz";
   };
 
   statue-src = if statue != null then statue else statue-src-github;
