@@ -16,7 +16,7 @@ copy-files() {
 }
 
 run-nix() {
-    nix-build
+    eval "nix-build $NIX_ARGS"
 }
 
 cleanup() {
