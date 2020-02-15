@@ -1,6 +1,7 @@
 { pkgs ? import <nixpkgs> {} }:
 
 let
+
   mkProject = { url, name, desc, docs }: ''
     <tr>
       <td>
@@ -12,29 +13,26 @@ let
   '';
 
   harg =
-    mkProject
-      {
-        url = "https://github.com/alexpeits/harg";
-        name = "harg";
-        desc = "Haskell program configuration using higher kinded data";
-        docs = "http://alexpeits.github.io/harg";
-      };
+    mkProject {
+      url = "https://github.com/alexpeits/harg";
+      name = "harg";
+      desc = "Haskell program configuration using higher kinded data";
+      docs = "http://alexpeits.github.io/harg";
+    };
   haskell-nix-cookiecutter =
-    mkProject
-      {
-        url = "https://github.com/alexpeits/haskell-nix-cookiecutter";
-        name = "nix-haskell-cookiecutter";
-        desc = "Cookiecutter template to quickly generate haskell projects (cabal, nix, direnv)";
-        docs = "https://github.com/alexpeits/haskell-nix-cookiecutter/blob/master/README.md";
-      };
+    mkProject {
+      url = "https://github.com/alexpeits/haskell-nix-cookiecutter";
+      name = "nix-haskell-cookiecutter";
+      desc = "Cookiecutter template to quickly generate haskell projects (cabal, nix, direnv)";
+      docs = "https://github.com/alexpeits/haskell-nix-cookiecutter/blob/master/README.md";
+    };
   statue =
-    mkProject
-      {
-        url = "https://github.com/alexpeits/statue";
-        name = "statue";
-        desc = "Simple static site generator using only nix";
-        docs = "https://github.com/alexpeits/statue/blob/master/README.md";
-      };
+    mkProject {
+      url = "https://github.com/alexpeits/statue";
+      name = "statue";
+      desc = "Simple static site generator using only nix";
+      docs = "https://github.com/alexpeits/statue/blob/master/README.md";
+    };
 
   projects = [
     harg
