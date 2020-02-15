@@ -18,5 +18,12 @@ title: Projects
         <div class="posts-table-tags tags"><a href="https://github.com/alexpeits/haskell-nix-cookiecutter/blob/master/README.md">Go to docs</a></div>
       </td>
     </tr>
+    <tr>
+      <td>
+        <a href="https://github.com/alexpeits/statue" class="posts-table-title">statue</a>
+        <div class="posts-table-description">Simple static site generator using only nix</div>
+        <div class="posts-table-tags tags"><a href="https://github.com/alexpeits/statue/blob/master/README.md">Go to docs</a></div>
+      </td>
+    </tr>
   </tbody>
 </table>
