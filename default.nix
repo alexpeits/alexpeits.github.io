@@ -268,9 +268,7 @@ let
   buildInfo = "build-info.txt";
   buildInfoScript = ''
     rm -f $out/${buildInfo}
-    touch $out/${buildInfo}
-    git -C ${./.} log -1 --format=%H >> $out/${buildInfo}
-    git -C ${./.} log -1 --format=%cd >> $out/${buildInfo}
+    git -C ${./.} log -1 --format="%H%n%cd" > $out/${buildInfo}
   '';
 in
 
