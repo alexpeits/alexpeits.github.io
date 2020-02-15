@@ -31,8 +31,19 @@ let
   fmtDate = { year, month, day }:
     let
       months =
-        [ "January" "February" "March" "April" "May" "June" "July"
-          "August" "September" "October" "November" "December"
+        [
+          "January"
+          "February"
+          "March"
+          "April"
+          "May"
+          "June"
+          "July"
+          "August"
+          "September"
+          "October"
+          "November"
+          "December"
         ];
       fmtMonth = lib.elemAt months (month - 1);
     in
@@ -42,7 +53,7 @@ let
     let
       pad = x: lib.fixedWidthString 2 "0" (b.toString x);
     in
-    "${b.toString year}.${pad month}.${pad day}";
+      "${b.toString year}.${pad month}.${pad day}";
 
   fmtTag = tag: "<a href=\"/tags/${tag}.html\">${tag}</a>";
 
@@ -71,10 +82,11 @@ let
       html = pkgs.runCommand (name + "-html") { buildInputs = [ pkgs.pandoc py ]; } ''
         pandoc ${path} --mathjax --to=html > $out
       '';
-        # pandoc ${path} --mathjax --to=html -F ${pygments-filter}/bin/pygments-filter > $out
+      # pandoc ${path} --mathjax --to=html -F ${pygments-filter}/bin/pygments-filter > $out
 
     in
-      { meta = processMeta fname (lib.importJSON meta);
+      {
+        meta = processMeta fname (lib.importJSON meta);
         html = lib.readFile html;
         fname = fname;
       };
@@ -92,122 +104,124 @@ let
     let
       go = acc: md: lib.foldl (addTag md) acc md.meta.tags;
       addTag = md: acc: t:
-        let v = if (acc ? "${t}") then acc."${t}" else [];
-        in acc // { "${t}" = v ++ [md]; };
+        let
+          v = if (acc ? "${t}") then acc."${t}" else [];
+        in
+          acc // { "${t}" = v ++ [ md ]; };
       mapping = lib.foldl go {} mds;
     in
       lib.mapAttrs (k: v: sortMds v) mapping;
 
   tmplBase = title: content: ''
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Alex's blog - ${title}</title>
-    <link rel="shortcut icon" type="image/png" href="/static/images/favicon.png"/>
-    <link rel="stylesheet" href="/static/css/default.css" />
-    <link rel="stylesheet" href="/static/css/syntax.css" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700%7CPT+Sans:400" />
-    <script type="text/x-mathjax-config">
-     MathJax.Hub.Config({
-       "HTML-CSS": { linebreaks: { automatic: true } },
-       SVG: { linebreaks: { automatic: true } },
-       messageStyle: "none"
-     });
-    </script>
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
-      type="text/javascript">
-    </script>
-  </head>
-  <body>
-    <header>
-      <div class="logo">
-        <a href="/">Alex's blog</a>
-      </div>
-      <nav>
-        <a class="nav-link" href="/">Home</a>
-        <a class="nav-link" href="/tags.html">Tags</a>
-        <a class="nav-link" href="/projects.html">Projects</a>
-        <a class="nav-link" href="/talks.html">Talks</a>
-        <a class="nav-link" href="/about.html">About</a>
-      </nav>
-    </header>
+    <!doctype html>
+    <html lang="en">
+      <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Alex's blog - ${title}</title>
+        <link rel="shortcut icon" type="image/png" href="/static/images/favicon.png"/>
+        <link rel="stylesheet" href="/static/css/default.css" />
+        <link rel="stylesheet" href="/static/css/syntax.css" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700%7CPT+Sans:400" />
+        <script type="text/x-mathjax-config">
+         MathJax.Hub.Config({
+           "HTML-CSS": { linebreaks: { automatic: true } },
+           SVG: { linebreaks: { automatic: true } },
+           messageStyle: "none"
+         });
+        </script>
+        <script
+          src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
+          type="text/javascript">
+        </script>
+      </head>
+      <body>
+        <header>
+          <div class="logo">
+            <a href="/">Alex's blog</a>
+          </div>
+          <nav>
+            <a class="nav-link" href="/">Home</a>
+            <a class="nav-link" href="/tags.html">Tags</a>
+            <a class="nav-link" href="/projects.html">Projects</a>
+            <a class="nav-link" href="/talks.html">Talks</a>
+            <a class="nav-link" href="/about.html">About</a>
+          </nav>
+        </header>
 
-    <main role="main">
-      <h1>${title}</h1>
-      ${content}
-    </main>
+        <main role="main">
+          <h1>${title}</h1>
+          ${content}
+        </main>
 
-    <footer>
-      Site generated using <a href="https://github.com/alexpeits/alexpeits.github.io/blob/develop/default.nix">nix</a>
-    </footer>
-  </body>
-</html>
+        <footer>
+          Site generated using <a href="https://github.com/alexpeits/alexpeits.github.io/blob/develop/default.nix">nix</a>
+        </footer>
+      </body>
+    </html>
   '';
 
   tmplPost = { meta, html, ... }: ''
-<article>
-  <section class="header">
-    Posted on ${fmtDate meta.date}
-  </section>
-  <section class="header tags">
-    ${if (b.length meta.tags == 0) then "" else "Tags:"} ${b.concatStringsSep ", " (map fmtTag meta.tags)}
-  </section>
-  <section>
-    ${html}
-  </section>
-</article>
+    <article>
+      <section class="header">
+        Posted on ${fmtDate meta.date}
+      </section>
+      <section class="header tags">
+        ${if (b.length meta.tags == 0) then "" else "Tags:"} ${b.concatStringsSep ", " (map fmtTag meta.tags)}
+      </section>
+      <section>
+        ${html}
+      </section>
+    </article>
   '';
 
-  postUrl = {fname, ...}: "/posts/${fname}.html";
+  postUrl = { fname, ... }: "/posts/${fname}.html";
 
   fmtPostSummaryTable = md: ''
-<tr>
-  <td class="posts-table-date">${fmtDateShort md.meta.date}</td>
-  <td>
-    <a href="${postUrl md}" class="posts-table-title">${md.meta.title}</a>
-    <div class="posts-table-tags tags">
-      ${b.concatStringsSep ", " (map fmtTag md.meta.tags)}
-    </div>
-  </td>
-</tr>
+    <tr>
+      <td class="posts-table-date">${fmtDateShort md.meta.date}</td>
+      <td>
+        <a href="${postUrl md}" class="posts-table-title">${md.meta.title}</a>
+        <div class="posts-table-tags tags">
+          ${b.concatStringsSep ", " (map fmtTag md.meta.tags)}
+        </div>
+      </td>
+    </tr>
   '';
 
   tmplPostTable = mds: ''
-<table class="posts-table">
-  <tbody>
-    ${b.concatStringsSep "\n" (map fmtPostSummaryTable (sortMds mds))}
-  </tbody>
-</table>
+    <table class="posts-table">
+      <tbody>
+        ${b.concatStringsSep "\n" (map fmtPostSummaryTable (sortMds mds))}
+      </tbody>
+    </table>
   '';
 
   fmtPostSummaryList = md: ''
-<li>
-  <a href="${postUrl md}">${md.meta.title}</a> - ${fmtDate md.meta.date}
-</li>
+    <li>
+      <a href="${postUrl md}">${md.meta.title}</a> - ${fmtDate md.meta.date}
+    </li>
   '';
 
   tmplPostList = mds: ''
-<ul>
-  ${b.concatStringsSep "\n" (map fmtPostSummaryList mds)}
-</ul>
+    <ul>
+      ${b.concatStringsSep "\n" (map fmtPostSummaryList mds)}
+    </ul>
   '';
 
   tagUrl = tag: "/tags/${tag}.html";
 
   fmtTagSummaryList = tag: mds: ''
-<li class="tags">
-  <a href="${tagUrl tag}">${tag}</a>
-</li>
+    <li class="tags">
+      <a href="${tagUrl tag}">${tag}</a>
+    </li>
   '';
 
   tmplTagList = tags: ''
-<ul>
-  ${b.concatStringsSep "\n" (lib.attrValues (lib.mapAttrs fmtTagSummaryList tags))}
-</ul>
+    <ul>
+      ${b.concatStringsSep "\n" (lib.attrValues (lib.mapAttrs fmtTagSummaryList tags))}
+    </ul>
   '';
 
   tmplTagPostList = mds: tmplPostList mds;
@@ -224,9 +238,9 @@ let
   tagPagesScript =
     let
       script = tag: content: ''
-      cat << \EOF > $out/tags/${tag}.html
-        ${content}
-      EOF
+        cat << \EOF > $out/tags/${tag}.html
+          ${content}
+        EOF
       '';
     in
       b.concatStringsSep "\n" (lib.attrValues (lib.mapAttrs script tagPages));
@@ -240,7 +254,7 @@ let
     in
       b.concatStringsSep "\n" (map script posts);
 
-  otherPages = map parseMd [./projects.md ./talks.md ./about.md];
+  otherPages = map parseMd [ ./projects.md ./talks.md ./about.md ];
   otherPagesScript =
     let
       script = md: ''
