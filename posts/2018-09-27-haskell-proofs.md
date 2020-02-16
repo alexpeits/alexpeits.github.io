@@ -32,7 +32,7 @@ compiled otherwise.
 
 One disclaimer: I am definitely not an expert so many things might not be
 correct. This post's style is informal and more of a braindump, much like some
-of my [favourite posts ](https://artyom.me/lens-over-tea-1) out there. If you
+of my [favourite posts](https://artyom.me/lens-over-tea-1) out there. If you
 find any errors or if you have any question or comment, feel free to leave a
 comment below, drop me an email (`alexpeitsinis [at] gmail [dot] com`) or find
 me at fpslack (`@alexpeits`). What follows is also most definitely not suitable
@@ -55,7 +55,6 @@ required language extensions:
 ```
 
 I'll also try to note why and when an extension should be enabled.
-
 
 ## Dependent types
 
@@ -114,7 +113,6 @@ kind. Our definition allows writing `Nat` in GADT and type family declarations,
 which adds a layer of type safety. Otherwise we'd have to use `*`, which, in
 some cases, would allow for ill-formed types.
 
-
 ## Type equality
 
 There is a ridiculously simple way to convince the type system that two types
@@ -131,7 +129,6 @@ somehow manage to give it the value `Refl`, we have convinced the type checker
 that types `a` and `b` are exactly the same, which is exactly what we want to
 achieve in our proofs.
 
-
 ## Type-level functions
 
 In order to actually have something to prove, we'll define addition at the type
@@ -144,7 +141,6 @@ a + 0    = a && \text{(1)}\\
 a + S(b) = S (a + b) && \text{(2)}\\
 \end{align}
 $$
-
 
 This can be achieved using a closed type family:
 
@@ -185,7 +181,6 @@ testEquality' = Refl
 ```
 
 This type checks, again thanks to `(1)`. Let's try `(2)`:
-
 
 ```haskell
 testEquality'' :: (a + S b) :~: S (a + b)
@@ -847,7 +842,6 @@ the typeclass with some help from `TypeApplications` and `ScopedTypeVariables`:
 ```
 
 Magic!
-
 
 ## Conclusion
 
