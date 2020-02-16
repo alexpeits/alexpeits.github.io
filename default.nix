@@ -6,6 +6,7 @@ let
     navPages = [ ./projects.nix ./talks.nix ./about.md ];
     rootDir = ./.;
     postsDir = ./posts;
+    copyFilesDir = ./static;
     htmlHead = ''
       <link rel="shortcut icon" type="image/png" href="/images/favicon.png"/>
       <link rel="stylesheet" href="/css/default.css" />
@@ -28,8 +29,8 @@ let
   statue-src-github = pkgs.fetchFromGitHub {
     owner = "alexpeits";
     repo = "statue";
-    rev = "9e4836c04680d987f7a9a4f4898044c2b24923fa";
-    sha256 = "15mzkgdm1dbym8y301l5rd4vflycmsvwpkpdhlzh1g0m17qqfsbz";
+    rev = "03ebba520b1de400108a499f3cfb56907055efcc";
+    sha256 = "0dm2r8av7qx82b10yf4fy0ygc31b7vdvfsm0vjaw8wylcl9cndcc";
   };
 
   statue-src = if statue != null then statue else statue-src-github;
