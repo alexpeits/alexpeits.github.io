@@ -52,6 +52,15 @@ watch-cmd() {
     serve
 }
 
+update-statue() {
+    if [ -z "$1" ]; then
+        rev="$(curl -s https://api.github.com/repos/alexpeits/statue/commits/master | jq -r .sha)"
+    else
+        rev="$1"
+    fi
+    nix-prefetch-git --url https://github.com/alexpeits/statue.git --rev "$rev" --quiet | tee statue.json
+}
+
 case "$1" in
     -b | --build)
         build
@@ -73,6 +82,9 @@ case "$1" in
         ;;
     -c | --cleanup)
         cleanup
+        ;;
+    -u | --update)
+        update-statue "$2"
         ;;
     -h | --help)
         usage

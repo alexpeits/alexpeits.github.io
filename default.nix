@@ -6,7 +6,6 @@ let
     navPages = [ ./projects.nix ./talks.nix ./about.md ];
     rootDir = ./.;
     postsDir = ./posts;
-    copyFilesDir = ./static;
     htmlHead = ''
       <link rel="shortcut icon" type="image/png" href="/images/favicon.png"/>
       <link rel="stylesheet" href="/css/default.css" />
@@ -24,14 +23,28 @@ let
         type="text/javascript">
       </script>
     '';
+    extraScript = {
+      inputs = p: [ p.minify ];
+      script = ''
+        cp -R ${./static/images} $out/images
+        cp -R ${./static/keybase.txt} $out/keybase.txt
+
+        mkdir -p $out/css
+        for css in $(find ${./static/css} -name '*.css'); do
+          minify -o $out/css/$(basename $css) $css
+        done
+      '';
+    };
   };
 
-  statue-src-github = pkgs.fetchFromGitHub {
-    owner = "alexpeits";
-    repo = "statue";
-    rev = "03ebba520b1de400108a499f3cfb56907055efcc";
-    sha256 = "0dm2r8av7qx82b10yf4fy0ygc31b7vdvfsm0vjaw8wylcl9cndcc";
-  };
+  statue-src-github =
+    let src = pkgs.lib.importJSON ./statue.json; in
+      pkgs.fetchFromGitHub {
+        owner = "alexpeits";
+        repo = "statue";
+        rev = src.rev;
+        sha256 = src.sha256;
+      };
 
   statue-src = if statue != null then statue else statue-src-github;
 
