@@ -1,11 +1,11 @@
 ---
 title: Writing and using proofs in Haskell
-tags: haskell
-      dependent-types
+tags:
+  - haskell
+  - dependent-types
 ---
 
-This post has an accompanying
-[github repo](https://github.com/alexpeits/haskell-proofs).
+This post has an accompanying [github repo][github-repo].
 
 ## Intro
 
@@ -22,8 +22,6 @@ prove that $a + b = b + a$ (commutativity of addition of natural numbers) then
 we'll have a function whose type reflects exactly that property, rather than
 using actual values to prove it (more on that later).
 
-[^mads]: [Proving stuff in Haskell](http://www.madsbuch.com/blog/proving-stuff-in-haskell/)
-
 Writing proofs using the type system is nothing new. What I describe in this
 post is first of all a way to write readable proofs by induction using the same
 steps we would use if the proof was done on paper, and then how to actually use
@@ -38,6 +36,8 @@ comment below, drop me an email (`alexpeitsinis [at] gmail [dot] com`) or find
 me at fpslack (`@alexpeits`). What follows is also most definitely not suitable
 for "production use". However I believe it's a good application of using
 dependent types and some more exotic language extensions.
+
+[^mads]: [Proving stuff in Haskell](http://www.madsbuch.com/blog/proving-stuff-in-haskell/)
 
 ## Setting up
 
@@ -69,13 +69,13 @@ supporting it, it's awesome). Finally, the Idris language tutorial [^idris] is a
 great resource, especially to understand what needs to be done differently in
 Haskell and how.
 
-[^stitch]: 'Stitch: The Sound Type-Indexed Type Checker' (Richard A. Eisenberg)
-<https://cs.brynmawr.edu/~rae/papers/2018/stitch/stitch.pdf>
-[^book-of-types]: [Book of Types on Patreon](https://www.patreon.com/isovector)
-[^idris]: <http://docs.idris-lang.org/en/latest/tutorial/typesfuns.html>
-
 Many of the following do not require dependent types and can probably be modeled
 using e.g. type classes, but I'm going to use dependent types here.
+
+[^stitch]: 'Stitch: The Sound Type-Indexed Type Checker' (Richard A. Eisenberg)
+    <https://cs.brynmawr.edu/~rae/papers/2018/stitch/stitch.pdf>
+[^book-of-types]: [Book of Types on Patreon](https://www.patreon.com/isovector)
+[^idris]: <http://docs.idris-lang.org/en/latest/tutorial/typesfuns.html>
 
 ## Natural numbers
 
@@ -117,7 +117,7 @@ some cases, would allow for ill-formed types.
 
 There is a ridiculously simple way to convince the type system that two types
 are equal using propositional equality in the module
-[Data.Type.Equality](http://hackage.haskell.org/package/base-4.12.0.0/docs/Data-Type-Equality.html):
+[Data.Type.Equality][hackage-data-type-equality].
 
 ```haskell
 data a :~: b where
@@ -132,8 +132,7 @@ achieve in our proofs.
 ## Type-level functions
 
 In order to actually have something to prove, we'll define addition at the type
-level as per the
-[Peano axiom for addition](https://en.wikipedia.org/wiki/Peano_axioms#Addition):
+level as per the [Peano axiom for addition][peano-axiom-addition].
 
 $$
 \begin{align}
@@ -237,8 +236,7 @@ But we find a dead end. We need to be able to use one proof in order to prove
 another one.
 
 Long story short, looking in `Data.Type.Equality` again, there is a function
-that seems like it does exactly that:
-[gcastWith](http://hackage.haskell.org/package/base-4.12.0.0/docs/Data-Type-Equality.html#v:gcastWith):
+that seems like it does exactly that: [gcastWith][hackage-gcastWith].
 
 ```haskell
 gcastWith :: (a :~: b) -> (a ~ b => r) -> r
@@ -384,8 +382,7 @@ plusRightId' n = gcastWith (given1 n) Refl
 ## Proofs with multiple steps
 
 The proof for left identity was a relatively simple one. Here it is in
-mathematical notation (copied from
-[here](https://en.wikipedia.org/wiki/Proofs_involving_the_addition_of_natural_numbers)
+mathematical notation, copied from [here][nat-addition-proofs].
 (I'll refer to the addition axiom as $(1)$ and $(2)$):
 
 $$
@@ -855,3 +852,10 @@ translating mathematical proofs to Haskell. After all, as someone said in the
 > plesiofunctors, one madman pushing the type system to its limits, and like
 > three people concerning themselves with practical software engineering using
 > Haskell.
+
+
+[github-repo]: <https://github.com/alexpeits/haskell-proofs>
+[hackage-data-type-equality]: <http://hackage.haskell.org/package/base-4.12.0.0/docs/Data-Type-Equality.html>
+[peano-axiom-addition]: <https://en.wikipedia.org/wiki/Peano_axioms#Addition>
+[hackage-gcastWith]: <http://hackage.haskell.org/package/base-4.12.0.0/docs/Data-Type-Equality.html#v:gcastWith>
+[nat-addition-proofs]: <https://en.wikipedia.org/wiki/Proofs_involving_the_addition_of_natural_numbers>

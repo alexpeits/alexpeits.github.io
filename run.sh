@@ -5,7 +5,11 @@ usage() {
 
 Usage:
     -b, --build    Build
+    -d, --develop  Watch for changes and run 'tree' in result/
+    -s, --serve    Serve from site/
     -w, --watch    Automatically watch for changes and serve on port 9999
+    -c, --cleanup  Remove site/ contents
+    -u, --update   Update statue version in statue.json
     -h, --help     This help text
 "
 }

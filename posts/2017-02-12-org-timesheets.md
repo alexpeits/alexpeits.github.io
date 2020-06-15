@@ -1,6 +1,7 @@
 ---
 title: Formatting timesheet tables in org-mode
-tags: emacs
+tags:
+  - emacs
 ---
 
 [This post is originally adapted from
