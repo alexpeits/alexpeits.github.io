@@ -356,7 +356,7 @@ plusLeftId (SS n) = gcastWith (plusLeftId n) Refl
 
 And it type checks (try calling the function with any `SNat` value)!
 
-Let's also rewrite the proof for write identity, as well as the axioms we
+Let's also rewrite the proof for right identity, as well as the axioms we
 automatically get from the type family, to use values:
 
 ```haskell
