@@ -171,7 +171,7 @@ a + S(b) = S (a + b) &amp;&amp; \text{(2)}\\
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true"></a>plusLeftId <span class="dt">SZ</span>     <span class="ot">=</span> <span class="dt">Refl</span></span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true"></a>plusLeftId (<span class="dt">SS</span> n) <span class="ot">=</span> gcastWith (plusLeftId n) <span class="dt">Refl</span></span></code></pre></div>
 <p>And it type checks (try calling the function with any <code>SNat</code> value)!</p>
-<p>Let’s also rewrite the proof for write identity, as well as the axioms we automatically get from the type family, to use values:</p>
+<p>Let’s also rewrite the proof for right identity, as well as the axioms we automatically get from the type family, to use values:</p>
 <div class="sourceCode" id="cb21"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true"></a><span class="ot">given1 ::</span> <span class="dt">SNat</span> a <span class="ot">-&gt;</span> (a <span class="op">+</span> <span class="dt">Z</span>) <span class="op">:~:</span> a</span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true"></a>given1 _ <span class="ot">=</span> <span class="dt">Refl</span></span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true"></a></span>
