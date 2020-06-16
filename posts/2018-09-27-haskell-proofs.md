@@ -592,10 +592,9 @@ The base case $b = 0$ is the left identity property.
 
 For the second base case $b = 1$:
 
-\- First we prove it for $a = 0$, which gives $0 + 1 = 1 + 0$, the
+- First we prove it for $a = 0$, which gives $0 + 1 = 1 + 0$, the
 right identity property.
-
-\- Then we prove inductively, assuming $a + 1 = 1 + a$:
+- Then we prove inductively, assuming $a + 1 = 1 + a$:
 
 $$
 \begin{align}
