@@ -28,11 +28,9 @@
         <a href="/">{{ site_title }}</a>
       </div>
       <nav>
-        <a class="nav-link" href="/">Home</a>
-        <a class="nav-link" href="/tags.html">Tags</a>
-        <a class="nav-link" href="/projects.html">Projects</a>
-        <a class="nav-link" href="/talks.html">Talks</a>
-        <a class="nav-link" href="/pages/about.html">About</a>
+        {{# nav }}
+        <a class="nav-link" href="{{ url }}">{{ name }}</a>
+        {{/ nav }}
       </nav>
     </header>
 
@@ -42,8 +40,7 @@
     </main>
 
     <footer>
-      {{ copyright }}
+      <span>{{ copyright }}</span>
     </footer>
   </body>
 </html>
-

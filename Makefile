@@ -10,17 +10,11 @@ ghcid:
 build:
 	${NIX_SHELL} --run 'cabal new-build'
 
-exec:
-	${NIX_SHELL} --run 'cabal new-build && cabal new-exec alexpeits-exe -- ${ARGS}'
-
 hoogle:
 	${NIX_SHELL} --run 'hoogle server --port ${HOOGLE_PORT} --local'
 
 serve:
 	cd _build && python -m http.server ${PORT}
-
-list-nixpkgs:
-	jq -n '[inputs | keys[]]' nix/sources.json
 
 copy-nix-files:
 	mkdir -p site

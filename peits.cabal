@@ -1,6 +1,6 @@
 cabal-version: 2.2
 
-name:            alexpeits
+name:            peits
 version:         0.1.0.0
 description:     See <https://github.com/alexpeits/alexpeits.github.io#readme>
 homepage:        https://github.com/alexpeits/alexpeits.github.io#readme
@@ -17,9 +17,12 @@ source-repository head
   type:     git
   location: https://github.com/alexpeits/alexpeits.github.io
 
-executable alexpeits-exe
+executable peits
   main-is:          Main.hs
   hs-source-dirs:   app
+  other-modules:    Peits.Pandoc
+                    Peits.Types
+                    Peits.Util
   ghc-options:      -Wall -Wredundant-constraints
                     -O2 -threaded -rtsopts -with-rtsopts=-N
   default-language: Haskell2010

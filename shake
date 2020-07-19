@@ -3,4 +3,4 @@
 set -e
 
 cabal new-build
-cabal new-exec alexpeits-exe -- $@
+cabal new-exec peits -- $@

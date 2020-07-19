@@ -1,5 +1,3 @@
-# to see ghc versions:
-# nix-instantiate --eval -E "with import ./nix/nixpkgs.nix {}; lib.attrNames haskell.compiler"
 { pkgs ? null, compiler ? null }:
 
 let
@@ -25,9 +23,9 @@ let
           super = super;
         };
         src = nixpkgs.nix-gitignore.gitignoreSource [] ./.;
-        drv = self.callCabal2nix "alexpeits" src {};
+        drv = self.callCabal2nix "peits" src {};
       in
-        hsPkgs // { alexpeits = drv; };
+        hsPkgs // { peits = drv; };
   };
 
   site = nixpkgs.stdenv.mkDerivation {
@@ -39,7 +37,7 @@ let
     LANG = "en_US.UTF-8";
     src = ./.;
     buildPhase = ''
-      ${haskellPackages.alexpeits}/bin/alexpeits-exe
+      ${haskellPackages.peits}/bin/peits
     '';
     installPhase = ''
       mkdir "$out"
@@ -48,7 +46,7 @@ let
   };
 
   shell = haskellPackages.shellFor {
-    packages = ps: [ ps.alexpeits ];
+    packages = ps: [ ps.peits ];
     buildInputs =
       [
         haskellPackages.ghcid
@@ -62,4 +60,4 @@ let
 in
 if nixpkgs.lib.inNixShell
 then shell
-else { site = site; alexpeits = haskellPackages.alexpeits; }
+else { site = site; peits = haskellPackages.alexpeits; }

@@ -1,4 +1,5 @@
 ---
+id: org-timesheets
 title: Formatting timesheet tables in org-mode
 date: 2017-02-12
 tags:

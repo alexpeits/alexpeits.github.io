@@ -1,4 +1,5 @@
 ---
+id: haskell-proofs
 title: Writing and using proofs in Haskell
 date: 2018-09-27
 tags:
