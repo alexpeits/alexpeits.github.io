@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Alex&#39;s blog</title>
+  <link href="https://alexpeits.github.ioatom.xml" rel="self"/>
+  <link href="https://alexpeits.github.io"/>
+  <id>https://alexpeits.github.ioatom.xml</id>
+  <author>
+    <name>Alex Peitsinis</name>
+    <email>alexpeitsinis@gmail.com</email>
+  </author>
+  <updated>2020-04-02T00:00:00Z</updated>
+  <entry>
+    <title>Writing and using proofs in Haskell</title>
+    <link href="https://alexpeits.github.io/posts/2018-09-27-haskell-proofs.html" />
+    <id>https://alexpeits.github.io/posts/2018-09-27-haskell-proofs.html</id>
+    <published></published>
+    <updated></updated>
+    <summary type="html"><![CDATA[]]></summary>
+  </entry>
+  <entry>
+    <title>Formatting timesheet tables in org-mode</title>
+    <link href="https://alexpeits.github.io/posts/2017-02-12-org-timesheets.html" />
+    <id>https://alexpeits.github.io/posts/2017-02-12-org-timesheets.html</id>
+    <published></published>
+    <updated></updated>
+    <summary type="html"><![CDATA[]]></summary>
+  </entry>
+</feed>

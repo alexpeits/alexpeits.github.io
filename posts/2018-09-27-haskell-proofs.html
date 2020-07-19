@@ -1,38 +1,38 @@
-  <!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Alex's blog - Writing and using proofs in Haskell</title>
+    <link type="application/atom+xml" rel="alternate" href="https://alexpeits.github.io/atom.xml" title="Alex&#39;s blog" />
+    <title>Alex&#39;s blog - Writing and using proofs in Haskell</title>
     <link rel="shortcut icon" type="image/png" href="/images/favicon.png"/>
-<link rel="stylesheet" href="/css/default.css" />
-<link rel="stylesheet" href="/css/syntax.css" />
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700%7CPT+Sans:400" />
-<script type="text/x-mathjax-config">
- MathJax.Hub.Config({
-   "HTML-CSS": { linebreaks: { automatic: true } },
-   SVG: { linebreaks: { automatic: true } },
-   messageStyle: "none"
- });
-</script>
-<script
-  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
-  type="text/javascript">
-</script>
-
+    <link rel="stylesheet" href="/css/default.css" />
+    <link rel="stylesheet" href="/css/syntax.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700%7CPT+Sans:400" />
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        "HTML-CSS": { linebreaks: { automatic: true } },
+        SVG: { linebreaks: { automatic: true } },
+        messageStyle: "none"
+      });
+    </script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
+      type="text/javascript">
+    </script>
   </head>
   <body>
     <header>
       <div class="logo">
-        <a href="/">Alex's blog</a>
+        <a href="/">Alex&#39;s blog</a>
       </div>
       <nav>
         <a class="nav-link" href="/">Home</a>
         <a class="nav-link" href="/tags.html">Tags</a>
         <a class="nav-link" href="/projects.html">Projects</a>
-<a class="nav-link" href="/talks.html">Talks</a>
-<a class="nav-link" href="/about.html">About</a>
+        <a class="nav-link" href="/talks.html">Talks</a>
+        <a class="nav-link" href="/pages/about.html">About</a>
       </nav>
     </header>
 
@@ -40,10 +40,11 @@
       <h1>Writing and using proofs in Haskell</h1>
       <article>
   <section class="header">
-    Posted on September 27, 2018
+    Posted on April  2,2020
   </section>
   <section class="header tags">
-    Tags: <a href="/tags/haskell.html">haskell</a>, <a href="/tags/dependent-types.html">dependent-types</a>
+    <a href="/tags/dependent-types.html">dependent-types</a>
+    <a href="/tags/haskell.html">haskell</a>
   </section>
   <section>
     <p>This post has an accompanying <a href="https://github.com/alexpeits/haskell-proofs">github repo</a>.</p>
@@ -54,29 +55,37 @@
 <p>One disclaimer: I am definitely not an expert so many things might not be correct. This post’s style is informal and more of a braindump, much like some of my <a href="https://artyom.me/lens-over-tea-1">favourite posts</a> out there. If you find any errors or if you have any question or comment, feel free to leave a comment below, drop me an email (<code>alexpeitsinis [at] gmail [dot] com</code>) or find me at fpslack (<code>@alexpeits</code>). What follows is also most definitely not suitable for “production use”. However I believe it’s a good application of using dependent types and some more exotic language extensions.</p>
 <h2 id="setting-up">Setting up</h2>
 <p>Unless I am completely mistaken, code should compile along the way. Here are the required language extensions:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="ot">{-# LANGUAGE DataKinds            #-}</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a><span class="ot">{-# LANGUAGE GADTs                #-}</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a><span class="ot">{-# LANGUAGE PolyKinds            #-}</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a><span class="ot">{-# LANGUAGE ScopedTypeVariables  #-}</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a><span class="ot">{-# LANGUAGE TypeApplications     #-}</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a><span class="ot">{-# LANGUAGE TypeFamilies         #-}</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a><span class="ot">{-# LANGUAGE TypeOperators        #-}</span></span></code></pre></div>
+<div class="highlight"><pre><span></span><span class="cm">{-# LANGUAGE DataKinds            #-}</span>
+<span class="cm">{-# LANGUAGE GADTs                #-}</span>
+<span class="cm">{-# LANGUAGE PolyKinds            #-}</span>
+<span class="cm">{-# LANGUAGE ScopedTypeVariables  #-}</span>
+<span class="cm">{-# LANGUAGE TypeApplications     #-}</span>
+<span class="cm">{-# LANGUAGE TypeFamilies         #-}</span>
+<span class="cm">{-# LANGUAGE TypeOperators        #-}</span>
+</pre></div>
+
 <p>I’ll also try to note why and when an extension should be enabled.</p>
 <h2 id="dependent-types">Dependent types</h2>
 <p>I’ve already given some spoilers, so here it is: to achieve what we want to do I’m going to use whatever Haskell offers to simulate a dependently typed language. To better understand the what and how of dependent types, I suggest taking a look at any work by <a href="https://cs.brynmawr.edu/~rae/">Richard Eisenberg</a>, especially the extremely well written <em>Stitch</em> functional pearl <a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>. Another great resource for everything type-level related is the Book of Types <a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> by <a href="http://reasonablypolymorphic.com/">Sandy Maguire</a> (consider supporting it, it’s awesome). Finally, the Idris language tutorial <a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> is a great resource, especially to understand what needs to be done differently in Haskell and how.</p>
 <p>Many of the following do not require dependent types and can probably be modeled using e.g. type classes, but I’m going to use dependent types here.</p>
 <h2 id="natural-numbers">Natural numbers</h2>
 <p>To prove theorems on natural number operations we first need a way to represent natural numbers at the type level. The canonical way to do this is to use <a href="https://wiki.haskell.org/Peano_numbers">Peano numbers</a>:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">Nat</span> <span class="ot">=</span> <span class="dt">Z</span> <span class="op">|</span> <span class="dt">S</span> <span class="dt">Nat</span></span></code></pre></div>
+<div class="highlight"><pre><span></span><span class="kr">data</span> <span class="kt">Nat</span> <span class="ow">=</span> <span class="kt">Z</span> <span class="o">|</span> <span class="kt">S</span> <span class="kt">Nat</span>
+</pre></div>
+
 <p>We have the base case which is the number zero (here <code>Z</code> for brevity later), and then we recursively define the successor (<code>S</code>). So to represent the number 1 we would write <code>S Z</code> (at the type level), to represent the number 2 we would write <code>S (S Z)</code> and so on. The thing is, we’d not use the <strong>value</strong> <code>Z</code> or <code>S Z</code>, because they have the same type, <code>Nat</code>, which is not very useful for type-level programming. On the other hand, because the types <code>Z</code> and <code>S Z</code> have kind <code>Nat</code> and not <code>*</code>, they cannot have any inhabitants, meaning that there is no value <code>x</code> so that <code>x :: Z</code> or <code>x :: S Z</code>. But there is a way to circumvent that restriction, which will be described later.</p>
 <p>In the above explanation we can use <code>Z</code> and <code>S</code> as types thanks to the <code>DataKinds</code> extension. What it does is “promote” data constructors to types and types to kinds. One thing to note is that there is no way to get a value of one of those types, as their kinds is <code>Nat</code> and not <code>*</code>. We could also have written something like this:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">Z</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">S</span> a</span></code></pre></div>
+<div class="highlight"><pre><span></span><span class="kr">data</span> <span class="kt">Z</span>
+<span class="kr">data</span> <span class="kt">S</span> <span class="n">a</span>
+</pre></div>
+
 <p>What we lose from this definition is the way to unite those two types under a kind. Our definition allows writing <code>Nat</code> in GADT and type family declarations, which adds a layer of type safety. Otherwise we’d have to use <code>*</code>, which, in some cases, would allow for ill-formed types.</p>
 <h2 id="type-equality">Type equality</h2>
 <p>There is a ridiculously simple way to convince the type system that two types are equal using propositional equality in the module <a href="http://hackage.haskell.org/package/base-4.12.0.0/docs/Data-Type-Equality.html">Data.Type.Equality</a>.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="kw">data</span> a <span class="op">:~:</span> b <span class="kw">where</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a>    <span class="dt">Refl</span><span class="ot"> ::</span> a <span class="op">:~:</span> a</span></code></pre></div>
+<div class="highlight"><pre><span></span><span class="kr">data</span> <span class="n">a</span> <span class="kt">:~:</span> <span class="n">b</span> <span class="kr">where</span>
+    <span class="kt">Refl</span> <span class="ow">::</span> <span class="n">a</span> <span class="kt">:~:</span> <span class="n">a</span>
+</pre></div>
+
 <p>What this means is that, if somewhere in our code we have the type <code>a :~: b</code> and somehow manage to give it the value <code>Refl</code>, we have convinced the type checker that types <code>a</code> and <code>b</code> are exactly the same, which is exactly what we want to achieve in our proofs.</p>
 <h2 id="type-level-functions">Type-level functions</h2>
 <p>In order to actually have something to prove, we’ll define addition at the type level as per the <a href="https://en.wikipedia.org/wiki/Peano_axioms#Addition">Peano axiom for addition</a>.</p>
@@ -87,26 +96,36 @@ a + S(b) = S (a + b) &amp;&amp; \text{(2)}\\
 \end{align}
 \]</span></p>
 <p>This can be achieved using a closed type family:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="kw">type</span> <span class="kw">family</span> a <span class="op">+</span> b <span class="kw">where</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a>    a <span class="op">+</span> <span class="dt">Z</span>   <span class="ot">=</span> a         <span class="co">-- (1)</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true"></a>    a <span class="op">+</span> <span class="dt">S</span> b <span class="ot">=</span> <span class="dt">S</span> (a <span class="op">+</span> b) <span class="co">-- (2)</span></span></code></pre></div>
+<div class="highlight"><pre><span></span><span class="kr">type</span> <span class="kr">family</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span> <span class="kr">where</span>
+    <span class="n">a</span> <span class="o">+</span> <span class="kt">Z</span>   <span class="ow">=</span> <span class="n">a</span>         <span class="c1">-- (1)</span>
+    <span class="n">a</span> <span class="o">+</span> <span class="kt">S</span> <span class="n">b</span> <span class="ow">=</span> <span class="kt">S</span> <span class="p">(</span><span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">)</span> <span class="c1">-- (2)</span>
+</pre></div>
+
 <p>(from now on I’ll refer to those two properties as <code>(1)</code> and <code>(2)</code> respectively)</p>
 <p>We don’t need to specify a kind for this type family explicitly, as it is deduced to be <code>Nat -&gt; Nat -&gt; Nat</code> since the type family is closed (no more instances can be defined). Also, the symbol <code>+</code> does not clash with the addition function, for the same reason the type <code>Z</code> does not clash with the value <code>Z</code> (if there is an ambiguity in that case we can tell the type system that we’re talking about the <em>type</em> <code>Z</code> by writing <code>'Z</code>).</p>
 <h2 id="first-proof">First proof</h2>
 <p>Now let’s try to combine this type family definition with propositional equality:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a><span class="ot">testEquality ::</span> (<span class="dt">Z</span> <span class="op">+</span> <span class="dt">Z</span>) <span class="op">:~:</span> <span class="dt">Z</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true"></a>testEquality <span class="ot">=</span> <span class="dt">Refl</span></span></code></pre></div>
+<div class="highlight"><pre><span></span><span class="nf">testEquality</span> <span class="ow">::</span> <span class="p">(</span><span class="kt">Z</span> <span class="o">+</span> <span class="kt">Z</span><span class="p">)</span> <span class="kt">:~:</span> <span class="kt">Z</span>
+<span class="nf">testEquality</span> <span class="ow">=</span> <span class="kt">Refl</span>
+</pre></div>
+
 <p>This type checks because <code>Refl</code> says “ok, I need <code>Z + Z</code> to be the same as <code>Z</code>. But when the type checker sees <code>Z + Z</code>, it uses <code>(1)</code> to say that <code>Z + Z = Z</code>, where <code>a = Z</code>, and our equality stands. This is the first proof! The fact that we don’t need to give any values or”nudge" the type system in any way means that the elaboration happens automatically, and this equality stands every time. Let’s also try not with concrete types, but with a type variable:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a><span class="ot">testEquality&#39; ::</span> (a <span class="op">+</span> <span class="dt">Z</span>) <span class="op">:~:</span> a</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true"></a>testEquality&#39; <span class="ot">=</span> <span class="dt">Refl</span></span></code></pre></div>
+<div class="highlight"><pre><span></span><span class="nf">testEquality&#39;</span> <span class="ow">::</span> <span class="p">(</span><span class="n">a</span> <span class="o">+</span> <span class="kt">Z</span><span class="p">)</span> <span class="kt">:~:</span> <span class="n">a</span>
+<span class="nf">testEquality&#39;</span> <span class="ow">=</span> <span class="kt">Refl</span>
+</pre></div>
+
 <p>This type checks, again thanks to <code>(1)</code>. Let’s try <code>(2)</code>:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true"></a><span class="ot">testEquality&#39;&#39; ::</span> (a <span class="op">+</span> <span class="dt">S</span> b) <span class="op">:~:</span> <span class="dt">S</span> (a <span class="op">+</span> b)</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true"></a>testEquality&#39;&#39; <span class="ot">=</span> <span class="dt">Refl</span></span></code></pre></div>
+<div class="highlight"><pre><span></span><span class="nf">testEquality&#39;&#39;</span> <span class="ow">::</span> <span class="p">(</span><span class="n">a</span> <span class="o">+</span> <span class="kt">S</span> <span class="n">b</span><span class="p">)</span> <span class="kt">:~:</span> <span class="kt">S</span> <span class="p">(</span><span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">)</span>
+<span class="nf">testEquality&#39;&#39;</span> <span class="ow">=</span> <span class="kt">Refl</span>
+</pre></div>
+
 <p>And yet again, this type checks, this time thanks to <code>(2)</code>. Now let’s try something that is not immediately apparent. With <code>testEquality'</code>, we proved the right identity property of addition. What about left identity?</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true"></a><span class="ot">plusLeftId ::</span> (<span class="dt">Z</span> <span class="op">+</span> a) <span class="op">:~:</span> a</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true"></a>plusLeftId <span class="ot">=</span> <span class="dt">Refl</span></span></code></pre></div>
+<div class="highlight"><pre><span></span><span class="nf">plusLeftId</span> <span class="ow">::</span> <span class="p">(</span><span class="kt">Z</span> <span class="o">+</span> <span class="n">a</span><span class="p">)</span> <span class="kt">:~:</span> <span class="n">a</span>
+<span class="nf">plusLeftId</span> <span class="ow">=</span> <span class="kt">Refl</span>
+</pre></div>
+
 <p>Which, when compiled, unfortunately fails:</p>
-<pre class="text"><code>• Couldn&#39;t match type ‘a’ with ‘&#39;Z + a’
+<div class="highlight"><pre><span></span>• Couldn&#39;t match type ‘a’ with ‘&#39;Z + a’
     ‘a’ is a rigid type variable bound by
     the type signature for:
         plusLeftId :: forall (a :: Nat). (&#39;Z + a) :~: a
@@ -120,69 +139,95 @@ a + S(b) = S (a + b) &amp;&amp; \text{(2)}\\
         (bound at ...)
 |
 70 | plusLeftId = Refl
-|       ^^^^</code></pre>
+|       ^^^^
+</pre></div>
+
 <p>However simple it seems, the type checker knows nothing about natural number addition, so we have to convince it that this is indeed correct. To prove that <code>Z + a = a</code> we need to do induction on <code>a</code>. By induction, I mean that we need to prove a base case, then assume that our hypothesis holds for <span class="math inline">\(a\)</span> and prove that it holds for <span class="math inline">\(S (a)\)</span>. If we prove that, we have proven the theorem for all natural numbers. That’s because if we substitute <span class="math inline">\(a\)</span> for <code>Z</code> then our hypothesis holds because we’ve already proven for <code>Z</code>. So if we manage to prove for <code>S Z</code>, then we do the same for <code>S (S Z)</code> and so on. We could try something like this:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true"></a><span class="ot">baseCase ::</span> (<span class="dt">Z</span> <span class="op">+</span> <span class="dt">Z</span>) <span class="op">:~:</span> <span class="dt">Z</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true"></a>baseCase <span class="ot">=</span> <span class="dt">Refl</span></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true"></a></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true"></a><span class="ot">induction ::</span> (<span class="dt">Z</span> <span class="op">+</span> <span class="dt">S</span> a) <span class="op">:~:</span> <span class="dt">S</span> a</span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true"></a>induction <span class="ot">=</span> <span class="op">???</span></span></code></pre></div>
+<div class="highlight"><pre><span></span><span class="nf">baseCase</span> <span class="ow">::</span> <span class="p">(</span><span class="kt">Z</span> <span class="o">+</span> <span class="kt">Z</span><span class="p">)</span> <span class="kt">:~:</span> <span class="kt">Z</span>
+<span class="nf">baseCase</span> <span class="ow">=</span> <span class="kt">Refl</span>
+
+<span class="nf">induction</span> <span class="ow">::</span> <span class="p">(</span><span class="kt">Z</span> <span class="o">+</span> <span class="kt">S</span> <span class="n">a</span><span class="p">)</span> <span class="kt">:~:</span> <span class="kt">S</span> <span class="n">a</span>
+<span class="nf">induction</span> <span class="ow">=</span> <span class="o">???</span>
+</pre></div>
+
 <p>But we find a dead end. We need to be able to use one proof in order to prove another one.</p>
 <p>Long story short, looking in <code>Data.Type.Equality</code> again, there is a function that seems like it does exactly that: <a href="http://hackage.haskell.org/package/base-4.12.0.0/docs/Data-Type-Equality.html#v:gcastWith">gcastWith</a>.</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true"></a><span class="ot">gcastWith ::</span> (a <span class="op">:~:</span> b) <span class="ot">-&gt;</span> (a <span class="op">~</span> b <span class="ot">=&gt;</span> r) <span class="ot">-&gt;</span> r</span></code></pre></div>
+<div class="highlight"><pre><span></span><span class="nf">gcastWith</span> <span class="ow">::</span> <span class="p">(</span><span class="n">a</span> <span class="kt">:~:</span> <span class="n">b</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="p">(</span><span class="n">a</span> <span class="o">~</span> <span class="n">b</span> <span class="ow">=&gt;</span> <span class="n">r</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="n">r</span>
+</pre></div>
+
 <p>In simple terms, what <code>gCastWith</code> says is: give me a <code>Refl</code> that proves <code>a</code> is the same type as <code>b</code>, and something of type <code>r</code> that could use the knowledge that <code>a</code> is <code>b</code>, and I will tell your type checker that <code>r</code> is well typed. This seems like the same logic used in one step of a mathematical proof. So we could do things like:</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true"></a><span class="ot">helper ::</span> (<span class="dt">S</span> <span class="dt">Z</span> <span class="op">+</span> <span class="dt">S</span> <span class="dt">Z</span>) <span class="op">:~:</span> <span class="dt">S</span> (<span class="dt">S</span> <span class="dt">Z</span> <span class="op">+</span> <span class="dt">Z</span>)</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true"></a>helper <span class="ot">=</span> <span class="dt">Refl</span></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true"></a></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true"></a><span class="ot">stupid ::</span> (<span class="dt">S</span> <span class="dt">Z</span> <span class="op">+</span> <span class="dt">S</span> <span class="dt">Z</span>) <span class="op">:~:</span> <span class="dt">S</span> (<span class="dt">S</span> <span class="dt">Z</span>)</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true"></a>stupid <span class="ot">=</span> gcastWith helper <span class="dt">Refl</span></span></code></pre></div>
+<div class="highlight"><pre><span></span><span class="nf">helper</span> <span class="ow">::</span> <span class="p">(</span><span class="kt">S</span> <span class="kt">Z</span> <span class="o">+</span> <span class="kt">S</span> <span class="kt">Z</span><span class="p">)</span> <span class="kt">:~:</span> <span class="kt">S</span> <span class="p">(</span><span class="kt">S</span> <span class="kt">Z</span> <span class="o">+</span> <span class="kt">Z</span><span class="p">)</span>
+<span class="nf">helper</span> <span class="ow">=</span> <span class="kt">Refl</span>
+
+<span class="nf">stupid</span> <span class="ow">::</span> <span class="p">(</span><span class="kt">S</span> <span class="kt">Z</span> <span class="o">+</span> <span class="kt">S</span> <span class="kt">Z</span><span class="p">)</span> <span class="kt">:~:</span> <span class="kt">S</span> <span class="p">(</span><span class="kt">S</span> <span class="kt">Z</span><span class="p">)</span>
+<span class="nf">stupid</span> <span class="ow">=</span> <span class="n">gcastWith</span> <span class="n">helper</span> <span class="kt">Refl</span>
+</pre></div>
+
 <p>What this says is: “I know that <code>S Z + S Z</code> is <code>S (S Z + Z)</code>, now use that”. Then the <code>Refl</code> in <code>stupid</code> says “ok, I have <code>S Z + S Z</code> and the other guy says that this is <code>S (S Z + Z)</code>, can I use it? Ah, of course, from <code>(1)</code> I know that <code>S Z + Z</code> is <code>S Z</code>, so what I have is <code>S (S Z)</code>, that’s it!” (or as mathematicians say, <a href="https://en.wikipedia.org/wiki/Q.E.D.">Q.E.D.</a>). OK, to be fair this is not necessary as <code>stupid</code> is proven directly: it’s 2 reduction steps of the <code>+</code> type family.</p>
 <p>Still, we are talking about concrete values, whereas what we need to prove has a type variable <code>a</code>. We need to somehow recurse until we reach the base case, which means we’ll need to reflect the <strong>exact</strong> type we have in the signature of <code>plusLeftId</code> to a value. If you peeked at the Idris tutorial, you might say something like <code>{a:Nat} -&gt; (Z + S a) :~: S a</code>. There is a way to do this in Haskell, using singletons.</p>
 <h2 id="singletons">Singletons</h2>
 <p>Singletons, as their name implies, are values that have a 1-1 mapping with their relevant types. This means that, when we have a singleton value <code>v</code> of type <code>T</code> then we know for sure that <code>v</code> always has the type <code>T</code> (that makes sense), but also that type <code>T</code> has only one inhabitant (only one possible value), and that is <code>v</code>. This is the singleton definition for our <code>Nat</code>:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">SNat</span><span class="ot"> ::</span> <span class="dt">Nat</span> <span class="ot">-&gt;</span> <span class="op">*</span> <span class="kw">where</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true"></a>    <span class="dt">SZ</span><span class="ot"> ::</span> <span class="dt">SNat</span> <span class="dt">Z</span></span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true"></a>    <span class="dt">SS</span><span class="ot"> ::</span> <span class="dt">SNat</span> a <span class="ot">-&gt;</span> <span class="dt">SNat</span> (<span class="dt">S</span> a)</span></code></pre></div>
+<div class="highlight"><pre><span></span><span class="kr">data</span> <span class="kt">SNat</span> <span class="ow">::</span> <span class="kt">Nat</span> <span class="ow">-&gt;</span> <span class="o">*</span> <span class="kr">where</span>
+    <span class="kt">SZ</span> <span class="ow">::</span> <span class="kt">SNat</span> <span class="kt">Z</span>
+    <span class="kt">SS</span> <span class="ow">::</span> <span class="kt">SNat</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">SNat</span> <span class="p">(</span><span class="kt">S</span> <span class="n">a</span><span class="p">)</span>
+</pre></div>
+
 <p>Now, if we ask for the type of <code>SZ</code> we get <code>SNat Z</code>, and <code>SS (SS (SZ))</code> gives <code>SNat (S (S Z))</code>. It goes without saying that we cannot write <code>SS (SS (SZ)) :: SNat Z</code> or something similar, because that gets rejected by the definition of the <code>SNat</code> GADT.</p>
 <h2 id="revisiting-the-proof">Revisiting the proof</h2>
 <p>Let’s try to prove left identity again, this time using an <code>SNat</code> to help us with the induction by allowing recursion:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true"></a><span class="ot">plusLeftId ::</span> <span class="dt">SNat</span> a <span class="ot">-&gt;</span> (<span class="dt">Z</span> <span class="op">+</span> a) <span class="op">:~:</span> a</span></code></pre></div>
+<div class="highlight"><pre><span></span><span class="nf">plusLeftId</span> <span class="ow">::</span> <span class="kt">SNat</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="p">(</span><span class="kt">Z</span> <span class="o">+</span> <span class="n">a</span><span class="p">)</span> <span class="kt">:~:</span> <span class="n">a</span>
+</pre></div>
+
 <p>The base case will be for <code>a ~ Z</code> (<code>~</code> is type equality):</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true"></a><span class="ot">plusLeftId ::</span> <span class="dt">SNat</span> a <span class="ot">-&gt;</span> (<span class="dt">Z</span> <span class="op">+</span> a) <span class="op">:~:</span> a</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true"></a>plusLeftId <span class="dt">SZ</span> <span class="ot">=</span> <span class="dt">Refl</span></span></code></pre></div>
+<div class="highlight"><pre><span></span><span class="nf">plusLeftId</span> <span class="ow">::</span> <span class="kt">SNat</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="p">(</span><span class="kt">Z</span> <span class="o">+</span> <span class="n">a</span><span class="p">)</span> <span class="kt">:~:</span> <span class="n">a</span>
+<span class="nf">plusLeftId</span> <span class="kt">SZ</span> <span class="ow">=</span> <span class="kt">Refl</span>
+</pre></div>
+
 <p>This type checks because, according to the <code>Refl</code> value, <code>(Z + Z) ~ Z</code> which is true from <code>(1)</code>. The reason that <code>a</code> is assumed to be <code>Z</code> is that the first parameter is <code>SZ :: SNat Z</code>, so <code>a ~ Z</code>. That’s very similar to the type signature in Idris: <code>{a:Nat} -&gt; (Z + S a) :~: S a</code>, only with some indirection via the singleton type for <code>Nat</code>!</p>
 <p>Now for the induction step. Recall that we need to now prove for every type <code>S a</code>, assuming that the proof stands for <code>a</code>. So we’ll use the singleton for the successor, <code>SS</code>:</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true"></a><span class="ot">plusLeftId ::</span> <span class="dt">SNat</span> a <span class="ot">-&gt;</span> (<span class="dt">Z</span> <span class="op">+</span> a) <span class="op">:~:</span> a</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true"></a>plusLeftId <span class="dt">SZ</span>     <span class="ot">=</span> <span class="dt">Refl</span></span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true"></a>plusLeftId (<span class="dt">SS</span> n) <span class="ot">=</span> <span class="dt">Refl</span></span></code></pre></div>
+<div class="highlight"><pre><span></span><span class="nf">plusLeftId</span> <span class="ow">::</span> <span class="kt">SNat</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="p">(</span><span class="kt">Z</span> <span class="o">+</span> <span class="n">a</span><span class="p">)</span> <span class="kt">:~:</span> <span class="n">a</span>
+<span class="nf">plusLeftId</span> <span class="kt">SZ</span>     <span class="ow">=</span> <span class="kt">Refl</span>
+<span class="nf">plusLeftId</span> <span class="p">(</span><span class="kt">SS</span> <span class="n">n</span><span class="p">)</span> <span class="ow">=</span> <span class="kt">Refl</span>
+</pre></div>
+
 <p>But this fails:</p>
-<pre class="text"><code>• Could not deduce: (&#39;Z + n) ~ n
+<div class="highlight"><pre><span></span>• Could not deduce: (&#39;Z + n) ~ n
   from the context: m ~ &#39;S n
     bound by a pattern with constructor:
                SS :: forall (m :: Nat). SNat m -&gt; SNat (&#39;S m),
-             in an equation for ‘plusLeftId’</code></pre>
+             in an equation for ‘plusLeftId’
+</pre></div>
+
 <p>(I have made the error message a bit more readable)</p>
 <p>Which makes sense: we have to <em>tell</em> the type checker that the equality holds for <code>n</code>. So, as described earlier, we’ll use <code>gcastWith</code>:</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true"></a><span class="ot">plusLeftId ::</span> <span class="dt">SNat</span> a <span class="ot">-&gt;</span> (<span class="dt">Z</span> <span class="op">+</span> a) <span class="op">:~:</span> a</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true"></a>plusLeftId <span class="dt">SZ</span>     <span class="ot">=</span> <span class="dt">Refl</span></span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true"></a>plusLeftId (<span class="dt">SS</span> n) <span class="ot">=</span> gcastWith <span class="op">???</span> <span class="dt">Refl</span></span></code></pre></div>
+<div class="highlight"><pre><span></span><span class="nf">plusLeftId</span> <span class="ow">::</span> <span class="kt">SNat</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="p">(</span><span class="kt">Z</span> <span class="o">+</span> <span class="n">a</span><span class="p">)</span> <span class="kt">:~:</span> <span class="n">a</span>
+<span class="nf">plusLeftId</span> <span class="kt">SZ</span>     <span class="ow">=</span> <span class="kt">Refl</span>
+<span class="nf">plusLeftId</span> <span class="p">(</span><span class="kt">SS</span> <span class="n">n</span><span class="p">)</span> <span class="ow">=</span> <span class="n">gcastWith</span> <span class="o">???</span> <span class="kt">Refl</span>
+</pre></div>
+
 <p>Recall that <code>gcastWith :: (a :~: b) -&gt; (a ~ b =&gt; r) -&gt; r</code>. Here, <code>Refl</code> is the <code>r</code>, and, according to the error message, we need <code>a ~ (Z + n)</code> and <code>b ~ n</code>, or even better <code>(Z + n) :~: n</code>. But that’s the result type of <code>plusLeftId</code> itself, if we called it with <code>n</code>:</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true"></a><span class="ot">plusLeftId ::</span> <span class="dt">SNat</span> a <span class="ot">-&gt;</span> (<span class="dt">Z</span> <span class="op">+</span> a) <span class="op">:~:</span> a</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true"></a>plusLeftId <span class="dt">SZ</span>     <span class="ot">=</span> <span class="dt">Refl</span></span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true"></a>plusLeftId (<span class="dt">SS</span> n) <span class="ot">=</span> gcastWith (plusLeftId n) <span class="dt">Refl</span></span></code></pre></div>
+<div class="highlight"><pre><span></span><span class="nf">plusLeftId</span> <span class="ow">::</span> <span class="kt">SNat</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="p">(</span><span class="kt">Z</span> <span class="o">+</span> <span class="n">a</span><span class="p">)</span> <span class="kt">:~:</span> <span class="n">a</span>
+<span class="nf">plusLeftId</span> <span class="kt">SZ</span>     <span class="ow">=</span> <span class="kt">Refl</span>
+<span class="nf">plusLeftId</span> <span class="p">(</span><span class="kt">SS</span> <span class="n">n</span><span class="p">)</span> <span class="ow">=</span> <span class="n">gcastWith</span> <span class="p">(</span><span class="n">plusLeftId</span> <span class="n">n</span><span class="p">)</span> <span class="kt">Refl</span>
+</pre></div>
+
 <p>And it type checks (try calling the function with any <code>SNat</code> value)!</p>
 <p>Let’s also rewrite the proof for right identity, as well as the axioms we automatically get from the type family, to use values:</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true"></a><span class="ot">given1 ::</span> <span class="dt">SNat</span> a <span class="ot">-&gt;</span> (a <span class="op">+</span> <span class="dt">Z</span>) <span class="op">:~:</span> a</span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true"></a>given1 _ <span class="ot">=</span> <span class="dt">Refl</span></span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true"></a></span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true"></a><span class="ot">given2 ::</span> <span class="dt">SNat</span> a <span class="ot">-&gt;</span> <span class="dt">SNat</span> b <span class="ot">-&gt;</span> (a <span class="op">+</span> <span class="dt">S</span> b) <span class="op">:~:</span> <span class="dt">S</span> (a <span class="op">+</span> b)</span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true"></a>given2 _ _ <span class="ot">=</span> <span class="dt">Refl</span></span>
-<span id="cb21-6"><a href="#cb21-6" aria-hidden="true"></a></span>
-<span id="cb21-7"><a href="#cb21-7" aria-hidden="true"></a><span class="ot">plusRightId ::</span> <span class="dt">SNat</span> a <span class="ot">-&gt;</span> (a <span class="op">+</span> <span class="dt">Z</span>) <span class="op">:~:</span> a</span>
-<span id="cb21-8"><a href="#cb21-8" aria-hidden="true"></a>plusRightId <span class="ot">=</span> given1</span></code></pre></div>
+<div class="highlight"><pre><span></span><span class="nf">given1</span> <span class="ow">::</span> <span class="kt">SNat</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="p">(</span><span class="n">a</span> <span class="o">+</span> <span class="kt">Z</span><span class="p">)</span> <span class="kt">:~:</span> <span class="n">a</span>
+<span class="nf">given1</span> <span class="kr">_</span> <span class="ow">=</span> <span class="kt">Refl</span>
+
+<span class="nf">given2</span> <span class="ow">::</span> <span class="kt">SNat</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">SNat</span> <span class="n">b</span> <span class="ow">-&gt;</span> <span class="p">(</span><span class="n">a</span> <span class="o">+</span> <span class="kt">S</span> <span class="n">b</span><span class="p">)</span> <span class="kt">:~:</span> <span class="kt">S</span> <span class="p">(</span><span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">)</span>
+<span class="nf">given2</span> <span class="kr">_</span> <span class="kr">_</span> <span class="ow">=</span> <span class="kt">Refl</span>
+
+<span class="nf">plusRightId</span> <span class="ow">::</span> <span class="kt">SNat</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="p">(</span><span class="n">a</span> <span class="o">+</span> <span class="kt">Z</span><span class="p">)</span> <span class="kt">:~:</span> <span class="n">a</span>
+<span class="nf">plusRightId</span> <span class="ow">=</span> <span class="n">given1</span>
+</pre></div>
+
 <p>Of course the first two don’t need anything further to be proved. The same applies for right identity, but here I used <code>given1</code> to demonstrate the use of a proof in another proof. This would work too:</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true"></a><span class="ot">plusRightId&#39; ::</span> <span class="dt">SNat</span> a <span class="ot">-&gt;</span> (a <span class="op">+</span> <span class="dt">Z</span>) <span class="op">:~:</span> a</span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true"></a>plusRightId&#39; n <span class="ot">=</span> gcastWith (given1 n) <span class="dt">Refl</span></span></code></pre></div>
+<div class="highlight"><pre><span></span><span class="nf">plusRightId&#39;</span> <span class="ow">::</span> <span class="kt">SNat</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="p">(</span><span class="n">a</span> <span class="o">+</span> <span class="kt">Z</span><span class="p">)</span> <span class="kt">:~:</span> <span class="n">a</span>
+<span class="nf">plusRightId&#39;</span> <span class="n">n</span> <span class="ow">=</span> <span class="n">gcastWith</span> <span class="p">(</span><span class="n">given1</span> <span class="n">n</span><span class="p">)</span> <span class="kt">Refl</span>
+</pre></div>
+
 <h2 id="proofs-with-multiple-steps">Proofs with multiple steps</h2>
 <p>The proof for left identity was a relatively simple one. Here it is in mathematical notation, copied from <a href="https://en.wikipedia.org/wiki/Proofs_involving_the_addition_of_natural_numbers">here</a>. (I’ll refer to the addition axiom as <span class="math inline">\((1)\)</span> and <span class="math inline">\((2)\)</span>):</p>
 <p><span class="math display">\[
@@ -193,8 +238,10 @@ a + S(b) = S (a + b) &amp;&amp; \text{(2)}\\
 \end{align}
 \]</span></p>
 <p>This means that in the proof we went from <code>Z + (S n)</code> to <code>S (Z + n)</code> by using the type family definition, and then proved what’s inside the <code>S</code> inductively. It makes sense that we want to work on <code>Z + n</code>, since the error we first got said exactly that:</p>
-<pre class="text"><code>• Could not deduce: (&#39;Z + n) ~ n
-  from the context: m ~ &#39;S n</code></pre>
+<div class="highlight"><pre><span></span>• Could not deduce: (&#39;Z + n) ~ n
+  from the context: m ~ &#39;S n
+</pre></div>
+
 <h2 id="proving-the-associativity-of-addition">Proving the associativity of addition</h2>
 <p>Let’s now try a proof that’s a bit more complex: associativity of addition. So we’ll prove that <span class="math inline">\((a + b) + c = a + (b + c)\)</span>. I am going to copy the mathematical notation for the proof here and follow that verbatim, rather than explaining each step.</p>
 <p>For the base case c = 0:</p>
@@ -216,94 +263,108 @@ a + S(b) = S (a + b) &amp;&amp; \text{(2)}\\
 \end{align}
 \]</span></p>
 <p>Let’s try to prove that in Haskell. First I’m going to take the long path and not assume that <code>(1)</code> and <code>(2)</code> are resolved automatically. This will help build some groundwork for later proofs. This will not typecheck for now so I’m going to use undefined in several places, but the intermediate steps are correct and correspond 1-1 with the steps above. Let’s also define addition for the singleton datatype, which will be useful because its type can directly reflect to the <code>+</code> type family:</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true"></a><span class="ot">(!+) ::</span> <span class="dt">SNat</span> n <span class="ot">-&gt;</span> <span class="dt">SNat</span> m <span class="ot">-&gt;</span> <span class="dt">SNat</span> (n <span class="op">+</span> m)</span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true"></a>n <span class="op">!+</span> <span class="dt">SZ</span>     <span class="ot">=</span> n</span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true"></a>n <span class="op">!+</span> (<span class="dt">SS</span> m) <span class="ot">=</span> <span class="dt">SS</span> (n <span class="op">!+</span> m)</span></code></pre></div>
+<div class="highlight"><pre><span></span><span class="p">(</span><span class="o">!+</span><span class="p">)</span> <span class="ow">::</span> <span class="kt">SNat</span> <span class="n">n</span> <span class="ow">-&gt;</span> <span class="kt">SNat</span> <span class="n">m</span> <span class="ow">-&gt;</span> <span class="kt">SNat</span> <span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="n">m</span><span class="p">)</span>
+<span class="nf">n</span> <span class="o">!+</span> <span class="kt">SZ</span>     <span class="ow">=</span> <span class="n">n</span>
+<span class="nf">n</span> <span class="o">!+</span> <span class="p">(</span><span class="kt">SS</span> <span class="n">m</span><span class="p">)</span> <span class="ow">=</span> <span class="kt">SS</span> <span class="p">(</span><span class="n">n</span> <span class="o">!+</span> <span class="n">m</span><span class="p">)</span>
+</pre></div>
+
 <p>We’ll use this function to construct, for example, the <span class="math inline">\(a + b\)</span> in the base case of the proof given <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span>. Here it goes:</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true"></a><span class="ot">plusAssoc ::</span> <span class="dt">SNat</span> a <span class="ot">-&gt;</span> <span class="dt">SNat</span> b <span class="ot">-&gt;</span> <span class="dt">SNat</span> c <span class="ot">-&gt;</span> ((a <span class="op">+</span> b) <span class="op">+</span> c) <span class="op">:~:</span> (a <span class="op">+</span> (b <span class="op">+</span> c))</span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true"></a>plusAssoc a b <span class="dt">SZ</span> <span class="ot">=</span></span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true"></a>  <span class="kw">let</span></span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true"></a><span class="ot">    step1 ::</span> <span class="dt">SNat</span> x <span class="ot">-&gt;</span> <span class="dt">SNat</span> y <span class="ot">-&gt;</span> ((x <span class="op">+</span> y) <span class="op">+</span> <span class="dt">Z</span>) <span class="op">:~:</span> (x <span class="op">+</span> y)</span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true"></a>    step1 x y <span class="ot">=</span> gcastWith (given1 (x <span class="op">!+</span> y)) <span class="dt">Refl</span> <span class="co">-- (1)</span></span>
-<span id="cb25-6"><a href="#cb25-6" aria-hidden="true"></a></span>
-<span id="cb25-7"><a href="#cb25-7" aria-hidden="true"></a><span class="ot">    step2 ::</span> <span class="dt">SNat</span> x <span class="ot">-&gt;</span> <span class="dt">SNat</span> y <span class="ot">-&gt;</span> (x <span class="op">+</span> y) <span class="op">:~:</span> (x <span class="op">+</span> (y <span class="op">+</span> <span class="dt">Z</span>))</span>
-<span id="cb25-8"><a href="#cb25-8" aria-hidden="true"></a>    step2 x y <span class="ot">=</span> gcastWith (given1 y) <span class="dt">Refl</span> <span class="co">-- (1)</span></span>
-<span id="cb25-9"><a href="#cb25-9" aria-hidden="true"></a>  <span class="kw">in</span> <span class="fu">undefined</span></span></code></pre></div>
+<div class="highlight"><pre><span></span><span class="nf">plusAssoc</span> <span class="ow">::</span> <span class="kt">SNat</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">SNat</span> <span class="n">b</span> <span class="ow">-&gt;</span> <span class="kt">SNat</span> <span class="n">c</span> <span class="ow">-&gt;</span> <span class="p">((</span><span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">)</span> <span class="o">+</span> <span class="n">c</span><span class="p">)</span> <span class="kt">:~:</span> <span class="p">(</span><span class="n">a</span> <span class="o">+</span> <span class="p">(</span><span class="n">b</span> <span class="o">+</span> <span class="n">c</span><span class="p">))</span>
+<span class="nf">plusAssoc</span> <span class="n">a</span> <span class="n">b</span> <span class="kt">SZ</span> <span class="ow">=</span>
+  <span class="kr">let</span>
+    <span class="n">step1</span> <span class="ow">::</span> <span class="kt">SNat</span> <span class="n">x</span> <span class="ow">-&gt;</span> <span class="kt">SNat</span> <span class="n">y</span> <span class="ow">-&gt;</span> <span class="p">((</span><span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="p">)</span> <span class="o">+</span> <span class="kt">Z</span><span class="p">)</span> <span class="kt">:~:</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="p">)</span>
+    <span class="n">step1</span> <span class="n">x</span> <span class="n">y</span> <span class="ow">=</span> <span class="n">gcastWith</span> <span class="p">(</span><span class="n">given1</span> <span class="p">(</span><span class="n">x</span> <span class="o">!+</span> <span class="n">y</span><span class="p">))</span> <span class="kt">Refl</span> <span class="c1">-- (1)</span>
+
+    <span class="n">step2</span> <span class="ow">::</span> <span class="kt">SNat</span> <span class="n">x</span> <span class="ow">-&gt;</span> <span class="kt">SNat</span> <span class="n">y</span> <span class="ow">-&gt;</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="p">)</span> <span class="kt">:~:</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="p">(</span><span class="n">y</span> <span class="o">+</span> <span class="kt">Z</span><span class="p">))</span>
+    <span class="n">step2</span> <span class="n">x</span> <span class="n">y</span> <span class="ow">=</span> <span class="n">gcastWith</span> <span class="p">(</span><span class="n">given1</span> <span class="n">y</span><span class="p">)</span> <span class="kt">Refl</span> <span class="c1">-- (1)</span>
+  <span class="kr">in</span> <span class="n">undefined</span>
+</pre></div>
+
 <p>What we do in those 2 steps is exactly what we do in the base case for <span class="math inline">\(c = 0\)</span>. I used <code>x</code> and <code>y</code> to make it clear that we’re not talking about <code>a</code> and <code>b</code>, but just defining steps based on two numbers, even though we’re going to pass <code>a</code> and <code>b</code> in those methods. In the first step, just as in the first step of the proof, we want to say that <code>((x + y) + Z) ~ (x + y)</code>. It’s the first time we’ve seen a more complex argument in the proofs so far. Given that we need to use <code>(1)</code> to prove this, we have to pass something of type <code>SNat n</code> where n is of type <code>x + y</code>. That’s why the addition for singletons (<code>!+</code>) is used here. The resulting type of this addition, if we pass in <code>x :: x</code> and <code>y :: y</code> is <code>x + y</code>. The second step is a bit easier to understand. The main trick here is to extract the <em>part</em> of the expression that we want to “transform” to something else, and then use another proof function to drive the process.</p>
 <p>It’s clear what needs to be done now. We want the type <code>((a + b) + Z) :~: (a + (b + Z))</code>, and we have the types (I substitute <code>x</code> and <code>y</code> for <code>a</code> and <code>b</code> for clarity) <code>((a + b) + Z) :~: (a + b)</code> and <code>(a + b) :~: (a + (b + Z))</code>. Fortunately, this is like saying “if type x is the same as type y, and type y is the same as type z, then is type x the same as type z”? Of course it is! Let’s prove it (I’ll also use a fancy symbol to make the process clearer later):</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true"></a><span class="ot">(==&gt;) ::</span> a <span class="op">:~:</span> b <span class="ot">-&gt;</span> b <span class="op">:~:</span> c <span class="ot">-&gt;</span> a <span class="op">:~:</span> c</span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true"></a><span class="dt">Refl</span> <span class="op">==&gt;</span> <span class="dt">Refl</span> <span class="ot">=</span> <span class="dt">Refl</span></span></code></pre></div>
+<div class="highlight"><pre><span></span><span class="p">(</span><span class="o">==&gt;</span><span class="p">)</span> <span class="ow">::</span> <span class="n">a</span> <span class="kt">:~:</span> <span class="n">b</span> <span class="ow">-&gt;</span> <span class="n">b</span> <span class="kt">:~:</span> <span class="n">c</span> <span class="ow">-&gt;</span> <span class="n">a</span> <span class="kt">:~:</span> <span class="n">c</span>
+<span class="kt">Refl</span> <span class="o">==&gt;</span> <span class="kt">Refl</span> <span class="ow">=</span> <span class="kt">Refl</span>
+</pre></div>
+
 <p>Since the above type checks, the proof stands. This is the <strong>transitive</strong> property of <code>:~:</code> (propositional equality).</p>
 <p>Let’s see how this helps:</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true"></a><span class="ot">plusAssoc ::</span> <span class="dt">SNat</span> a <span class="ot">-&gt;</span> <span class="dt">SNat</span> b <span class="ot">-&gt;</span> <span class="dt">SNat</span> c <span class="ot">-&gt;</span> ((a <span class="op">+</span> b) <span class="op">+</span> c) <span class="op">:~:</span> (a <span class="op">+</span> (b <span class="op">+</span> c))</span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true"></a>plusAssoc a b <span class="dt">SZ</span> <span class="ot">=</span></span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true"></a>  <span class="kw">let</span></span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true"></a><span class="ot">    step1 ::</span> <span class="dt">SNat</span> x <span class="ot">-&gt;</span> <span class="dt">SNat</span> y <span class="ot">-&gt;</span> ((x <span class="op">+</span> y) <span class="op">+</span> <span class="dt">Z</span>) <span class="op">:~:</span> (x <span class="op">+</span> y)</span>
-<span id="cb27-5"><a href="#cb27-5" aria-hidden="true"></a>    step1 x y <span class="ot">=</span> gcastWith (given1 (x <span class="op">!+</span> y)) <span class="dt">Refl</span> <span class="co">-- (1)</span></span>
-<span id="cb27-6"><a href="#cb27-6" aria-hidden="true"></a></span>
-<span id="cb27-7"><a href="#cb27-7" aria-hidden="true"></a><span class="ot">    step2 ::</span> <span class="dt">SNat</span> x <span class="ot">-&gt;</span> <span class="dt">SNat</span> y <span class="ot">-&gt;</span> (x <span class="op">+</span> y) <span class="op">:~:</span> (x <span class="op">+</span> (y <span class="op">+</span> <span class="dt">Z</span>))</span>
-<span id="cb27-8"><a href="#cb27-8" aria-hidden="true"></a>    step2 x y <span class="ot">=</span> gcastWith (given1 y) <span class="dt">Refl</span> <span class="co">-- (1)</span></span>
-<span id="cb27-9"><a href="#cb27-9" aria-hidden="true"></a>  <span class="kw">in</span> step1 a b <span class="op">==&gt;</span> step2 a b</span></code></pre></div>
+<div class="highlight"><pre><span></span><span class="nf">plusAssoc</span> <span class="ow">::</span> <span class="kt">SNat</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">SNat</span> <span class="n">b</span> <span class="ow">-&gt;</span> <span class="kt">SNat</span> <span class="n">c</span> <span class="ow">-&gt;</span> <span class="p">((</span><span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">)</span> <span class="o">+</span> <span class="n">c</span><span class="p">)</span> <span class="kt">:~:</span> <span class="p">(</span><span class="n">a</span> <span class="o">+</span> <span class="p">(</span><span class="n">b</span> <span class="o">+</span> <span class="n">c</span><span class="p">))</span>
+<span class="nf">plusAssoc</span> <span class="n">a</span> <span class="n">b</span> <span class="kt">SZ</span> <span class="ow">=</span>
+  <span class="kr">let</span>
+    <span class="n">step1</span> <span class="ow">::</span> <span class="kt">SNat</span> <span class="n">x</span> <span class="ow">-&gt;</span> <span class="kt">SNat</span> <span class="n">y</span> <span class="ow">-&gt;</span> <span class="p">((</span><span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="p">)</span> <span class="o">+</span> <span class="kt">Z</span><span class="p">)</span> <span class="kt">:~:</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="p">)</span>
+    <span class="n">step1</span> <span class="n">x</span> <span class="n">y</span> <span class="ow">=</span> <span class="n">gcastWith</span> <span class="p">(</span><span class="n">given1</span> <span class="p">(</span><span class="n">x</span> <span class="o">!+</span> <span class="n">y</span><span class="p">))</span> <span class="kt">Refl</span> <span class="c1">-- (1)</span>
+
+    <span class="n">step2</span> <span class="ow">::</span> <span class="kt">SNat</span> <span class="n">x</span> <span class="ow">-&gt;</span> <span class="kt">SNat</span> <span class="n">y</span> <span class="ow">-&gt;</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="p">)</span> <span class="kt">:~:</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="p">(</span><span class="n">y</span> <span class="o">+</span> <span class="kt">Z</span><span class="p">))</span>
+    <span class="n">step2</span> <span class="n">x</span> <span class="n">y</span> <span class="ow">=</span> <span class="n">gcastWith</span> <span class="p">(</span><span class="n">given1</span> <span class="n">y</span><span class="p">)</span> <span class="kt">Refl</span> <span class="c1">-- (1)</span>
+  <span class="kr">in</span> <span class="n">step1</span> <span class="n">a</span> <span class="n">b</span> <span class="o">==&gt;</span> <span class="n">step2</span> <span class="n">a</span> <span class="n">b</span>
+</pre></div>
+
 <p>Voila! Onward to the next step, the induction.</p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true"></a>plusAssoc</span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true"></a><span class="ot">  ::</span> <span class="dt">SNat</span> a <span class="ot">-&gt;</span> <span class="dt">SNat</span> b <span class="ot">-&gt;</span> <span class="dt">SNat</span> c <span class="ot">-&gt;</span> ((a <span class="op">+</span> b) <span class="op">+</span> c) <span class="op">:~:</span> (a <span class="op">+</span> (b <span class="op">+</span> c))</span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true"></a>plusAssoc a b <span class="dt">SZ</span>     <span class="ot">=</span> <span class="op">...</span></span>
-<span id="cb28-4"><a href="#cb28-4" aria-hidden="true"></a>plusAssoc a b (<span class="dt">SS</span> c) <span class="ot">=</span></span>
-<span id="cb28-5"><a href="#cb28-5" aria-hidden="true"></a>  <span class="kw">let</span></span>
-<span id="cb28-6"><a href="#cb28-6" aria-hidden="true"></a></span>
-<span id="cb28-7"><a href="#cb28-7" aria-hidden="true"></a>    step1</span>
-<span id="cb28-8"><a href="#cb28-8" aria-hidden="true"></a><span class="ot">      ::</span> <span class="dt">SNat</span> x <span class="ot">-&gt;</span> <span class="dt">SNat</span> y <span class="ot">-&gt;</span> <span class="dt">SNat</span> (<span class="dt">S</span> z) <span class="ot">-&gt;</span> ((x <span class="op">+</span> y) <span class="op">+</span> <span class="dt">S</span> z) <span class="op">:~:</span> <span class="dt">S</span> ((x <span class="op">+</span> y) <span class="op">+</span> z)</span>
-<span id="cb28-9"><a href="#cb28-9" aria-hidden="true"></a>    step1 x y (<span class="dt">SS</span> z) <span class="ot">=</span> gcastWith (given2 (x <span class="op">!+</span> y) (<span class="dt">SS</span> z)) <span class="dt">Refl</span> <span class="co">-- (2)</span></span>
-<span id="cb28-10"><a href="#cb28-10" aria-hidden="true"></a></span>
-<span id="cb28-11"><a href="#cb28-11" aria-hidden="true"></a>    step2</span>
-<span id="cb28-12"><a href="#cb28-12" aria-hidden="true"></a><span class="ot">      ::</span> <span class="dt">SNat</span> x <span class="ot">-&gt;</span> <span class="dt">SNat</span> y <span class="ot">-&gt;</span> <span class="dt">SNat</span> z <span class="ot">-&gt;</span> <span class="dt">S</span> ((x <span class="op">+</span> y) <span class="op">+</span> z) <span class="op">:~:</span> <span class="dt">S</span> (x <span class="op">+</span> (y <span class="op">+</span> z))</span>
-<span id="cb28-13"><a href="#cb28-13" aria-hidden="true"></a>    step2 x y z <span class="ot">=</span> gcastWith (plusAssoc x y z) <span class="dt">Refl</span> <span class="co">-- induction</span></span>
-<span id="cb28-14"><a href="#cb28-14" aria-hidden="true"></a></span>
-<span id="cb28-15"><a href="#cb28-15" aria-hidden="true"></a>    step3</span>
-<span id="cb28-16"><a href="#cb28-16" aria-hidden="true"></a><span class="ot">      ::</span> <span class="dt">SNat</span> x <span class="ot">-&gt;</span> <span class="dt">SNat</span> y <span class="ot">-&gt;</span> <span class="dt">SNat</span> z <span class="ot">-&gt;</span> <span class="dt">S</span> (x <span class="op">+</span> (y <span class="op">+</span> z)) <span class="op">:~:</span> (x <span class="op">+</span> <span class="dt">S</span> (y <span class="op">+</span> z))</span>
-<span id="cb28-17"><a href="#cb28-17" aria-hidden="true"></a>    step3 x y z <span class="ot">=</span> gcastWith (given2 x (y <span class="op">!+</span> z)) <span class="dt">Refl</span> <span class="co">-- (2)</span></span>
-<span id="cb28-18"><a href="#cb28-18" aria-hidden="true"></a></span>
-<span id="cb28-19"><a href="#cb28-19" aria-hidden="true"></a>    step4</span>
-<span id="cb28-20"><a href="#cb28-20" aria-hidden="true"></a><span class="ot">      ::</span> <span class="dt">SNat</span> x <span class="ot">-&gt;</span> <span class="dt">SNat</span> y <span class="ot">-&gt;</span> <span class="dt">SNat</span> z <span class="ot">-&gt;</span> (x <span class="op">+</span> <span class="dt">S</span> (y <span class="op">+</span> z)) <span class="op">:~:</span> (x <span class="op">+</span> (y <span class="op">+</span> <span class="dt">S</span> z))</span>
-<span id="cb28-21"><a href="#cb28-21" aria-hidden="true"></a>    step4 x y z <span class="ot">=</span> gcastWith (given2 y z) <span class="dt">Refl</span> <span class="co">-- (2)</span></span>
-<span id="cb28-22"><a href="#cb28-22" aria-hidden="true"></a></span>
-<span id="cb28-23"><a href="#cb28-23" aria-hidden="true"></a>  <span class="kw">in</span> step1 a b (<span class="dt">SS</span> c) <span class="op">==&gt;</span> step2 a b c <span class="op">==&gt;</span> step3 a b c <span class="op">==&gt;</span> step4 a b c</span></code></pre></div>
+<div class="highlight"><pre><span></span><span class="nf">plusAssoc</span>
+  <span class="ow">::</span> <span class="kt">SNat</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">SNat</span> <span class="n">b</span> <span class="ow">-&gt;</span> <span class="kt">SNat</span> <span class="n">c</span> <span class="ow">-&gt;</span> <span class="p">((</span><span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">)</span> <span class="o">+</span> <span class="n">c</span><span class="p">)</span> <span class="kt">:~:</span> <span class="p">(</span><span class="n">a</span> <span class="o">+</span> <span class="p">(</span><span class="n">b</span> <span class="o">+</span> <span class="n">c</span><span class="p">))</span>
+<span class="nf">plusAssoc</span> <span class="n">a</span> <span class="n">b</span> <span class="kt">SZ</span>     <span class="ow">=</span> <span class="o">...</span>
+<span class="nf">plusAssoc</span> <span class="n">a</span> <span class="n">b</span> <span class="p">(</span><span class="kt">SS</span> <span class="n">c</span><span class="p">)</span> <span class="ow">=</span>
+  <span class="kr">let</span>
+
+    <span class="n">step1</span>
+      <span class="ow">::</span> <span class="kt">SNat</span> <span class="n">x</span> <span class="ow">-&gt;</span> <span class="kt">SNat</span> <span class="n">y</span> <span class="ow">-&gt;</span> <span class="kt">SNat</span> <span class="p">(</span><span class="kt">S</span> <span class="n">z</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="p">((</span><span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="p">)</span> <span class="o">+</span> <span class="kt">S</span> <span class="n">z</span><span class="p">)</span> <span class="kt">:~:</span> <span class="kt">S</span> <span class="p">((</span><span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="p">)</span> <span class="o">+</span> <span class="n">z</span><span class="p">)</span>
+    <span class="n">step1</span> <span class="n">x</span> <span class="n">y</span> <span class="p">(</span><span class="kt">SS</span> <span class="n">z</span><span class="p">)</span> <span class="ow">=</span> <span class="n">gcastWith</span> <span class="p">(</span><span class="n">given2</span> <span class="p">(</span><span class="n">x</span> <span class="o">!+</span> <span class="n">y</span><span class="p">)</span> <span class="p">(</span><span class="kt">SS</span> <span class="n">z</span><span class="p">))</span> <span class="kt">Refl</span> <span class="c1">-- (2)</span>
+
+    <span class="n">step2</span>
+      <span class="ow">::</span> <span class="kt">SNat</span> <span class="n">x</span> <span class="ow">-&gt;</span> <span class="kt">SNat</span> <span class="n">y</span> <span class="ow">-&gt;</span> <span class="kt">SNat</span> <span class="n">z</span> <span class="ow">-&gt;</span> <span class="kt">S</span> <span class="p">((</span><span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="p">)</span> <span class="o">+</span> <span class="n">z</span><span class="p">)</span> <span class="kt">:~:</span> <span class="kt">S</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="p">(</span><span class="n">y</span> <span class="o">+</span> <span class="n">z</span><span class="p">))</span>
+    <span class="n">step2</span> <span class="n">x</span> <span class="n">y</span> <span class="n">z</span> <span class="ow">=</span> <span class="n">gcastWith</span> <span class="p">(</span><span class="n">plusAssoc</span> <span class="n">x</span> <span class="n">y</span> <span class="n">z</span><span class="p">)</span> <span class="kt">Refl</span> <span class="c1">-- induction</span>
+
+    <span class="n">step3</span>
+      <span class="ow">::</span> <span class="kt">SNat</span> <span class="n">x</span> <span class="ow">-&gt;</span> <span class="kt">SNat</span> <span class="n">y</span> <span class="ow">-&gt;</span> <span class="kt">SNat</span> <span class="n">z</span> <span class="ow">-&gt;</span> <span class="kt">S</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="p">(</span><span class="n">y</span> <span class="o">+</span> <span class="n">z</span><span class="p">))</span> <span class="kt">:~:</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="kt">S</span> <span class="p">(</span><span class="n">y</span> <span class="o">+</span> <span class="n">z</span><span class="p">))</span>
+    <span class="n">step3</span> <span class="n">x</span> <span class="n">y</span> <span class="n">z</span> <span class="ow">=</span> <span class="n">gcastWith</span> <span class="p">(</span><span class="n">given2</span> <span class="n">x</span> <span class="p">(</span><span class="n">y</span> <span class="o">!+</span> <span class="n">z</span><span class="p">))</span> <span class="kt">Refl</span> <span class="c1">-- (2)</span>
+
+    <span class="n">step4</span>
+      <span class="ow">::</span> <span class="kt">SNat</span> <span class="n">x</span> <span class="ow">-&gt;</span> <span class="kt">SNat</span> <span class="n">y</span> <span class="ow">-&gt;</span> <span class="kt">SNat</span> <span class="n">z</span> <span class="ow">-&gt;</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="kt">S</span> <span class="p">(</span><span class="n">y</span> <span class="o">+</span> <span class="n">z</span><span class="p">))</span> <span class="kt">:~:</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="p">(</span><span class="n">y</span> <span class="o">+</span> <span class="kt">S</span> <span class="n">z</span><span class="p">))</span>
+    <span class="n">step4</span> <span class="n">x</span> <span class="n">y</span> <span class="n">z</span> <span class="ow">=</span> <span class="n">gcastWith</span> <span class="p">(</span><span class="n">given2</span> <span class="n">y</span> <span class="n">z</span><span class="p">)</span> <span class="kt">Refl</span> <span class="c1">-- (2)</span>
+
+  <span class="kr">in</span> <span class="n">step1</span> <span class="n">a</span> <span class="n">b</span> <span class="p">(</span><span class="kt">SS</span> <span class="n">c</span><span class="p">)</span> <span class="o">==&gt;</span> <span class="n">step2</span> <span class="n">a</span> <span class="n">b</span> <span class="n">c</span> <span class="o">==&gt;</span> <span class="n">step3</span> <span class="n">a</span> <span class="n">b</span> <span class="n">c</span> <span class="o">==&gt;</span> <span class="n">step4</span> <span class="n">a</span> <span class="n">b</span> <span class="n">c</span>
+</pre></div>
+
 <p>To be fair, none of this is needed for both stages of the proof. Since all but the induction step are inferred automatically by the <code>+</code> type family, the proof can be written more compactly:</p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true"></a><span class="ot">plusAssoc ::</span> <span class="dt">SNat</span> a <span class="ot">-&gt;</span> <span class="dt">SNat</span> b <span class="ot">-&gt;</span> <span class="dt">SNat</span> c <span class="ot">-&gt;</span> ((a <span class="op">+</span> b) <span class="op">+</span> c) <span class="op">:~:</span> (a <span class="op">+</span> (b <span class="op">+</span> c))</span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true"></a>plusAssoc a b <span class="dt">SZ</span>     <span class="ot">=</span> <span class="dt">Refl</span></span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true"></a>plusAssoc a b (<span class="dt">SS</span> c) <span class="ot">=</span> gcastWith (plusAssoc a b c) <span class="dt">Refl</span></span></code></pre></div>
+<div class="highlight"><pre><span></span><span class="nf">plusAssoc</span> <span class="ow">::</span> <span class="kt">SNat</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">SNat</span> <span class="n">b</span> <span class="ow">-&gt;</span> <span class="kt">SNat</span> <span class="n">c</span> <span class="ow">-&gt;</span> <span class="p">((</span><span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">)</span> <span class="o">+</span> <span class="n">c</span><span class="p">)</span> <span class="kt">:~:</span> <span class="p">(</span><span class="n">a</span> <span class="o">+</span> <span class="p">(</span><span class="n">b</span> <span class="o">+</span> <span class="n">c</span><span class="p">))</span>
+<span class="nf">plusAssoc</span> <span class="n">a</span> <span class="n">b</span> <span class="kt">SZ</span>     <span class="ow">=</span> <span class="kt">Refl</span>
+<span class="nf">plusAssoc</span> <span class="n">a</span> <span class="n">b</span> <span class="p">(</span><span class="kt">SS</span> <span class="n">c</span><span class="p">)</span> <span class="ow">=</span> <span class="n">gcastWith</span> <span class="p">(</span><span class="n">plusAssoc</span> <span class="n">a</span> <span class="n">b</span> <span class="n">c</span><span class="p">)</span> <span class="kt">Refl</span>
+</pre></div>
+
 <p>In this case, only the induction step is needed to help the second step type-check. But the long proof shows a lot on how to take a mathematical proof and directly apply it in Haskell.</p>
 <p>Bonus: using <code>ScopedTypeVariables</code> we can make it much prettier. We’ll use a <code>forall</code> in the <code>let</code> block to bring some fresh variables in scope, and define the steps inside it, using the same names in the types so that we don’t have to pass variables to each step:</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true"></a><span class="ot">plusAssoc ::</span> <span class="dt">SNat</span> a <span class="ot">-&gt;</span> <span class="dt">SNat</span> b <span class="ot">-&gt;</span> <span class="dt">SNat</span> c <span class="ot">-&gt;</span> ((a <span class="op">+</span> b) <span class="op">+</span> c) <span class="op">:~:</span> (a <span class="op">+</span> (b <span class="op">+</span> c))</span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true"></a>plusAssoc a b <span class="dt">SZ</span> <span class="ot">=</span></span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true"></a>  <span class="kw">let</span><span class="ot"> proof ::</span> <span class="kw">forall</span> x y<span class="op">.</span> <span class="dt">SNat</span> x <span class="ot">-&gt;</span> <span class="dt">SNat</span> y <span class="ot">-&gt;</span> ((x <span class="op">+</span> y) <span class="op">+</span> <span class="dt">Z</span>) <span class="op">:~:</span> (x <span class="op">+</span> (y <span class="op">+</span> <span class="dt">Z</span>))</span>
-<span id="cb30-4"><a href="#cb30-4" aria-hidden="true"></a>      proof x y <span class="ot">=</span> step1 <span class="op">==&gt;</span> step2</span>
-<span id="cb30-5"><a href="#cb30-5" aria-hidden="true"></a>        <span class="kw">where</span></span>
-<span id="cb30-6"><a href="#cb30-6" aria-hidden="true"></a><span class="ot">          step1 ::</span> ((x <span class="op">+</span> y) <span class="op">+</span> <span class="dt">Z</span>) <span class="op">:~:</span> (x <span class="op">+</span> y)</span>
-<span id="cb30-7"><a href="#cb30-7" aria-hidden="true"></a>          step1  <span class="ot">=</span> gcastWith (given1 (x <span class="op">!+</span> y)) <span class="dt">Refl</span></span>
-<span id="cb30-8"><a href="#cb30-8" aria-hidden="true"></a></span>
-<span id="cb30-9"><a href="#cb30-9" aria-hidden="true"></a><span class="ot">          step2 ::</span> (x <span class="op">+</span> y) <span class="op">:~:</span> (x <span class="op">+</span> (y <span class="op">+</span> <span class="dt">Z</span>))</span>
-<span id="cb30-10"><a href="#cb30-10" aria-hidden="true"></a>          step2 <span class="ot">=</span> gcastWith (given1 y) <span class="dt">Refl</span></span>
-<span id="cb30-11"><a href="#cb30-11" aria-hidden="true"></a>  <span class="kw">in</span> proof a b</span>
-<span id="cb30-12"><a href="#cb30-12" aria-hidden="true"></a>plusAssoc a b (<span class="dt">SS</span> c) <span class="ot">=</span></span>
-<span id="cb30-13"><a href="#cb30-13" aria-hidden="true"></a>  <span class="kw">let</span><span class="ot"> proof ::</span></span>
-<span id="cb30-14"><a href="#cb30-14" aria-hidden="true"></a>        <span class="kw">forall</span> x y z<span class="op">.</span></span>
-<span id="cb30-15"><a href="#cb30-15" aria-hidden="true"></a>        <span class="dt">SNat</span> x <span class="ot">-&gt;</span> <span class="dt">SNat</span> y <span class="ot">-&gt;</span> <span class="dt">SNat</span> z <span class="ot">-&gt;</span></span>
-<span id="cb30-16"><a href="#cb30-16" aria-hidden="true"></a>        ((x <span class="op">+</span> y) <span class="op">+</span> <span class="dt">S</span> z) <span class="op">:~:</span> (x <span class="op">+</span> (y <span class="op">+</span> <span class="dt">S</span> z))</span>
-<span id="cb30-17"><a href="#cb30-17" aria-hidden="true"></a>      proof x y z <span class="ot">=</span> step1 <span class="op">==&gt;</span> step2 <span class="op">==&gt;</span> step3 <span class="op">==&gt;</span> step4</span>
-<span id="cb30-18"><a href="#cb30-18" aria-hidden="true"></a>        <span class="kw">where</span></span>
-<span id="cb30-19"><a href="#cb30-19" aria-hidden="true"></a><span class="ot">          step1 ::</span> ((x <span class="op">+</span> y) <span class="op">+</span> <span class="dt">S</span> z) <span class="op">:~:</span> <span class="dt">S</span> ((x <span class="op">+</span> y) <span class="op">+</span> z)</span>
-<span id="cb30-20"><a href="#cb30-20" aria-hidden="true"></a>          step1 <span class="ot">=</span> gcastWith (given2 (x <span class="op">!+</span> y) (<span class="dt">SS</span> z)) <span class="dt">Refl</span></span>
-<span id="cb30-21"><a href="#cb30-21" aria-hidden="true"></a></span>
-<span id="cb30-22"><a href="#cb30-22" aria-hidden="true"></a><span class="ot">          step2 ::</span> <span class="dt">S</span> ((x <span class="op">+</span> y) <span class="op">+</span> z) <span class="op">:~:</span> <span class="dt">S</span> (x <span class="op">+</span> (y <span class="op">+</span> z))</span>
-<span id="cb30-23"><a href="#cb30-23" aria-hidden="true"></a>          step2 <span class="ot">=</span> gcastWith (plusAssoc x y z) <span class="dt">Refl</span></span>
-<span id="cb30-24"><a href="#cb30-24" aria-hidden="true"></a></span>
-<span id="cb30-25"><a href="#cb30-25" aria-hidden="true"></a><span class="ot">          step3 ::</span> <span class="dt">S</span> (x <span class="op">+</span> (y <span class="op">+</span> z)) <span class="op">:~:</span> (x <span class="op">+</span> <span class="dt">S</span> (y <span class="op">+</span> z))</span>
-<span id="cb30-26"><a href="#cb30-26" aria-hidden="true"></a>          step3 <span class="ot">=</span> gcastWith (given2 x (y <span class="op">!+</span> z)) <span class="dt">Refl</span></span>
-<span id="cb30-27"><a href="#cb30-27" aria-hidden="true"></a></span>
-<span id="cb30-28"><a href="#cb30-28" aria-hidden="true"></a><span class="ot">          step4 ::</span> (x <span class="op">+</span> <span class="dt">S</span> (y <span class="op">+</span> z)) <span class="op">:~:</span> (x <span class="op">+</span> (y <span class="op">+</span> <span class="dt">S</span> z))</span>
-<span id="cb30-29"><a href="#cb30-29" aria-hidden="true"></a>          step4 <span class="ot">=</span> gcastWith (given2 y z) <span class="dt">Refl</span></span>
-<span id="cb30-30"><a href="#cb30-30" aria-hidden="true"></a>  <span class="kw">in</span> proof a b c</span></code></pre></div>
+<div class="highlight"><pre><span></span><span class="nf">plusAssoc</span> <span class="ow">::</span> <span class="kt">SNat</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">SNat</span> <span class="n">b</span> <span class="ow">-&gt;</span> <span class="kt">SNat</span> <span class="n">c</span> <span class="ow">-&gt;</span> <span class="p">((</span><span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">)</span> <span class="o">+</span> <span class="n">c</span><span class="p">)</span> <span class="kt">:~:</span> <span class="p">(</span><span class="n">a</span> <span class="o">+</span> <span class="p">(</span><span class="n">b</span> <span class="o">+</span> <span class="n">c</span><span class="p">))</span>
+<span class="nf">plusAssoc</span> <span class="n">a</span> <span class="n">b</span> <span class="kt">SZ</span> <span class="ow">=</span>
+  <span class="kr">let</span> <span class="n">proof</span> <span class="ow">::</span> <span class="n">forall</span> <span class="n">x</span> <span class="n">y</span><span class="o">.</span> <span class="kt">SNat</span> <span class="n">x</span> <span class="ow">-&gt;</span> <span class="kt">SNat</span> <span class="n">y</span> <span class="ow">-&gt;</span> <span class="p">((</span><span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="p">)</span> <span class="o">+</span> <span class="kt">Z</span><span class="p">)</span> <span class="kt">:~:</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="p">(</span><span class="n">y</span> <span class="o">+</span> <span class="kt">Z</span><span class="p">))</span>
+      <span class="n">proof</span> <span class="n">x</span> <span class="n">y</span> <span class="ow">=</span> <span class="n">step1</span> <span class="o">==&gt;</span> <span class="n">step2</span>
+        <span class="kr">where</span>
+          <span class="n">step1</span> <span class="ow">::</span> <span class="p">((</span><span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="p">)</span> <span class="o">+</span> <span class="kt">Z</span><span class="p">)</span> <span class="kt">:~:</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="p">)</span>
+          <span class="n">step1</span>  <span class="ow">=</span> <span class="n">gcastWith</span> <span class="p">(</span><span class="n">given1</span> <span class="p">(</span><span class="n">x</span> <span class="o">!+</span> <span class="n">y</span><span class="p">))</span> <span class="kt">Refl</span>
+
+          <span class="n">step2</span> <span class="ow">::</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="p">)</span> <span class="kt">:~:</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="p">(</span><span class="n">y</span> <span class="o">+</span> <span class="kt">Z</span><span class="p">))</span>
+          <span class="n">step2</span> <span class="ow">=</span> <span class="n">gcastWith</span> <span class="p">(</span><span class="n">given1</span> <span class="n">y</span><span class="p">)</span> <span class="kt">Refl</span>
+  <span class="kr">in</span> <span class="n">proof</span> <span class="n">a</span> <span class="n">b</span>
+<span class="nf">plusAssoc</span> <span class="n">a</span> <span class="n">b</span> <span class="p">(</span><span class="kt">SS</span> <span class="n">c</span><span class="p">)</span> <span class="ow">=</span>
+  <span class="kr">let</span> <span class="n">proof</span> <span class="ow">::</span>
+        <span class="n">forall</span> <span class="n">x</span> <span class="n">y</span> <span class="n">z</span><span class="o">.</span>
+        <span class="kt">SNat</span> <span class="n">x</span> <span class="ow">-&gt;</span> <span class="kt">SNat</span> <span class="n">y</span> <span class="ow">-&gt;</span> <span class="kt">SNat</span> <span class="n">z</span> <span class="ow">-&gt;</span>
+        <span class="p">((</span><span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="p">)</span> <span class="o">+</span> <span class="kt">S</span> <span class="n">z</span><span class="p">)</span> <span class="kt">:~:</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="p">(</span><span class="n">y</span> <span class="o">+</span> <span class="kt">S</span> <span class="n">z</span><span class="p">))</span>
+      <span class="n">proof</span> <span class="n">x</span> <span class="n">y</span> <span class="n">z</span> <span class="ow">=</span> <span class="n">step1</span> <span class="o">==&gt;</span> <span class="n">step2</span> <span class="o">==&gt;</span> <span class="n">step3</span> <span class="o">==&gt;</span> <span class="n">step4</span>
+        <span class="kr">where</span>
+          <span class="n">step1</span> <span class="ow">::</span> <span class="p">((</span><span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="p">)</span> <span class="o">+</span> <span class="kt">S</span> <span class="n">z</span><span class="p">)</span> <span class="kt">:~:</span> <span class="kt">S</span> <span class="p">((</span><span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="p">)</span> <span class="o">+</span> <span class="n">z</span><span class="p">)</span>
+          <span class="n">step1</span> <span class="ow">=</span> <span class="n">gcastWith</span> <span class="p">(</span><span class="n">given2</span> <span class="p">(</span><span class="n">x</span> <span class="o">!+</span> <span class="n">y</span><span class="p">)</span> <span class="p">(</span><span class="kt">SS</span> <span class="n">z</span><span class="p">))</span> <span class="kt">Refl</span>
+
+          <span class="n">step2</span> <span class="ow">::</span> <span class="kt">S</span> <span class="p">((</span><span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="p">)</span> <span class="o">+</span> <span class="n">z</span><span class="p">)</span> <span class="kt">:~:</span> <span class="kt">S</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="p">(</span><span class="n">y</span> <span class="o">+</span> <span class="n">z</span><span class="p">))</span>
+          <span class="n">step2</span> <span class="ow">=</span> <span class="n">gcastWith</span> <span class="p">(</span><span class="n">plusAssoc</span> <span class="n">x</span> <span class="n">y</span> <span class="n">z</span><span class="p">)</span> <span class="kt">Refl</span>
+
+          <span class="n">step3</span> <span class="ow">::</span> <span class="kt">S</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="p">(</span><span class="n">y</span> <span class="o">+</span> <span class="n">z</span><span class="p">))</span> <span class="kt">:~:</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="kt">S</span> <span class="p">(</span><span class="n">y</span> <span class="o">+</span> <span class="n">z</span><span class="p">))</span>
+          <span class="n">step3</span> <span class="ow">=</span> <span class="n">gcastWith</span> <span class="p">(</span><span class="n">given2</span> <span class="n">x</span> <span class="p">(</span><span class="n">y</span> <span class="o">!+</span> <span class="n">z</span><span class="p">))</span> <span class="kt">Refl</span>
+
+          <span class="n">step4</span> <span class="ow">::</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="kt">S</span> <span class="p">(</span><span class="n">y</span> <span class="o">+</span> <span class="n">z</span><span class="p">))</span> <span class="kt">:~:</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="p">(</span><span class="n">y</span> <span class="o">+</span> <span class="kt">S</span> <span class="n">z</span><span class="p">))</span>
+          <span class="n">step4</span> <span class="ow">=</span> <span class="n">gcastWith</span> <span class="p">(</span><span class="n">given2</span> <span class="n">y</span> <span class="n">z</span><span class="p">)</span> <span class="kt">Refl</span>
+  <span class="kr">in</span> <span class="n">proof</span> <span class="n">a</span> <span class="n">b</span> <span class="n">c</span>
+</pre></div>
+
 <h2 id="commutativity">Commutativity</h2>
 <p>Here’s the proof (in mathematical notation) for the property of commutativity of addition. What we want to prove is <span class="math inline">\(a + b = b + a\)</span>:</p>
 <p>The base case <span class="math inline">\(b = 0\)</span> is the left identity property.</p>
@@ -337,45 +398,65 @@ a + S(b) = S (a + b) &amp;&amp; \text{(2)}\\
 \end{align}
 \]</span></p>
 <p>The proof is left as an exercise, but using the same pattern as in the associativity proof it should be pretty straightforward. The signature should be:</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true"></a><span class="ot">plusComm ::</span> <span class="dt">SNat</span> a <span class="ot">-&gt;</span> <span class="dt">SNat</span> b <span class="ot">-&gt;</span> (a <span class="op">+</span> b) <span class="op">:~:</span> (b <span class="op">+</span> a)</span></code></pre></div>
+<div class="highlight"><pre><span></span><span class="nf">plusComm</span> <span class="ow">::</span> <span class="kt">SNat</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">SNat</span> <span class="n">b</span> <span class="ow">-&gt;</span> <span class="p">(</span><span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">)</span> <span class="kt">:~:</span> <span class="p">(</span><span class="n">b</span> <span class="o">+</span> <span class="n">a</span><span class="p">)</span>
+</pre></div>
+
 <p>The proof (and even more proofs) can be found in the repo.</p>
 <h2 id="using-the-proofs">Using the proofs</h2>
 <p>It was a bit difficult to find a use case for the proofs on addition, but I quickly found an issue trying to append two length-indexed vectors. The vector definition and several operations are more or less the same as the ones in the Stitch paper:</p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">Vec</span><span class="ot"> ::</span> <span class="dt">Nat</span> <span class="ot">-&gt;</span> <span class="op">*</span> <span class="ot">-&gt;</span> <span class="op">*</span> <span class="kw">where</span></span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true"></a>  <span class="dt">V0</span><span class="ot">   ::</span> <span class="dt">Vec</span> <span class="dt">Z</span> a</span>
-<span id="cb32-3"><a href="#cb32-3" aria-hidden="true"></a><span class="ot">  (:&gt;) ::</span> a <span class="ot">-&gt;</span> <span class="dt">Vec</span> n a <span class="ot">-&gt;</span> <span class="dt">Vec</span> (<span class="dt">S</span> n) a</span>
-<span id="cb32-4"><a href="#cb32-4" aria-hidden="true"></a></span>
-<span id="cb32-5"><a href="#cb32-5" aria-hidden="true"></a><span class="kw">infixr</span> <span class="dv">5</span> <span class="op">:&gt;</span></span></code></pre></div>
+<div class="highlight"><pre><span></span><span class="kr">data</span> <span class="kt">Vec</span> <span class="ow">::</span> <span class="kt">Nat</span> <span class="ow">-&gt;</span> <span class="o">*</span> <span class="ow">-&gt;</span> <span class="o">*</span> <span class="kr">where</span>
+  <span class="kt">V0</span>   <span class="ow">::</span> <span class="kt">Vec</span> <span class="kt">Z</span> <span class="n">a</span>
+  <span class="p">(</span><span class="kt">:&gt;</span><span class="p">)</span> <span class="ow">::</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">Vec</span> <span class="n">n</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">Vec</span> <span class="p">(</span><span class="kt">S</span> <span class="n">n</span><span class="p">)</span> <span class="n">a</span>
+
+<span class="kr">infixr</span> <span class="mi">5</span> <span class="kt">:&gt;</span>
+</pre></div>
+
 <p>I’m not going to go into detail here, but the most important part is that this vector type has its length in its type as extra information, and we need to reason about the length when manipulating it.</p>
 <p>One common example is appending two vectors. It is apparent that if one has length <code>n</code> and the other has length <code>m</code>, then the resulting vector will have length <code>n + m</code>. A naive first attemt would be the following:</p>
-<div class="sourceCode" id="cb33"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true"></a><span class="ot">append ::</span> <span class="dt">Vec</span> n a <span class="ot">-&gt;</span> <span class="dt">Vec</span> m a <span class="ot">-&gt;</span> <span class="dt">Vec</span> (n <span class="op">+</span> m) a</span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true"></a>append <span class="dt">V0</span>      ys <span class="ot">=</span> ys</span>
-<span id="cb33-3"><a href="#cb33-3" aria-hidden="true"></a>append (x<span class="op">:&gt;</span>xs) ys <span class="ot">=</span> <span class="fu">undefined</span> <span class="co">-- let&#39;s wait for now</span></span></code></pre></div>
+<div class="highlight"><pre><span></span><span class="nf">append</span> <span class="ow">::</span> <span class="kt">Vec</span> <span class="n">n</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">Vec</span> <span class="n">m</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">Vec</span> <span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="n">m</span><span class="p">)</span> <span class="n">a</span>
+<span class="nf">append</span> <span class="kt">V0</span>      <span class="n">ys</span> <span class="ow">=</span> <span class="n">ys</span>
+<span class="nf">append</span> <span class="p">(</span><span class="n">x</span><span class="kt">:&gt;</span><span class="n">xs</span><span class="p">)</span> <span class="n">ys</span> <span class="ow">=</span> <span class="n">undefined</span> <span class="c1">-- let&#39;s wait for now</span>
+</pre></div>
+
 <p>But even the base case fails to typecheck:</p>
-<pre class="text"><code>• Could not deduce: (&#39;Z + m) ~ m
-      from the context: n ~ &#39;Z</code></pre>
+<div class="highlight"><pre><span></span>• Could not deduce: (&#39;Z + m) ~ m
+      from the context: n ~ &#39;Z
+</pre></div>
+
 <p>The error says that the only concrete information we have is <code>n ~ Z</code>, because the first vector is the empty vector. And because we return <code>ys</code>, which has length <code>m</code>, the resulting type <code>Z + m</code> should be the same as <code>m</code>, but the type checker is not convinced. Let’s notice that what we need is to use the left identity property, and convince the checker:</p>
-<div class="sourceCode" id="cb35"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true"></a><span class="ot">append ::</span> <span class="dt">Vec</span> n a <span class="ot">-&gt;</span> <span class="dt">Vec</span> m a <span class="ot">-&gt;</span> <span class="dt">Vec</span> (n <span class="op">+</span> m) a</span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true"></a>append <span class="dt">V0</span>      ys <span class="ot">=</span> gcastWith (plusLeftId <span class="op">?</span>) ys</span>
-<span id="cb35-3"><a href="#cb35-3" aria-hidden="true"></a>append (x<span class="op">:&gt;</span>xs) ys <span class="ot">=</span> <span class="fu">undefined</span> <span class="co">-- let&#39;s wait for now</span></span></code></pre></div>
+<div class="highlight"><pre><span></span><span class="nf">append</span> <span class="ow">::</span> <span class="kt">Vec</span> <span class="n">n</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">Vec</span> <span class="n">m</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">Vec</span> <span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="n">m</span><span class="p">)</span> <span class="n">a</span>
+<span class="nf">append</span> <span class="kt">V0</span>      <span class="n">ys</span> <span class="ow">=</span> <span class="n">gcastWith</span> <span class="p">(</span><span class="n">plusLeftId</span> <span class="o">?</span><span class="p">)</span> <span class="n">ys</span>
+<span class="nf">append</span> <span class="p">(</span><span class="n">x</span><span class="kt">:&gt;</span><span class="n">xs</span><span class="p">)</span> <span class="n">ys</span> <span class="ow">=</span> <span class="n">undefined</span> <span class="c1">-- let&#39;s wait for now</span>
+</pre></div>
+
 <p>There is one important part missing: the actual length. All our proofs used singletons to help drive the checking process, but here there is no mention of a singleton. So let’s add it for now, and later we’ll try to make this process implicit. We’ll explicitly pass the lengths of both vectors:</p>
-<div class="sourceCode" id="cb36"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true"></a><span class="ot">append ::</span> <span class="dt">SNat</span> n <span class="ot">-&gt;</span> <span class="dt">SNat</span> m <span class="ot">-&gt;</span> <span class="dt">Vec</span> n a <span class="ot">-&gt;</span> <span class="dt">Vec</span> m a <span class="ot">-&gt;</span> <span class="dt">Vec</span> (n <span class="op">+</span> m) a</span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true"></a>append <span class="dt">SZ</span> m <span class="dt">V0</span>      ys <span class="ot">=</span> gcastWith (plusLeftId m) ys</span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true"></a>append n  m (x<span class="op">:&gt;</span>xs) ys <span class="ot">=</span> <span class="fu">undefined</span> <span class="co">-- let&#39;s wait for now</span></span></code></pre></div>
+<div class="highlight"><pre><span></span><span class="nf">append</span> <span class="ow">::</span> <span class="kt">SNat</span> <span class="n">n</span> <span class="ow">-&gt;</span> <span class="kt">SNat</span> <span class="n">m</span> <span class="ow">-&gt;</span> <span class="kt">Vec</span> <span class="n">n</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">Vec</span> <span class="n">m</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">Vec</span> <span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="n">m</span><span class="p">)</span> <span class="n">a</span>
+<span class="nf">append</span> <span class="kt">SZ</span> <span class="n">m</span> <span class="kt">V0</span>      <span class="n">ys</span> <span class="ow">=</span> <span class="n">gcastWith</span> <span class="p">(</span><span class="n">plusLeftId</span> <span class="n">m</span><span class="p">)</span> <span class="n">ys</span>
+<span class="nf">append</span> <span class="n">n</span>  <span class="n">m</span> <span class="p">(</span><span class="n">x</span><span class="kt">:&gt;</span><span class="n">xs</span><span class="p">)</span> <span class="n">ys</span> <span class="ow">=</span> <span class="n">undefined</span> <span class="c1">-- let&#39;s wait for now</span>
+</pre></div>
+
 <p>OK, this works. Let’s try to do the next case where the first vector is nonempty. We’ll make it fail just to see the error message:</p>
-<div class="sourceCode" id="cb37"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true"></a><span class="ot">append ::</span> <span class="dt">SNat</span> n <span class="ot">-&gt;</span> <span class="dt">SNat</span> m <span class="ot">-&gt;</span> <span class="dt">Vec</span> n a <span class="ot">-&gt;</span> <span class="dt">Vec</span> m a <span class="ot">-&gt;</span> <span class="dt">Vec</span> (n <span class="op">+</span> m) a</span>
-<span id="cb37-2"><a href="#cb37-2" aria-hidden="true"></a>append <span class="dt">SZ</span> m <span class="dt">V0</span>      ys <span class="ot">=</span> gcastWith (plusLeftId m) ys</span>
-<span id="cb37-3"><a href="#cb37-3" aria-hidden="true"></a>append n  m (x<span class="op">:&gt;</span>xs) ys <span class="ot">=</span> x <span class="op">:&gt;</span> append <span class="op">?</span> m xs ys</span></code></pre></div>
+<div class="highlight"><pre><span></span><span class="nf">append</span> <span class="ow">::</span> <span class="kt">SNat</span> <span class="n">n</span> <span class="ow">-&gt;</span> <span class="kt">SNat</span> <span class="n">m</span> <span class="ow">-&gt;</span> <span class="kt">Vec</span> <span class="n">n</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">Vec</span> <span class="n">m</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">Vec</span> <span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="n">m</span><span class="p">)</span> <span class="n">a</span>
+<span class="nf">append</span> <span class="kt">SZ</span> <span class="n">m</span> <span class="kt">V0</span>      <span class="n">ys</span> <span class="ow">=</span> <span class="n">gcastWith</span> <span class="p">(</span><span class="n">plusLeftId</span> <span class="n">m</span><span class="p">)</span> <span class="n">ys</span>
+<span class="nf">append</span> <span class="n">n</span>  <span class="n">m</span> <span class="p">(</span><span class="n">x</span><span class="kt">:&gt;</span><span class="n">xs</span><span class="p">)</span> <span class="n">ys</span> <span class="ow">=</span> <span class="n">x</span> <span class="kt">:&gt;</span> <span class="n">append</span> <span class="o">?</span> <span class="n">m</span> <span class="n">xs</span> <span class="n">ys</span>
+</pre></div>
+
 <p>Uh-oh. How do we get the length of the first vector after we remove the first element? Luckily, that’s just <code>n - 1</code>. Let’s create a helper function to get the <em>predecessor</em> number of a singleton of <code>Nat</code>:</p>
-<div class="sourceCode" id="cb38"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true"></a><span class="ot">spred ::</span> <span class="dt">SNat</span> (<span class="dt">S</span> n) <span class="ot">-&gt;</span> <span class="dt">SNat</span> n</span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true"></a>spred (<span class="dt">SS</span> n) <span class="ot">=</span> n</span></code></pre></div>
+<div class="highlight"><pre><span></span><span class="nf">spred</span> <span class="ow">::</span> <span class="kt">SNat</span> <span class="p">(</span><span class="kt">S</span> <span class="n">n</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="kt">SNat</span> <span class="n">n</span>
+<span class="nf">spred</span> <span class="p">(</span><span class="kt">SS</span> <span class="n">n</span><span class="p">)</span> <span class="ow">=</span> <span class="n">n</span>
+</pre></div>
+
 <p>This function is total, because there is no need for the case <code>spred SZ</code>. As a matter of fact, it wouldn’t type check because it would mean trying to do <code>SZ :: SNat (S n)</code> which doesn’t make sense. And because the first vector in the second case of <code>append</code> is not empty, we know that <code>n</code> is not <code>SZ</code> but <code>SS ...</code>.</p>
-<div class="sourceCode" id="cb39"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true"></a><span class="ot">append ::</span> <span class="dt">SNat</span> n <span class="ot">-&gt;</span> <span class="dt">SNat</span> m <span class="ot">-&gt;</span> <span class="dt">Vec</span> n a <span class="ot">-&gt;</span> <span class="dt">Vec</span> m a <span class="ot">-&gt;</span> <span class="dt">Vec</span> (n <span class="op">+</span> m) a</span>
-<span id="cb39-2"><a href="#cb39-2" aria-hidden="true"></a>append <span class="dt">SZ</span> m <span class="dt">V0</span>      ys <span class="ot">=</span> gcastWith (plusLeftId m) ys</span>
-<span id="cb39-3"><a href="#cb39-3" aria-hidden="true"></a>append n  m (x<span class="op">:&gt;</span>xs) ys <span class="ot">=</span> x <span class="op">:&gt;</span> append (spred n) m xs ys</span></code></pre></div>
+<div class="highlight"><pre><span></span><span class="nf">append</span> <span class="ow">::</span> <span class="kt">SNat</span> <span class="n">n</span> <span class="ow">-&gt;</span> <span class="kt">SNat</span> <span class="n">m</span> <span class="ow">-&gt;</span> <span class="kt">Vec</span> <span class="n">n</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">Vec</span> <span class="n">m</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">Vec</span> <span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="n">m</span><span class="p">)</span> <span class="n">a</span>
+<span class="nf">append</span> <span class="kt">SZ</span> <span class="n">m</span> <span class="kt">V0</span>      <span class="n">ys</span> <span class="ow">=</span> <span class="n">gcastWith</span> <span class="p">(</span><span class="n">plusLeftId</span> <span class="n">m</span><span class="p">)</span> <span class="n">ys</span>
+<span class="nf">append</span> <span class="n">n</span>  <span class="n">m</span> <span class="p">(</span><span class="n">x</span><span class="kt">:&gt;</span><span class="n">xs</span><span class="p">)</span> <span class="n">ys</span> <span class="ow">=</span> <span class="n">x</span> <span class="kt">:&gt;</span> <span class="n">append</span> <span class="p">(</span><span class="n">spred</span> <span class="n">n</span><span class="p">)</span> <span class="n">m</span> <span class="n">xs</span> <span class="n">ys</span>
+</pre></div>
+
 <p>This time we get this error:</p>
-<pre class="text"><code>• Could not deduce: (&#39;S n1 + m) ~ &#39;S (n1 + m)
-  from the context: n ~ &#39;S n1</code></pre>
+<div class="highlight"><pre><span></span>• Could not deduce: (&#39;S n1 + m) ~ &#39;S (n1 + m)
+  from the context: n ~ &#39;S n1
+</pre></div>
+
 <p>Where <code>n1</code> is the type of the result of <code>spred n</code>. Let’s construct a proof for that:</p>
 <p>We need to prove <span class="math inline">\(S(a) + b = S(a + b)\)</span>. We can do an inductive proof which will be quicker (in the repo I use an inductive proof), but let’s try to do it in one pass:</p>
 <p><span class="math display">\[
@@ -387,58 +468,76 @@ a + S(b) = S (a + b) &amp;&amp; \text{(2)}\\
 \end{align}
 \]</span></p>
 <p>And in Haskell:</p>
-<div class="sourceCode" id="cb41"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true"></a><span class="ot">append ::</span> <span class="dt">SNat</span> n <span class="ot">-&gt;</span> <span class="dt">SNat</span> m <span class="ot">-&gt;</span> <span class="dt">Vec</span> n a <span class="ot">-&gt;</span> <span class="dt">Vec</span> m a <span class="ot">-&gt;</span> <span class="dt">Vec</span> (n <span class="op">+</span> m) a</span>
-<span id="cb41-2"><a href="#cb41-2" aria-hidden="true"></a>append <span class="dt">SZ</span> m <span class="dt">V0</span> ys <span class="ot">=</span> gcastWith (plusIdenL m) ys</span>
-<span id="cb41-3"><a href="#cb41-3" aria-hidden="true"></a>append n m (x<span class="op">:&gt;</span>xs) ys <span class="ot">=</span> gcastWith (proof pn m) <span class="op">$</span> x <span class="op">:&gt;</span> app (spred n) m xs ys</span>
-<span id="cb41-4"><a href="#cb41-4" aria-hidden="true"></a>  <span class="kw">where</span></span>
-<span id="cb41-5"><a href="#cb41-5" aria-hidden="true"></a>    pn <span class="ot">=</span> spred n</span>
-<span id="cb41-6"><a href="#cb41-6" aria-hidden="true"></a><span class="ot">    proof ::</span> <span class="kw">forall</span> x y<span class="op">.</span> <span class="dt">SNat</span> x <span class="ot">-&gt;</span> <span class="dt">SNat</span> y <span class="ot">-&gt;</span> (<span class="dt">S</span> x <span class="op">+</span> y) <span class="op">:~:</span> <span class="dt">S</span> (x <span class="op">+</span> y)</span>
-<span id="cb41-7"><a href="#cb41-7" aria-hidden="true"></a>    proof x y <span class="ot">=</span> step1 <span class="op">==&gt;</span> step2 <span class="op">==&gt;</span> step3</span>
-<span id="cb41-8"><a href="#cb41-8" aria-hidden="true"></a>      <span class="kw">where</span></span>
-<span id="cb41-9"><a href="#cb41-9" aria-hidden="true"></a><span class="ot">        step1 ::</span> (<span class="dt">S</span> x <span class="op">+</span> y) <span class="op">:~:</span> (y <span class="op">+</span> <span class="dt">S</span> x)</span>
-<span id="cb41-10"><a href="#cb41-10" aria-hidden="true"></a>        step1 <span class="ot">=</span> gcastWith (plusComm (<span class="dt">SS</span> x) y) <span class="dt">Refl</span></span>
-<span id="cb41-11"><a href="#cb41-11" aria-hidden="true"></a></span>
-<span id="cb41-12"><a href="#cb41-12" aria-hidden="true"></a><span class="ot">        step2 ::</span> (y <span class="op">+</span> <span class="dt">S</span> x) <span class="op">:~:</span> <span class="dt">S</span> (y <span class="op">+</span> x)</span>
-<span id="cb41-13"><a href="#cb41-13" aria-hidden="true"></a>        step2 <span class="ot">=</span> gcastWith (given2 y (<span class="dt">SS</span> x)) <span class="dt">Refl</span></span>
-<span id="cb41-14"><a href="#cb41-14" aria-hidden="true"></a></span>
-<span id="cb41-15"><a href="#cb41-15" aria-hidden="true"></a><span class="ot">        step3 ::</span> <span class="dt">S</span> (y <span class="op">+</span> x) <span class="op">:~:</span> <span class="dt">S</span> (x <span class="op">+</span> y)</span>
-<span id="cb41-16"><a href="#cb41-16" aria-hidden="true"></a>        step3 <span class="ot">=</span> gcastWith (plusComm y x) <span class="dt">Refl</span></span></code></pre></div>
+<div class="highlight"><pre><span></span><span class="nf">append</span> <span class="ow">::</span> <span class="kt">SNat</span> <span class="n">n</span> <span class="ow">-&gt;</span> <span class="kt">SNat</span> <span class="n">m</span> <span class="ow">-&gt;</span> <span class="kt">Vec</span> <span class="n">n</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">Vec</span> <span class="n">m</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">Vec</span> <span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="n">m</span><span class="p">)</span> <span class="n">a</span>
+<span class="nf">append</span> <span class="kt">SZ</span> <span class="n">m</span> <span class="kt">V0</span> <span class="n">ys</span> <span class="ow">=</span> <span class="n">gcastWith</span> <span class="p">(</span><span class="n">plusIdenL</span> <span class="n">m</span><span class="p">)</span> <span class="n">ys</span>
+<span class="nf">append</span> <span class="n">n</span> <span class="n">m</span> <span class="p">(</span><span class="n">x</span><span class="kt">:&gt;</span><span class="n">xs</span><span class="p">)</span> <span class="n">ys</span> <span class="ow">=</span> <span class="n">gcastWith</span> <span class="p">(</span><span class="n">proof</span> <span class="n">pn</span> <span class="n">m</span><span class="p">)</span> <span class="o">$</span> <span class="n">x</span> <span class="kt">:&gt;</span> <span class="n">app</span> <span class="p">(</span><span class="n">spred</span> <span class="n">n</span><span class="p">)</span> <span class="n">m</span> <span class="n">xs</span> <span class="n">ys</span>
+  <span class="kr">where</span>
+    <span class="n">pn</span> <span class="ow">=</span> <span class="n">spred</span> <span class="n">n</span>
+    <span class="n">proof</span> <span class="ow">::</span> <span class="n">forall</span> <span class="n">x</span> <span class="n">y</span><span class="o">.</span> <span class="kt">SNat</span> <span class="n">x</span> <span class="ow">-&gt;</span> <span class="kt">SNat</span> <span class="n">y</span> <span class="ow">-&gt;</span> <span class="p">(</span><span class="kt">S</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="p">)</span> <span class="kt">:~:</span> <span class="kt">S</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="p">)</span>
+    <span class="n">proof</span> <span class="n">x</span> <span class="n">y</span> <span class="ow">=</span> <span class="n">step1</span> <span class="o">==&gt;</span> <span class="n">step2</span> <span class="o">==&gt;</span> <span class="n">step3</span>
+      <span class="kr">where</span>
+        <span class="n">step1</span> <span class="ow">::</span> <span class="p">(</span><span class="kt">S</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="p">)</span> <span class="kt">:~:</span> <span class="p">(</span><span class="n">y</span> <span class="o">+</span> <span class="kt">S</span> <span class="n">x</span><span class="p">)</span>
+        <span class="n">step1</span> <span class="ow">=</span> <span class="n">gcastWith</span> <span class="p">(</span><span class="n">plusComm</span> <span class="p">(</span><span class="kt">SS</span> <span class="n">x</span><span class="p">)</span> <span class="n">y</span><span class="p">)</span> <span class="kt">Refl</span>
+
+        <span class="n">step2</span> <span class="ow">::</span> <span class="p">(</span><span class="n">y</span> <span class="o">+</span> <span class="kt">S</span> <span class="n">x</span><span class="p">)</span> <span class="kt">:~:</span> <span class="kt">S</span> <span class="p">(</span><span class="n">y</span> <span class="o">+</span> <span class="n">x</span><span class="p">)</span>
+        <span class="n">step2</span> <span class="ow">=</span> <span class="n">gcastWith</span> <span class="p">(</span><span class="n">given2</span> <span class="n">y</span> <span class="p">(</span><span class="kt">SS</span> <span class="n">x</span><span class="p">))</span> <span class="kt">Refl</span>
+
+        <span class="n">step3</span> <span class="ow">::</span> <span class="kt">S</span> <span class="p">(</span><span class="n">y</span> <span class="o">+</span> <span class="n">x</span><span class="p">)</span> <span class="kt">:~:</span> <span class="kt">S</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="p">)</span>
+        <span class="n">step3</span> <span class="ow">=</span> <span class="n">gcastWith</span> <span class="p">(</span><span class="n">plusComm</span> <span class="n">y</span> <span class="n">x</span><span class="p">)</span> <span class="kt">Refl</span>
+</pre></div>
+
 <p>And that’s the proof. Now appending two vectors should work. First, here’s an instance of <code>Show</code> for <code>Vec</code>:</p>
-<div class="sourceCode" id="cb42"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true"></a><span class="kw">instance</span> (<span class="dt">Show</span> a) <span class="ot">=&gt;</span> <span class="dt">Show</span> (<span class="dt">Vec</span> n a) <span class="kw">where</span></span>
-<span id="cb42-2"><a href="#cb42-2" aria-hidden="true"></a>  <span class="fu">show</span> v <span class="ot">=</span> <span class="st">&quot;[&quot;</span> <span class="op">++</span> go v</span>
-<span id="cb42-3"><a href="#cb42-3" aria-hidden="true"></a>    <span class="kw">where</span><span class="ot"> go ::</span> (<span class="dt">Show</span> a&#39;) <span class="ot">=&gt;</span> <span class="dt">Vec</span> n&#39; a&#39; <span class="ot">-&gt;</span> <span class="dt">String</span></span>
-<span id="cb42-4"><a href="#cb42-4" aria-hidden="true"></a>          go v <span class="ot">=</span> <span class="kw">case</span> v <span class="kw">of</span></span>
-<span id="cb42-5"><a href="#cb42-5" aria-hidden="true"></a>            <span class="dt">V0</span>        <span class="ot">-&gt;</span> <span class="st">&quot;]&quot;</span></span>
-<span id="cb42-6"><a href="#cb42-6" aria-hidden="true"></a>            (x <span class="op">:&gt;</span> xs) <span class="ot">-&gt;</span> <span class="fu">show</span> x <span class="op">++</span> sep <span class="op">++</span> go xs</span>
-<span id="cb42-7"><a href="#cb42-7" aria-hidden="true"></a>              <span class="kw">where</span> sep <span class="ot">=</span> <span class="kw">case</span> xs <span class="kw">of</span></span>
-<span id="cb42-8"><a href="#cb42-8" aria-hidden="true"></a>                      <span class="dt">V0</span>   <span class="ot">-&gt;</span> <span class="st">&quot;&quot;</span></span>
-<span id="cb42-9"><a href="#cb42-9" aria-hidden="true"></a>                      _    <span class="ot">-&gt;</span> <span class="st">&quot;, &quot;</span></span></code></pre></div>
+<div class="highlight"><pre><span></span><span class="kr">instance</span> <span class="p">(</span><span class="kt">Show</span> <span class="n">a</span><span class="p">)</span> <span class="ow">=&gt;</span> <span class="kt">Show</span> <span class="p">(</span><span class="kt">Vec</span> <span class="n">n</span> <span class="n">a</span><span class="p">)</span> <span class="kr">where</span>
+  <span class="n">show</span> <span class="n">v</span> <span class="ow">=</span> <span class="s">&quot;[&quot;</span> <span class="o">++</span> <span class="n">go</span> <span class="n">v</span>
+    <span class="kr">where</span> <span class="n">go</span> <span class="ow">::</span> <span class="p">(</span><span class="kt">Show</span> <span class="n">a&#39;</span><span class="p">)</span> <span class="ow">=&gt;</span> <span class="kt">Vec</span> <span class="n">n&#39;</span> <span class="n">a&#39;</span> <span class="ow">-&gt;</span> <span class="kt">String</span>
+          <span class="n">go</span> <span class="n">v</span> <span class="ow">=</span> <span class="kr">case</span> <span class="n">v</span> <span class="kr">of</span>
+            <span class="kt">V0</span>        <span class="ow">-&gt;</span> <span class="s">&quot;]&quot;</span>
+            <span class="p">(</span><span class="n">x</span> <span class="kt">:&gt;</span> <span class="n">xs</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="n">show</span> <span class="n">x</span> <span class="o">++</span> <span class="n">sep</span> <span class="o">++</span> <span class="n">go</span> <span class="n">xs</span>
+              <span class="kr">where</span> <span class="n">sep</span> <span class="ow">=</span> <span class="kr">case</span> <span class="n">xs</span> <span class="kr">of</span>
+                      <span class="kt">V0</span>   <span class="ow">-&gt;</span> <span class="s">&quot;&quot;</span>
+                      <span class="kr">_</span>    <span class="ow">-&gt;</span> <span class="s">&quot;, &quot;</span>
+</pre></div>
+
 <p>And two example vectors:</p>
-<div class="sourceCode" id="cb43"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true"></a>x <span class="ot">=</span> <span class="dv">1</span> <span class="op">:&gt;</span> <span class="dv">2</span> <span class="op">:&gt;</span> <span class="dv">3</span> <span class="op">:&gt;</span> <span class="dv">4</span> <span class="op">:&gt;</span> <span class="dt">V0</span></span>
-<span id="cb43-2"><a href="#cb43-2" aria-hidden="true"></a>lengthX <span class="ot">=</span> <span class="dt">SS</span> (<span class="dt">SS</span> (<span class="dt">SS</span> (<span class="dt">SS</span> <span class="dt">SZ</span>)))</span>
-<span id="cb43-3"><a href="#cb43-3" aria-hidden="true"></a></span>
-<span id="cb43-4"><a href="#cb43-4" aria-hidden="true"></a>y <span class="ot">=</span> <span class="dv">5</span> <span class="op">:&gt;</span> <span class="dv">6</span> <span class="op">:&gt;</span> <span class="dv">7</span> <span class="op">:&gt;</span> <span class="dv">8</span> <span class="op">:&gt;</span> <span class="dv">9</span> <span class="op">:&gt;</span> <span class="dt">V0</span></span>
-<span id="cb43-5"><a href="#cb43-5" aria-hidden="true"></a>lengthY <span class="ot">=</span> <span class="dt">SS</span> (<span class="dt">SS</span> (<span class="dt">SS</span> (<span class="dt">SS</span> (<span class="dt">SS</span> <span class="dt">SZ</span>))))</span></code></pre></div>
-<pre class="text"><code>&gt; append lengthX lengthY x y
+<div class="highlight"><pre><span></span><span class="nf">x</span> <span class="ow">=</span> <span class="mi">1</span> <span class="kt">:&gt;</span> <span class="mi">2</span> <span class="kt">:&gt;</span> <span class="mi">3</span> <span class="kt">:&gt;</span> <span class="mi">4</span> <span class="kt">:&gt;</span> <span class="kt">V0</span>
+<span class="nf">lengthX</span> <span class="ow">=</span> <span class="kt">SS</span> <span class="p">(</span><span class="kt">SS</span> <span class="p">(</span><span class="kt">SS</span> <span class="p">(</span><span class="kt">SS</span> <span class="kt">SZ</span><span class="p">)))</span>
+
+<span class="nf">y</span> <span class="ow">=</span> <span class="mi">5</span> <span class="kt">:&gt;</span> <span class="mi">6</span> <span class="kt">:&gt;</span> <span class="mi">7</span> <span class="kt">:&gt;</span> <span class="mi">8</span> <span class="kt">:&gt;</span> <span class="mi">9</span> <span class="kt">:&gt;</span> <span class="kt">V0</span>
+<span class="nf">lengthY</span> <span class="ow">=</span> <span class="kt">SS</span> <span class="p">(</span><span class="kt">SS</span> <span class="p">(</span><span class="kt">SS</span> <span class="p">(</span><span class="kt">SS</span> <span class="p">(</span><span class="kt">SS</span> <span class="kt">SZ</span><span class="p">))))</span>
+</pre></div>
+
+<div class="highlight"><pre><span></span>&gt; append lengthX lengthY x y
 [1, 2, 3, 4, 5, 6, 7, 8, 9]
 &gt; :t append lengthX lengthY x y
 append lengthX lengthY x y
-  :: Vec (&#39;S (&#39;S (&#39;S (&#39;S (&#39;S (&#39;S (&#39;S (&#39;S (&#39;S &#39;Z))))))))) Integer</code></pre>
+  :: Vec (&#39;S (&#39;S (&#39;S (&#39;S (&#39;S (&#39;S (&#39;S (&#39;S (&#39;S &#39;Z))))))))) Integer
+</pre></div>
+
 <p>We can also remove the need to have the length in a variable beforehand. To do that, we have to resort to type classes (again, this is described in the Stitch paper). We will construct a type class with a single method that can magically give an <code>SNat</code> depending on the instance we are using:</p>
-<div class="sourceCode" id="cb45"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true"></a><span class="kw">class</span> <span class="dt">IsNat</span> (<span class="ot">n ::</span> <span class="dt">Nat</span>) <span class="kw">where</span><span class="ot"> nat ::</span> <span class="dt">SNat</span> n</span>
-<span id="cb45-2"><a href="#cb45-2" aria-hidden="true"></a></span>
-<span id="cb45-3"><a href="#cb45-3" aria-hidden="true"></a><span class="kw">instance</span>            <span class="dt">IsNat</span> <span class="dt">Z</span>     <span class="kw">where</span> nat <span class="ot">=</span> <span class="dt">SZ</span></span>
-<span id="cb45-4"><a href="#cb45-4" aria-hidden="true"></a><span class="kw">instance</span> <span class="dt">IsNat</span> n <span class="ot">=&gt;</span> <span class="dt">IsNat</span> (<span class="dt">S</span> n) <span class="kw">where</span> nat <span class="ot">=</span> <span class="dt">SS</span> nat</span></code></pre></div>
+<div class="highlight"><pre><span></span><span class="kr">class</span> <span class="kt">IsNat</span> <span class="p">(</span><span class="n">n</span> <span class="ow">::</span> <span class="kt">Nat</span><span class="p">)</span> <span class="kr">where</span> <span class="n">nat</span> <span class="ow">::</span> <span class="kt">SNat</span> <span class="n">n</span>
+
+<span class="kr">instance</span>            <span class="kt">IsNat</span> <span class="kt">Z</span>     <span class="kr">where</span> <span class="n">nat</span> <span class="ow">=</span> <span class="kt">SZ</span>
+<span class="kr">instance</span> <span class="kt">IsNat</span> <span class="n">n</span> <span class="ow">=&gt;</span> <span class="kt">IsNat</span> <span class="p">(</span><span class="kt">S</span> <span class="n">n</span><span class="p">)</span> <span class="kr">where</span> <span class="n">nat</span> <span class="ow">=</span> <span class="kt">SS</span> <span class="n">nat</span>
+</pre></div>
+
 <p>Then we can just use <code>nat</code> to get the length. The instance of <code>IsNat</code> to use is resolved thanks to the fact that the <code>n</code> in the constraint <code>IsNat</code> is the same <code>n</code> that is the vector length:</p>
-<div class="sourceCode" id="cb46"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true"></a><span class="ot">vlength ::</span> <span class="dt">IsNat</span> n <span class="ot">=&gt;</span> <span class="dt">Vec</span> n a <span class="ot">-&gt;</span> <span class="dt">SNat</span> n</span>
-<span id="cb46-2"><a href="#cb46-2" aria-hidden="true"></a>vlength _ <span class="ot">=</span> nat</span></code></pre></div>
-<pre class="text"><code>&gt; append (vlength x) (vlength y) x y
-[1, 2, 3, 4, 5, 6, 7, 8, 9]</code></pre>
+<div class="highlight"><pre><span></span><span class="nf">vlength</span> <span class="ow">::</span> <span class="kt">IsNat</span> <span class="n">n</span> <span class="ow">=&gt;</span> <span class="kt">Vec</span> <span class="n">n</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">SNat</span> <span class="n">n</span>
+<span class="nf">vlength</span> <span class="kr">_</span> <span class="ow">=</span> <span class="n">nat</span>
+</pre></div>
+
+<div class="highlight"><pre><span></span>&gt; append (vlength x) (vlength y) x y
+[1, 2, 3, 4, 5, 6, 7, 8, 9]
+</pre></div>
+
 <p>But I promised that we can have the length passed implicitly. Again, we’ll use the typeclass with some help from <code>TypeApplications</code> and <code>ScopedTypeVariables</code>:</p>
-<div class="sourceCode" id="cb48"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true"></a><span class="ot">(+++) ::</span> <span class="kw">forall</span> n m a<span class="op">.</span> (<span class="dt">IsNat</span> n, <span class="dt">IsNat</span> m) <span class="ot">=&gt;</span> <span class="dt">Vec</span> n a <span class="ot">-&gt;</span> <span class="dt">Vec</span> m a <span class="ot">-&gt;</span> <span class="dt">Vec</span> (n <span class="op">+</span> m) a</span>
-<span id="cb48-2"><a href="#cb48-2" aria-hidden="true"></a>(<span class="op">+++</span>) <span class="ot">=</span> append (nat <span class="op">@</span>n) (nat <span class="op">@</span>m)</span></code></pre></div>
-<pre class="text"><code>&gt; x +++ y
-[1, 2, 3, 4, 5, 6, 7, 8, 9]</code></pre>
+<div class="highlight"><pre><span></span><span class="p">(</span><span class="o">+++</span><span class="p">)</span> <span class="ow">::</span> <span class="n">forall</span> <span class="n">n</span> <span class="n">m</span> <span class="n">a</span><span class="o">.</span> <span class="p">(</span><span class="kt">IsNat</span> <span class="n">n</span><span class="p">,</span> <span class="kt">IsNat</span> <span class="n">m</span><span class="p">)</span> <span class="ow">=&gt;</span> <span class="kt">Vec</span> <span class="n">n</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">Vec</span> <span class="n">m</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">Vec</span> <span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="n">m</span><span class="p">)</span> <span class="n">a</span>
+<span class="p">(</span><span class="o">+++</span><span class="p">)</span> <span class="ow">=</span> <span class="n">append</span> <span class="p">(</span><span class="n">nat</span> <span class="o">@</span><span class="n">n</span><span class="p">)</span> <span class="p">(</span><span class="n">nat</span> <span class="o">@</span><span class="n">m</span><span class="p">)</span>
+</pre></div>
+
+<div class="highlight"><pre><span></span>&gt; x +++ y
+[1, 2, 3, 4, 5, 6, 7, 8, 9]
+</pre></div>
+
 <p>Magic!</p>
 <h2 id="conclusion">Conclusion</h2>
 <p>This was a lengthy blog post, and the ideas presented fall into the obscure side of things. Should there be a need to resort to dependent types, the above might prove useful. Nevertheless, it’s a fun way to explore both dependent types and translating mathematical proofs to Haskell. After all, as someone said in the <a href="https://fpchat-invite.herokuapp.com/">functional programming slack</a>,</p>
@@ -454,14 +553,12 @@ append lengthX lengthY x y
 <li id="fn4" role="doc-endnote"><p><a href="http://docs.idris-lang.org/en/latest/tutorial/typesfuns.html" class="uri">http://docs.idris-lang.org/en/latest/tutorial/typesfuns.html</a><a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
-
   </section>
 </article>
-
     </main>
 
     <footer>
-      Site generated using nix + <a href="https://github.com/alexpeits/statue.git">statue</a>
+      © 2017–present Alex Peitsinis
     </footer>
   </body>
 </html>
