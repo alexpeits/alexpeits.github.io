@@ -1,5 +1,6 @@
 NIXPKGS?=nixpkgs-unstable
 HOOGLE_PORT?=8888
+PORT?=8080
 
 NIX_SHELL=nix-shell --argstr pkgs ${NIXPKGS}
 
@@ -16,7 +17,7 @@ hoogle:
 	${NIX_SHELL} --run 'hoogle server --port ${HOOGLE_PORT} --local'
 
 serve:
-	cd _build && python -m http.server 8080
+	cd _build && python -m http.server ${PORT}
 
 list-nixpkgs:
 	jq -n '[inputs | keys[]]' nix/sources.json
