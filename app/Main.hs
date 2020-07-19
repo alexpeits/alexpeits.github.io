@@ -483,9 +483,6 @@ instance Ae.ToJSON Meta where
         "description" .= mDesc
       ]
 
-metaCtx :: Post -> Ae.Value
-metaCtx = Ae.toJSON . postMeta
-
 data Page = Page
   { pageMeta :: PageMeta,
     pageMdFile :: FilePath,
