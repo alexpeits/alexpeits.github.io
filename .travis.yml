@@ -18,7 +18,11 @@ jobs:
         - nix-env -iA cachix -f https://cachix.org/api/v1/install
         - cachix use alexpeits-travis
         - cachix push alexpeits-travis --watch-store &
-        - ./run.sh -b
+        - nix-build -A site
+        - mkdir -p site
+        - rm -rf site/*
+        - cp -R result/_build/* site/
+        - chmod -R +w site/
         - sleep 10
 
       deploy:

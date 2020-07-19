@@ -1,0 +1,32 @@
+site_title: Alex's blog
+author: Alex Peitsinis
+email: alexpeitsinis@gmail.com
+copyright: © 2017–present Alex Peitsinis
+host: https://alexpeits.github.io
+projects:
+  - name: harg
+    link: https://github.com/alexpeits/harg
+    description: Haskell program configuration using higher kinded data
+    docs: http://alexpeits.github.io/harg
+  - name: nix-haskell-cookiecutter
+    link: https://github.com/alexpeits/haskell-nix-cookiecutter
+    description: Cookiecutter template to quickly generate haskell projects (cabal, nix, direnv)
+    docs: https://github.com/alexpeits/haskell-nix-cookiecutter/blob/master/README.md
+  - name: statue
+    link: https://github.com/alexpeits/statue
+    description: Simple static site generator using only nix
+    docs: https://github.com/alexpeits/statue/blob/master/README.md
+talks:
+  - name: Proofs in Haskell using type-level features and dependent types
+    link: https://github.com/alexpeits/habito-proofs-talk
+    date: April 2019
+    location: habito
+    location_link: https://www.habito.com/
+  - name: Python Metaclasses and Descriptors
+    link: https://alexpeits.github.io/metaclasses-pythonmeetup-hsgr
+    date: June 2017
+    location: hackerspacegr
+    location_link: https://www.hackerspace.gr/
+
+
+

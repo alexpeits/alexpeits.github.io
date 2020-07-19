@@ -1,53 +1,65 @@
-{ pkgs ? import <nixpkgs> {}, statue ? null }:
+# to see ghc versions:
+# nix-instantiate --eval -E "with import ./nix/nixpkgs.nix {}; lib.attrNames haskell.compiler"
+{ pkgs ? null, compiler ? null }:
 
 let
-  config = {
-    siteTitle = "Alex's blog";
-    navPages = [ ./projects.nix ./talks.nix ./about.md ];
-    rootDir = ./.;
-    postsDir = ./posts;
-    htmlHead = ''
-      <link rel="shortcut icon" type="image/png" href="/images/favicon.png"/>
-      <link rel="stylesheet" href="/css/default.css" />
-      <link rel="stylesheet" href="/css/syntax.css" />
-      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700%7CPT+Sans:400" />
-      <script type="text/x-mathjax-config">
-       MathJax.Hub.Config({
-         "HTML-CSS": { linebreaks: { automatic: true } },
-         SVG: { linebreaks: { automatic: true } },
-         messageStyle: "none"
-       });
-      </script>
-      <script
-        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
-        type="text/javascript">
-      </script>
-    '';
-    extraScript = {
-      inputs = p: [ p.minify ];
-      script = ''
-        cp -R ${./static/images} $out/images
-        cp -R ${./static/keybase.txt} $out/keybase.txt
 
-        mkdir -p $out/css
-        for css in $(find ${./static/css} -name '*.css'); do
-          minify -o $out/css/$(basename $css) $css
-        done
-      '';
-    };
+  nixpkgs = if isNull pkgs then
+    import (import ./nix/sources.nix).nixpkgs-unstable {}
+  else if builtins.typeOf pkgs == "set" then
+    pkgs
+  else
+    import (builtins.getAttr pkgs (import ./nix/sources.nix)) {};
+
+  haskellPackagesBase = if isNull compiler then
+    nixpkgs.haskellPackages
+  else
+    nixpkgs.haskell.packages.${compiler};
+
+  haskellPackages = haskellPackagesBase.override {
+    overrides = self: super:
+      let
+        hsPkgs = import ./nix/overrides.nix {
+          pkgs = nixpkgs;
+          self = self;
+          super = super;
+        };
+        src = nixpkgs.nix-gitignore.gitignoreSource [] ./.;
+        drv = self.callCabal2nix "alexpeits" src {};
+      in
+        hsPkgs // { alexpeits = drv; };
   };
 
-  statue-src-github =
-    let src = pkgs.lib.importJSON ./statue.json; in
-      pkgs.fetchFromGitHub {
-        owner = "alexpeits";
-        repo = "statue";
-        rev = src.rev;
-        sha256 = src.sha256;
-      };
+  site = nixpkgs.stdenv.mkDerivation {
+    name = "alexpeits-github-io";
+    buildInputs = [
+      nixpkgs.python37Packages.pygments
+      nixpkgs.glibcLocales
+    ];
+    LANG = "en_US.UTF-8";
+    src = ./.;
+    buildPhase = ''
+      ${haskellPackages.alexpeits}/bin/alexpeits-exe
+    '';
+    installPhase = ''
+      mkdir "$out"
+      cp -R _build "$out/_build"
+    '';
+  };
 
-  statue-src = if statue != null then statue else statue-src-github;
+  shell = haskellPackages.shellFor {
+    packages = ps: [ ps.alexpeits ];
+    buildInputs =
+      [
+        haskellPackages.ghcid
+        haskellPackages.cabal-install
+        nixpkgs.python37Packages.pygments
+        nixpkgs.inotify-tools
+      ];
+    withHoogle = true;
+  };
 
 in
-
-import statue-src { config = config; }
+if nixpkgs.lib.inNixShell
+then shell
+else { site = site; alexpeits = haskellPackages.alexpeits; }

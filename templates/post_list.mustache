@@ -1,0 +1,17 @@
+<table class="posts-table">
+  <tbody>
+    {{# posts }}
+    <tr>
+      <td class="posts-table-date">{{ date_short }}</td>
+      <td>
+        <a href="{{ html_file }}" class="posts-table-title">{{ title }}</a>
+        <div class="posts-table-tags tags">
+          {{# tags }}
+          <a href="{{ html_file }}">{{ name }}</a>
+          {{/ tags }}
+        </div>
+      </td>
+    </tr>
+    {{/ posts }}
+  </tbody>
+</table>
