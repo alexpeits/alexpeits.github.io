@@ -11,6 +11,10 @@ branches:
   only:
     - develop
 
+before_script:
+  - echo "trusted-users = root $USER" | sudo tee -a /etc/nix/nix.conf
+  - sudo launchctl kickstart -k system/org.nixos.nix-daemon || true
+
 jobs:
   include:
     - stage: deploy
