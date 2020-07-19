@@ -113,7 +113,7 @@ tr, td {
 }
 
 .tags > a:not(:last-child):after {
-  content: ", " !important;
+  content: "," !important;
 }
 
 .posts-table-tags, .posts-table-tags a {
