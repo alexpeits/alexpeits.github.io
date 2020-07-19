@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>{{ site_title }}</title>
+  <link href="{{ host }}{{ feed_file }}" rel="self"/>
+  <link href="{{ host }}"/>
+  <id>{{ host }}{{ feed_file }}</id>
+  <author>
+    <name>{{ author }}</name>
+    <email>{{ email }}</email>
+  </author>
+  <updated>{{ feed_updated }}</updated>
+  {{# posts }}
+  <entry>
+    <title>{{ title }}</title>
+    <link href="{{ host }}{{ html_file }}" />
+    <id>{{ host }}{{ html_file }}</id>
+    <published>{{ date_iso }}</published>
+    <updated>{{ date_iso }}</updated>
+    <summary type="html"><![CDATA[{{ description }}]]></summary>
+  </entry>
+  {{/ posts }}
+</feed>

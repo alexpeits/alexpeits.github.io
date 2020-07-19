@@ -1,0 +1,13 @@
+<article>
+  <section class="header">
+    Posted on {{ date_long }}
+  </section>
+  <section class="header tags">
+    {{# tags }}
+    <a href="{{ html_file }}">{{ name }}</a>
+    {{/ tags }}
+  </section>
+  <section>
+    {{& content}}
+  </section>
+</article>

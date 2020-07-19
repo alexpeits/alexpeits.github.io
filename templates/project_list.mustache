@@ -1,0 +1,17 @@
+<table class="posts-table">
+  <tbody>
+    {{# projects }}
+    <tr>
+      <td>
+        <a href="{{ link }}" class="posts-table-title">{{ name }}</a>
+        <div class="posts-table-description">{{ description }}</div>
+        {{# docs }}
+        <div class="posts-table-tags tags">
+          <a href="{{ . }}">Go to docs</a>
+        </div>
+        {{/ docs }}
+      </td>
+    </tr>
+    {{/ projects }}
+  </tbody>
+</table>

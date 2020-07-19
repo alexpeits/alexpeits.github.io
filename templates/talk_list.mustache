@@ -1,0 +1,16 @@
+<p>Here you can find all my past talks:</p>
+<table class="posts-table">
+  <tbody>
+    {{# talks }}
+    <tr>
+      <td>
+        <a href="{{ link }}" class="posts-table-title">{{ name }}</a>
+        <div class="posts-table-description">{{ date }}</div>
+        <div class="posts-table-tags tags">
+          <a href="{{ location_link }}">{{ location }}</a>
+        </div>
+      </td>
+    </tr>
+    {{/ talks }}
+  </tbody>
+</table>

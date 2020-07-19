@@ -1,5 +1,6 @@
 ---
 title: Formatting timesheet tables in org-mode
+date: 2019-04-02
 tags:
   - emacs
 ---

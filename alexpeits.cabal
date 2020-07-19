@@ -1,0 +1,45 @@
+cabal-version: 2.2
+
+name:            alexpeits
+version:         0.1.0.0
+description:     See <https://github.com/alexpeits/alexpeits.github.io#readme>
+homepage:        https://github.com/alexpeits/alexpeits.github.io#readme
+bug-reports:     https://github.com/alexpeits/alexpeits.github.io/issues
+maintainer:      alexpeitsinis@gmail.com
+author:          Alex Peitsinis
+copyright:       2020 Alex Peitsinis
+license:         BSD-3-Clause
+license-file:    LICENSE
+build-type:      Simple
+extra-doc-files: README.md
+
+source-repository head
+  type:     git
+  location: https://github.com/alexpeits/alexpeits.github.io
+
+executable alexpeits-exe
+  main-is:          Main.hs
+  hs-source-dirs:   app
+  ghc-options:      -Wall -Wredundant-constraints
+                    -O2 -threaded -rtsopts -with-rtsopts=-N
+  default-language: Haskell2010
+  build-depends:
+      aeson  >= 1.4.7  && < 1.5
+    , base   >= 4.13.0 && < 4.14
+    , text   >= 1.2.4  && < 1.3
+    , time   >= 1.9.3  && < 1.10
+    , mtl    >= 2.2.2  && < 2.3
+    , shake  >= 0.19.1 && < 0.20
+    , stache >= 2.1.1  && < 2.2
+    , yaml   >= 0.11.4 && < 0.12
+    , bytestring
+    , pandoc
+    , pandoc-types
+    , process
+    , megaparsec
+    , parser-combinators
+    , interpolate
+    , unordered-containers
+    , containers
+    , vector
+

@@ -107,9 +107,13 @@ tr, td {
 .posts-table-title {
 }
 
-.tags a {
+.tags > a {
   color: #79871b !important;
   text-decoration: none;
+}
+
+.tags > a:not(:last-child):after {
+  content: ", " !important;
 }
 
 .posts-table-tags, .posts-table-tags a {
