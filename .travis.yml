@@ -1,8 +1,7 @@
 os:
 - linux
 language: nix
-#nix: 2.2.1
-nix: 2.0.4
+nix: 2.2.1
 env:
   global:
     - secure: "mBjN9aye+Raelt87O42f6kVuYsOu3V7xcbtqnGwAC/NCjTO5gkcxtK/NSgc4jbw4t+onNuQa2LSBIr9QnDnoy1MYRBIZrLU4xTQK9PHCfubdm66YuNspuQ1TvnBei66jNkSmw67hkWwEL79zwUJYHn7LSX+XxrrRKa5YXofui/YAr7LxmemrmysPenF9X1WWyE44Dkj9zvci11XPVifUj7yhaYotcPR8cI1HnGgl4LGy1nikc8WQtxO+Y8PgtTt2IgKCjx5XcwrBp2D5PuDpfEvrN7AoXHBkc2Mv1VBmRcG4/3gcI+gly3Sg5vMixPqk2APJ/LyaTWcZZ/7fI/Z8fClOskUr2jOhtfxO2NChRh96QREZtesBqS4wzQmUanC4+GjrBsV/OgTBIXwYpvGMfDASLVLuY1LLPBUNWjk6ANPCxZoAGTLbfpOnpof1x98cS1SyQBNOtWyjmfh4QYQp3eQo/3H7VYKYnOdzmOgYf9qfC5O0GzFcvkmxfBfqvh/ZpkY7QmXzC+L7pGJM0JA3cmj5HFbQLTB2I2ZGv5M1mxKWHtZSOkorsZZ2SzYBjbdBbbvt//5R1yP+13fw5Y6V12WSRBYP2czF1jrDse+mHcWfbDUlr2ZdiiM9rHgyLhhItDYrcTqwzsH88vyylf6JLdHCwkPVEbQBOqgxDrr7fM8="
@@ -12,23 +11,19 @@ branches:
   only:
     - develop
 
-before_script:
-  - echo "trusted-users = root $USER" | sudo tee -a /etc/nix/nix.conf
-  - sudo launchctl kickstart -k system/org.nixos.nix-daemon || true
-
 jobs:
   include:
     - stage: deploy
       script:
-        - nix-env -iA cachix -f https://cachix.org/api/v1/install
-        - cachix use alexpeits-travis
-        - cachix push alexpeits-travis --watch-store &
+        #- nix-env -iA cachix -f https://cachix.org/api/v1/install
+        #- cachix use alexpeits-travis
+        #- cachix push alexpeits-travis --watch-store &
         - nix-build -A site
         - mkdir -p site
         - rm -rf site/*
         - cp -R result/_build/* site/
         - chmod -R +w site/
-        - sleep 10
+        #- sleep 10
 
       deploy:
         provider: pages
