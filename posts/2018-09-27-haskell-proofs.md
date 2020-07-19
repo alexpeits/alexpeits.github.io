@@ -1,6 +1,6 @@
 ---
 title: Writing and using proofs in Haskell
-date: 2020-04-02
+date: 2018-09-27
 tags:
   - haskell
   - dependent-types
