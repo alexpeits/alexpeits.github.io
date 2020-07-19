@@ -20,3 +20,12 @@ serve:
 
 list-nixpkgs:
 	jq -n '[inputs | keys[]]' nix/sources.json
+
+build-info:
+	git log -1 --format=%H%n%cd > _build/build-info.txt
+
+copy-nix-files:
+	mkdir -p site
+	rm -rf site/*
+	cp -R result/_build/* site/
+	chmod -R +w site/

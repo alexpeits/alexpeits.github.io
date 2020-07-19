@@ -19,11 +19,8 @@ jobs:
         #- cachix use alexpeits-travis
         #- cachix push alexpeits-travis --watch-store &
         - nix-build -A site
-        - mkdir -p site
-        - rm -rf site/*
-        - cp -R result/_build/* site/
-        - chmod -R +w site/
-        #- sleep 10
+        - make copy-nix-files
+        - make build-info
 
       deploy:
         provider: pages
