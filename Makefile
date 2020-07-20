@@ -17,6 +17,9 @@ hoogle:
 serve:
 	cd _build && python -m http.server ${PORT}
 
+watch:
+	./watch.sh
+
 copy-nix-files:
 	mkdir -p site
 	rm -rf site/*

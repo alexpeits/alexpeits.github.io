@@ -1,0 +1,14 @@
+---
+id: {{ id }}
+title: {{ title }}
+date: {{ date }}
+{{# description }}
+description: {{ . }}
+{{/ description }}
+{{# has_tags }}
+tags:
+{{/ has_tags }}
+  {{# tags }}
+  - {{ . }}
+  {{/ tags }}
+---
