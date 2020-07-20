@@ -152,6 +152,12 @@ tr, td {
   color: #515151;
 }
 
+/* .header.tags > a { */
+/*   border: 1px solid #79871b; */
+/*   border-radius: 5px; */
+/*   padding: 1px 4px 1px 4px; */
+/* } */
+
 .posts-table-tags, .posts-table-tags a {
   font-size: 92%;
 }
