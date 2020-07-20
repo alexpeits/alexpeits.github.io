@@ -6,9 +6,9 @@ tags:
   - emacs
 ---
 
-[This post is originally adapted from
-[this](https://emacs.stackexchange.com/questions/23808/how-to-plot-summaries-of-timestamps-of-different-projects-clocking-in-and-out/23862#23862)
-stackoverflow answer.]{.info}
+[
+This post is originally adapted from [this][so-answer] stackoverflow answer.
+]{.info}
 
 Org-mode is a great productivity tool, and has a lot of functionality out of the
 box, including utilities for tracking time spent on a task/project. For example,
@@ -125,3 +125,5 @@ Afterwards, the table can be exported to csv with `org-table-export`.
 
 in your config, otherwise clock entries will go into a `LOGBOOK` drawer and I
 haven't yet figured out how to parse them from there.
+
+[so-answer]: <https://emacs.stackexchange.com/questions/23808/how-to-plot-summaries-of-timestamps-of-different-projects-clocking-in-and-out/23862#23862>
