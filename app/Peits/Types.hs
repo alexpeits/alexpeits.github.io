@@ -22,12 +22,12 @@ import Development.Shake.FilePath ((<.>), (</>))
 import qualified Text.Mustache as Mu
 
 parseDate :: DateFmt -> Text -> Maybe T.UTCTime
-parseDate (DateFmt fmt) datestr =
-  TF.parseTimeM True TF.defaultTimeLocale (Tx.unpack fmt) (Tx.unpack datestr)
+parseDate (DateFmt fmt) =
+  TF.parseTimeM True TF.defaultTimeLocale (Tx.unpack fmt) . Tx.unpack
 
 showDate :: DateFmt -> T.UTCTime -> Text
-showDate (DateFmt fmt) date =
-  Tx.pack $ TF.formatTime TF.defaultTimeLocale (Tx.unpack fmt) date
+showDate (DateFmt fmt) =
+  Tx.pack . TF.formatTime TF.defaultTimeLocale (Tx.unpack fmt)
 
 showDateIso :: T.UTCTime -> Text
 showDateIso = Tx.pack . TF.Iso.iso8601Show
