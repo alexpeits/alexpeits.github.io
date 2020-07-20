@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+set -e
+
+cabal new-build
+cabal new-exec new-post -- "$@"
