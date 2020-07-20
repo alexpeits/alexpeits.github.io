@@ -1,11 +1,12 @@
 NIXPKGS?=nixpkgs-unstable
 HOOGLE_PORT?=8888
 PORT?=8080
+EXE?=peits
 
 NIX_SHELL=nix-shell --argstr pkgs ${NIXPKGS}
 
 ghcid:
-	${NIX_SHELL} --run 'ghcid -a'
+	${NIX_SHELL} --run "ghcid -a --command='cabal new-repl exe:${EXE}'"
 
 build:
 	${NIX_SHELL} --run 'cabal new-build'

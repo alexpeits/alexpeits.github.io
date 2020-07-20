@@ -7,13 +7,21 @@ html {
 
 body {
   font-size: 1.6rem;
-  /*color: #000;*/
   color: #515151;
-  /*background-color: #fffff8;*/
+}
+
+pre {
+  font-family: 'Fira Code', monospace;
+  font-size: 85%;
+  font-variant-ligatures: none;
 }
 
 header {
   border-bottom: 0.2rem solid #2da49b;
+}
+
+section > p {
+  text-align: justify;
 }
 
 hr { display: block; height: 1px;
@@ -197,6 +205,9 @@ li:target {
     margin: 0;
     padding: 0 5%;
   }
+  html {
+    font-size: 63%;
+  }
   header {
     margin: 4.2rem 0;
   }
@@ -225,6 +236,9 @@ li:target {
     width: 90%;
     margin: 0;
     padding: 0 5%;
+  }
+  html {
+    font-size: 67%;
   }
   header {
     margin: 4.2rem 0;
@@ -261,11 +275,14 @@ li:target {
   }
 }
 
-@media (min-width: 850px) {
+@media (min-width: 880px) {
   body {
-    width: 65rem;
+    width: 67rem;
     margin: 0 auto;
     padding: 0;
+  }
+  html {
+    font-size: 72%;
   }
   header {
     margin: 0 0 3rem;

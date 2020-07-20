@@ -2,7 +2,7 @@
 
 cabal new-build
 
-while inotifywait -e close_write posts/*.md pages/*.md static/**/*; do
+while inotifywait -e close_write config.yml posts/*.md pages/*.md templates/* static/**/*; do
     cabal new-exec peits -- "$@"
 done
 

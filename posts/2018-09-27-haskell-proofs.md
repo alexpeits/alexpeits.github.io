@@ -123,7 +123,7 @@ are equal using propositional equality in the module
 
 ```haskell
 data a :~: b where
-    Refl :: a :~: a
+  Refl :: a :~: a
 ```
 
 What this means is that, if somewhere in our code we have the type `a :~: b` and
@@ -147,8 +147,8 @@ This can be achieved using a closed type family:
 
 ```haskell
 type family a + b where
-    a + Z   = a         -- (1)
-    a + S b = S (a + b) -- (2)
+  a + Z   = a          -- (1)
+  a + S b = S (a + b)  -- (2)
 ```
 
 (from now on I'll refer to those two properties as `(1)` and `(2)` respectively)
@@ -283,8 +283,8 @@ is `v`. This is the singleton definition for our `Nat`:
 
 ```haskell
 data SNat :: Nat -> * where
-    SZ :: SNat Z
-    SS :: SNat a -> SNat (S a)
+  SZ :: SNat Z
+  SS :: SNat a -> SNat (S a)
 ```
 
 Now, if we ask for the type of `SZ` we get `SNat Z`, and `SS (SS (SZ))` gives
@@ -452,7 +452,11 @@ We'll use this function to construct, for example, the $a + b$ in the base case
 of the proof given $a$ and $b$. Here it goes:
 
 ```haskell
-plusAssoc :: SNat a -> SNat b -> SNat c -> ((a + b) + c) :~: (a + (b + c))
+plusAssoc
+  :: SNat a
+  -> SNat b
+  -> SNat c
+  -> ((a + b) + c) :~: (a + (b + c))
 plusAssoc a b SZ =
   let
     step1 :: SNat x -> SNat y -> ((x + y) + Z) :~: (x + y)
@@ -494,7 +498,11 @@ property of `:~:` (propositional equality).
 Let's see how this helps:
 
 ```haskell
-plusAssoc :: SNat a -> SNat b -> SNat c -> ((a + b) + c) :~: (a + (b + c))
+plusAssoc
+  :: SNat a
+  -> SNat b
+  -> SNat c
+  -> ((a + b) + c) :~: (a + (b + c))
 plusAssoc a b SZ =
   let
     step1 :: SNat x -> SNat y -> ((x + y) + Z) :~: (x + y)
@@ -509,7 +517,10 @@ Voila! Onward to the next step, the induction.
 
 ```haskell
 plusAssoc
-  :: SNat a -> SNat b -> SNat c -> ((a + b) + c) :~: (a + (b + c))
+  :: SNat a
+  -> SNat b
+  -> SNat c
+  -> ((a + b) + c) :~: (a + (b + c))
 plusAssoc a b SZ     = ...
 plusAssoc a b (SS c) =
   let
@@ -538,7 +549,11 @@ the induction step are inferred automatically by the `+` type family, the proof
 can be written more compactly:
 
 ```haskell
-plusAssoc :: SNat a -> SNat b -> SNat c -> ((a + b) + c) :~: (a + (b + c))
+plusAssoc
+  :: SNat a
+  -> SNat b
+  -> SNat c
+  -> ((a + b) + c) :~: (a + (b + c))
 plusAssoc a b SZ     = Refl
 plusAssoc a b (SS c) = gcastWith (plusAssoc a b c) Refl
 ```
@@ -553,7 +568,11 @@ the steps inside it, using the same names in the types so that we don't have to
 pass variables to each step:
 
 ```haskell
-plusAssoc :: SNat a -> SNat b -> SNat c -> ((a + b) + c) :~: (a + (b + c))
+plusAssoc
+  :: SNat a
+  -> SNat b
+  -> SNat c
+  -> ((a + b) + c) :~: (a + (b + c))
 plusAssoc a b SZ =
   let proof :: forall x y. SNat x -> SNat y -> ((x + y) + Z) :~: (x + (y + Z))
       proof x y = step1 ==> step2
@@ -750,21 +769,23 @@ And in Haskell:
 
 ```haskell
 append :: SNat n -> SNat m -> Vec n a -> Vec m a -> Vec (n + m) a
-append SZ m V0 ys = gcastWith (plusIdenL m) ys
-append n m (x:>xs) ys = gcastWith (proof pn m) $ x :> app (spred n) m xs ys
-  where
-    pn = spred n
-    proof :: forall x y. SNat x -> SNat y -> (S x + y) :~: S (x + y)
-    proof x y = step1 ==> step2 ==> step3
-      where
-        step1 :: (S x + y) :~: (y + S x)
-        step1 = gcastWith (plusComm (SS x) y) Refl
+append SZ m V0 ys
+  = gcastWith (plusIdenL m) ys
+append n m (x:>xs) ys
+  = gcastWith (proof pn m) $ x :> app (spred n) m xs ys
+    where
+      pn = spred n
+      proof :: forall x y. SNat x -> SNat y -> (S x + y) :~: S (x + y)
+      proof x y = step1 ==> step2 ==> step3
+        where
+          step1 :: (S x + y) :~: (y + S x)
+          step1 = gcastWith (plusComm (SS x) y) Refl
 
-        step2 :: (y + S x) :~: S (y + x)
-        step2 = gcastWith (given2 y (SS x)) Refl
+          step2 :: (y + S x) :~: S (y + x)
+          step2 = gcastWith (given2 y (SS x)) Refl
 
-        step3 :: S (y + x) :~: S (x + y)
-        step3 = gcastWith (plusComm y x) Refl
+          step3 :: S (y + x) :~: S (x + y)
+          step3 = gcastWith (plusComm y x) Refl
 ```
 
 And that's the proof. Now appending two vectors should work. First, here's an
@@ -773,13 +794,15 @@ instance of `Show` for `Vec`:
 ```haskell
 instance (Show a) => Show (Vec n a) where
   show v = "[" ++ go v
-    where go :: (Show a') => Vec n' a' -> String
-          go v = case v of
-            V0        -> "]"
-            (x :> xs) -> show x ++ sep ++ go xs
-              where sep = case xs of
-                      V0   -> ""
-                      _    -> ", "
+    where
+      go :: (Show a') => Vec n' a' -> String
+      go v = case v of
+        V0 -> "]"
+        (x :> xs) -> show x ++ sep ++ go xs
+          where
+            sep = case xs of
+              V0 -> ""
+              _  -> ", "
 ```
 
 And two example vectors:
@@ -808,8 +831,11 @@ give an `SNat` depending on the instance we are using:
 ```haskell
 class IsNat (n :: Nat) where nat :: SNat n
 
-instance            IsNat Z     where nat = SZ
-instance IsNat n => IsNat (S n) where nat = SS nat
+instance IsNat Z where
+  nat = SZ
+
+instance IsNat n => IsNat (S n) where
+  nat = SS nat
 ```
 
 Then we can just use `nat` to get the length. The instance of `IsNat` to use is
@@ -830,7 +856,10 @@ But I promised that we can have the length passed implicitly. Again, we'll use
 the typeclass with some help from `TypeApplications` and `ScopedTypeVariables`:
 
 ```haskell
-(+++) :: forall n m a. (IsNat n, IsNat m) => Vec n a -> Vec m a -> Vec (n + m) a
+(+++) :: forall n m a. (IsNat n, IsNat m)
+      => Vec n a
+      -> Vec m a
+      -> Vec (n + m) a
 (+++) = append (nat @n) (nat @m)
 ```
 
