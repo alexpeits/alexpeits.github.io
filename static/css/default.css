@@ -1,6 +1,6 @@
 /* Most stuff copied from the default hakyll css */
 html {
-  font-family: 'Lora', serif;
+  font-family: 'Source Serif Pro', serif;
   line-height: 1.5;
 }
 
@@ -33,6 +33,7 @@ hr {
 nav {
   text-align: right;
   font-family: 'Raleway', sans-serif;
+  weight: 600;
 }
 
 nav a {
@@ -58,7 +59,7 @@ a {
 }
 
 footer {
-  margin-top: 3rem;
+  margin-top: 2rem;
   padding: 0.8rem 0;
   margin-bottom: 0.2rem;
   border-top: 2px solid #2da49b;
@@ -71,6 +72,7 @@ h1 {
   font-family: 'Raleway', sans-serif;
   margin-top: 1.5rem;
   margin-bottom: 1rem;
+  weight: 600;
 }
 
 h2 {
@@ -78,6 +80,7 @@ h2 {
   font-family: 'Raleway', sans-serif;
   margin-top: 1.7rem;
   margin-bottom: 0rem;
+  weight: 600;
 }
 
 h3 {
@@ -85,6 +88,7 @@ h3 {
   font-family: 'Raleway', sans-serif;
   margin-top: 1.4rem;
   margin-bottom: 0rem;
+  weight: 600;
 }
 
 h4 {
@@ -92,6 +96,7 @@ h4 {
   font-family: 'Raleway', sans-serif;
   margin-top: 1.2rem;
   margin-bottom: 0rem;
+  weight: 600;
 }
 
 article .header {
@@ -105,6 +110,7 @@ article .header {
   color: #2da49b;
   text-decoration: none;
   font-family: 'Raleway', sans-serif;
+  weight: 600;
 }
 
 table {
@@ -131,7 +137,6 @@ tr, td {
   whitespace: nowrap;
   overflow: hidden;
   width: 10%;
-  font-family: 'Raleway', sans-serif;
 }
 
 .posts-table-title {
@@ -178,6 +183,12 @@ li:target {
   background-color: #dff2f0;
 }
 
+blockquote {
+  font-style: oblique;
+  padding-left: 0.8em;
+  border-left: 2px solid #e0e0e0;
+}
+
 .MathJax_Display {
   margin: 0 !important;
   overflow-y: hidden;
@@ -189,7 +200,6 @@ li:target {
   background-color: #e5f2ff;
   border-left: 0.23em solid #92c3f2;
   padding: 0.2em 0em 0.2em 0.6em;
-  font-family: 'Lora', serif;
   font-size: 90%;
 }
 
@@ -198,7 +208,6 @@ li:target {
   background-color: #e6fff6;
   border-left: 0.23em solid #a5f0d5;
   padding: 0.2em 0em 0.2em 0.6em;
-  font-family: 'Lora', serif;
   font-size: 90%;
 }
 
@@ -207,7 +216,6 @@ li:target {
   background-color: #fffae0;
   border-left: 0.23em solid #f2e3a5;
   padding: 0.2em 0em 0.2em 0.6em;
-  font-family: 'Lora', serif;
   font-size: 90%;
 }
 
@@ -216,7 +224,6 @@ li:target {
   background-color: #ffeded;
   border-left: 0.23em solid #f7b5b5;
   padding: 0.2em 0em 0.2em 0.6em;
-  font-family: 'Lora', serif;
   font-size: 90%;
 }
 
@@ -227,10 +234,10 @@ li:target {
     padding: 0 5%;
   }
   html {
-    font-size: 11pt;
+    font-size: 12pt;
   }
   pre {
-    font-size: 10pt;
+    font-size: 10.5pt;
   }
   code {
     font-size: 10pt;
@@ -265,10 +272,10 @@ li:target {
     padding: 0 5%;
   }
   html {
-    font-size: 12pt;
+    font-size: 13pt;
   }
   pre {
-    font-size: 11pt;
+    font-size: 11.5pt;
   }
   code {
     font-size: 10pt;
@@ -298,24 +305,24 @@ li:target {
 
 @media (max-width: 449px) {
   .MathJax_Display {
-    font-size: 75%;
+    font-size: 83%;
   }
 }
 
 @media (min-width: 450px) {
   .MathJax_Display {
-    font-size: 90%;
+    font-size: 92%;
   }
 }
 
-@media (min-width: 880px) {
+@media (min-width: 900px) {
   body {
     width: 42rem;
     margin: 0 auto;
     padding: 0;
   }
   html {
-    font-size: 13.5pt;
+    font-size: 14pt;
   }
   pre {
     font-size: 12pt;
