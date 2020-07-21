@@ -14,6 +14,21 @@ let
   else
     nixpkgs.haskell.packages.${compiler};
 
+  appSrcRegex = [
+    "^app.*$"
+    "^peits.cabal$"
+    "^README\.md$"
+    "^LICENSE$"
+  ];
+
+  siteSrcRegex = [
+    "^posts.*$"
+    "^pages.*$"
+    "^static.*$"
+    "^templates.*$"
+    "^config\.yml$"
+  ];
+
   haskellPackages = haskellPackagesBase.override {
     overrides = self: super:
       let
@@ -22,7 +37,7 @@ let
           self = self;
           super = super;
         };
-        src = nixpkgs.nix-gitignore.gitignoreSource [] ./.;
+        src = nixpkgs.lib.sourceByRegex ./. appSrcRegex;
         drv = self.callCabal2nix "peits" src {};
       in
         hsPkgs // { peits = drv; };
@@ -35,7 +50,7 @@ let
       nixpkgs.glibcLocales
     ];
     LANG = "en_US.UTF-8";
-    src = ./.;
+    src = nixpkgs.lib.sourceByRegex ./. siteSrcRegex;
     buildPhase = ''
       ${haskellPackages.peits}/bin/peits
     '';
@@ -58,6 +73,7 @@ let
   };
 
 in
+
 if nixpkgs.lib.inNixShell
 then shell
 else { site = site; peits = haskellPackages.peits; }
