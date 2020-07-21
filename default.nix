@@ -60,4 +60,4 @@ let
 in
 if nixpkgs.lib.inNixShell
 then shell
-else { site = site; peits = haskellPackages.alexpeits; }
+else { site = site; peits = haskellPackages.peits; }
