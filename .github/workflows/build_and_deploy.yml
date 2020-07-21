@@ -2,36 +2,36 @@ name: "Deploy to gh pages"
 on:
   pull_request:
     branches:
-      - develop
+    - develop
   push:
     branches:
-      - develop
+    - develop
 jobs:
   build-and-deploy:
+    name: Build and deploy
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout :crystal_ball:
-        uses: actions/checkout@v2.3.1
-        with:
-          persist-credentials: false
+    - name: Checkout
+      uses: actions/checkout@v2.3.1
+      with:
+        persist-credentials: false
 
-      - name: Install nix :penguin:
-        uses: cachix/install-nix-action@v10
+    - name: Install nix
+      uses: cachix/install-nix-action@v10
 
-      - name: Build and push to cachix :wrench:
-        uses: cachix/cachix-action@v6
-        with:
-          name: alexpeits-gh-actions
-          signingKey: '${{ secrets.CACHIX_SIGNING_KEY }}'
-        run: |
-          nix-build -A site
-          make copy-nix-files
-          make build-info
+    - name: Build and push to cachix
+      uses: cachix/cachix-action@v6
+      with:
+        name: alexpeits-gh-actions
+        signingKey: '${{ secrets.CACHIX_SIGNING_KEY }}'
+      run: |
+        nix-build -A site
+        make copy-nix-files
+        make build-info
 
-      - name: Deploy :rocket:
-        uses: JamesIves/github-pages-deploy-action@3.5.7
-        with:
-          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
-          BRANCH: master
-          FOLDER: site
-
+    - name: Deploy
+      uses: JamesIves/github-pages-deploy-action@3.5.7
+      with:
+        GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
+        BRANCH: master
+        FOLDER: site
