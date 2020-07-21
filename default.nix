@@ -42,10 +42,14 @@ let
         hsPkgs // { peits = drv; };
   };
 
+  deps = [
+    nixpkgs.python37Packages.pygments
+    nixpkgs.minify
+  ];
+
   site = nixpkgs.stdenv.mkDerivation {
     name = "alexpeits-github-io";
-    buildInputs = [
-      nixpkgs.python37Packages.pygments
+    buildInputs = deps ++ [
       nixpkgs.glibcLocales
     ];
     LANG = "en_US.UTF-8";
@@ -61,13 +65,11 @@ let
 
   shell = haskellPackages.shellFor {
     packages = ps: [ ps.peits ];
-    buildInputs =
-      [
-        haskellPackages.ghcid
-        haskellPackages.cabal-install
-        nixpkgs.python37Packages.pygments
-        nixpkgs.inotify-tools
-      ];
+    buildInputs = deps ++ [
+      haskellPackages.ghcid
+      haskellPackages.cabal-install
+      nixpkgs.inotify-tools
+    ];
     withHoogle = true;
   };
 

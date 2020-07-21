@@ -175,7 +175,11 @@ main = S.shakeArgs S.shakeOptions $ do
       [ctxFeed, ctxPosts]
       output
 
-  buildRoute cssR S.copyFile'
+  buildRoute cssR $ \input output -> do
+    let cmd :: [String]
+        cmd = ["minify", "-o", output, input]
+    S.cmd_ cmd
+
   buildRoute imagesR S.copyFile'
   buildRoute keybaseR S.copyFile'
 
