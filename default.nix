@@ -17,7 +17,6 @@ let
   appSrcRegex = [
     "^app.*$"
     "^peits.cabal$"
-    "^README\.md$"
     "^LICENSE$"
   ];
 
