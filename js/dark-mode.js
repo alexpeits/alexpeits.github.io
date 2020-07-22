@@ -3,4 +3,5 @@ function setDarkMode(darkMode){if(darkMode){document.documentElement.setAttribut
 function setDarkModeIcon(darkMode){btn=document.getElementById(btnId);if(darkMode){btn.classList.remove(clsWhenLight);btn.classList.add(clsWhenDark);}else{btn.classList.remove(clsWhenDark);btn.classList.add(clsWhenLight);}}
 function toggleDarkMode(){darkMode=isDarkMode();setDarkMode(!darkMode);setDarkModeIcon(!darkMode);}
 if(isDarkMode()){document.documentElement.setAttribute("data-theme","dark");}
-window.onload=function(){btn=document.getElementById(btnId);btn.classList.add(faIcon);setDarkModeIcon(isDarkMode());}
+window.onload=function(){btn=document.getElementById(btnId);btn.classList.remove("dark-mode-disabled")
+setDarkModeIcon(isDarkMode());}
