@@ -300,7 +300,19 @@ blockquote {
   font-size: 90%;
 }
 
-@media (max-width: 529px) {
+@media (max-width: 449px) {
+  .MathJax_Display {
+    font-size: 83%;
+  }
+}
+
+@media (min-width: 450px) {
+  .MathJax_Display {
+    font-size: 92%;
+  }
+}
+
+@media (max-width: 559px) {
   body {
     width: 90%;
     margin: 0;
@@ -336,9 +348,13 @@ blockquote {
     display: block;
     line-height: 1.6;
   }
+  #dark-mode-toggle {
+    display: block;
+    line-height: 1.6;
+  }
 }
 
-@media (min-width: 530px) {
+@media (min-width: 560px) {
   body {
     width: 90%;
     margin: 0;
@@ -374,17 +390,9 @@ blockquote {
     display: inline;
     margin: 0 0.6rem;
   }
-}
-
-@media (max-width: 449px) {
-  .MathJax_Display {
-    font-size: 83%;
-  }
-}
-
-@media (min-width: 450px) {
-  .MathJax_Display {
-    font-size: 92%;
+  #dark-mode-toggle {
+    display: inline;
+    margin: 0 0.6rem;
   }
 }
 
