@@ -43,6 +43,6 @@ if (isDarkMode()) {
 
 window.onload = function () {
   btn = document.getElementById(btnId);
-  btn.classList.add(faIcon);
+  btn.classList.remove("dark-mode-disabled")
   setDarkModeIcon(isDarkMode());
 }
