@@ -175,10 +175,14 @@ main = S.shakeArgs S.shakeOptions $ do
       [ctxFeed, ctxPosts]
       output
 
-  buildRoute cssR $ \input output -> do
-    let cmd :: [String]
-        cmd = ["minify", "-o", output, input]
-    S.cmd_ cmd
+  let minify input output = do
+        S.need [input]
+        let cmd :: [String]
+            cmd = ["minify", "-o", output, input]
+        S.cmd_ cmd
+
+  buildRoute cssR minify
+  buildRoute jsR minify
 
   buildRoute imagesR S.copyFile'
   buildRoute keybaseR S.copyFile'
@@ -229,6 +233,9 @@ pageR = Mapping "pages/*.md" (-<.> "html")
 
 cssR :: Route InputAndOutput
 cssR = Mapping "static/css/*.css" SF.dropDirectory1
+
+jsR :: Route InputAndOutput
+jsR = Mapping "static/js/*.js" SF.dropDirectory1
 
 imagesR :: Route InputAndOutput
 imagesR = Mapping "static/images/*" SF.dropDirectory1

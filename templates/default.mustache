@@ -7,9 +7,10 @@
     <link type="application/atom+xml" rel="alternate" href="{{ host }}/atom.xml" title="{{ site_title }}" />
     <title>{{ site_title }} - {{ title }}</title>
     <link rel="shortcut icon" type="image/png" href="/images/favicon.png"/>
+    <link rel="stylesheet" href="/css/solarized.css">
     <link rel="stylesheet" href="/css/default.css">
-    <link rel="stylesheet" href="/css/friendly.css">
-    <link rel="stylesheet" href="/css/code.css">
+    <script src="/js/dark-mode.js"></script>
+    <script src="https://kit.fontawesome.com/f39770a341.js" crossorigin="anonymous"></script>
     <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Raleway:ital,wght@0,400;0,600;1,400;1,600&family=Source+Serif+Pro:ital,wght@0,400;0,600;1,400;1,600&display=swap">
@@ -34,6 +35,7 @@
         {{# nav }}
         <a class="nav-link" href="{{ url }}">{{ name }}</a>
         {{/ nav }}
+        <span id="dark-mode-toggle" class="far fa-moon" onclick="toggleDarkMode()"></span>
       </nav>
     </header>
 

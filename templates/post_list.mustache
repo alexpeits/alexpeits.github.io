@@ -5,6 +5,11 @@
       <td class="posts-table-date">{{ date_short }}</td>
       <td>
         <a href="{{ html_file }}" class="posts-table-title">{{ title }}</a>
+        {{# description }}
+        <div class="posts-table-description">
+          {{ . }}
+        </div>
+        {{/ description }}
         <div class="posts-table-tags tags">
           {{# tags }}
           <a href="{{ html_file }}">{{ name }}</a>

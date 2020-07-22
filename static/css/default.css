@@ -1,20 +1,79 @@
 /* Most stuff copied from the default hakyll css */
+:root {
+  --color-fg: #515151;
+  --color-bg: #ffffff;
+
+  --color-code-fg: #5c7078;
+  --color-code-bg: #f8f8f8;
+  --color-inline-code-fg: #BF616A;
+  --color-inline-code-bg: var(--color-code-bg);
+
+  --color-dark-mode-disabled: #b0b0b0;
+
+  --color-grey-dark: #656565;
+  --color-grey: #838383;
+  --color-grey-light: #e3e3e3;
+  --color-cyan: #2da49b;
+  --color-blue: #2380c2;
+  --color-olive: #79871b;
+
+  --color-info-bg: #e5f2ff;
+  --color-info-border: #92c3f2;
+  --color-success-bg: #e6fff6;
+  --color-success-border: #a5f0d5;
+  --color-warn-bg: #fffae0;
+  --color-warn-border: #f2e3a5;
+  --color-error-bg: #ffeded;
+  --color-error-border: #f7b5b5;
+
+  --font-serif: 'Source Serif Pro';
+  --font-sans-serif: 'Raleway';
+  --font-monospace: 'Fira Code';
+}
+
+[data-theme="dark"] {
+  --color-fg: #d5d5d5;
+  --color-bg: #2a2a2a;
+
+  --color-code-bg: #303030;
+  --color-code-fg: #a0b4b8;
+  --color-inline-code-fg: #cf8f95;
+  --color-inline-code-bg: #353535;
+
+  --color-grey-dark: #c0c0c0;
+  --color-grey: #959595;
+  --color-grey-light: #555555;
+  --color-cyan: #1ebab0;
+  --color-blue: #69d3f5;
+  --color-olive: #95ba16;
+
+  --color-info-bg: #3d5559;
+  --color-info-border: #90d7e8;
+  --color-success-bg: #3c5444;
+  --color-success-border: #9ad6ac;
+  --color-warn-bg: #574833;
+  --color-warn-border: #c9c079;
+  --color-error-bg: #543b41;
+  --color-error-border: #eb94a1;
+}
+
 html {
-  font-family: 'Source Serif Pro', serif;
+  font-family: var(--font-serif), serif;
   line-height: 1.5;
 }
 
 body {
-  color: #515151;
+  color: var(--color-fg);
+  background-color: var(--color-bg);
 }
 
 pre {
-  font-family: 'Fira Code', monospace;
+  font-family: var(--font-monospace), monospace;
   font-variant-ligatures: none;
 }
 
 header {
-  border-bottom: 2px solid #2da49b;
+  border-bottom: 2px solid var(--color-cyan);
 }
 
 section > p {
@@ -25,14 +84,14 @@ hr {
   display: block;
   height: 1px;
   border: 0;
-  border-top: 1px solid #2da49b;
+  border-top: 1px solid var(--color-cyan);
   margin: 1em 0;
   padding: 0;
 }
 
 nav {
   text-align: right;
-  font-family: 'Raleway', sans-serif;
+  font-family: var(--font-sans-serif), sans-serif;
   weight: 600;
 }
 
@@ -45,11 +104,25 @@ nav a {
 }
 
 .nav-link {
-  color: #2da49b;
+  color: var(--color-cyan);
+}
+
+#dark-mode-toggle {
+  cursor: pointer;
+  font-size: 110%;
+  margin: 0 0 0 1rem;
+}
+
+.dark-mode-enabled {
+  color: var(--color-cyan);
+}
+
+.dark-mode-disabled {
+  color: var(--color-dark-mode-disabled);
 }
 
 a {
-  color: #2380c2;
+  color: var(--color-blue);
   text-decoration: none;
   white-space: pre-wrap;
   white-space: -moz-pre-wrap;
@@ -62,14 +135,14 @@ footer {
   margin-top: 2rem;
   padding: 0.8rem 0;
   margin-bottom: 0.2rem;
-  border-top: 2px solid #2da49b;
+  border-top: 2px solid var(--color-cyan);
   font-size: 75%;
-  color: #656565;
+  color: var(--color-grey-dark);
 }
 
 h1 {
   font-size: 145%;
-  font-family: 'Raleway', sans-serif;
+  font-family: var(--font-sans-serif), sans-serif;
   margin-top: 1.5rem;
   margin-bottom: 1rem;
   weight: 600;
@@ -77,7 +150,7 @@ h1 {
 
 h2 {
   font-size: 125%;
-  font-family: 'Raleway', sans-serif;
+  font-family: var(--font-sans-serif), sans-serif;
   margin-top: 1.7rem;
   margin-bottom: 0rem;
   weight: 600;
@@ -85,7 +158,7 @@ h2 {
 
 h3 {
   font-size: 110%;
-  font-family: 'Raleway', sans-serif;
+  font-family: var(--font-sans-serif), sans-serif;
   margin-top: 1.4rem;
   margin-bottom: 0rem;
   weight: 600;
@@ -93,7 +166,7 @@ h3 {
 
 h4 {
   font-size: 107%;
-  font-family: 'Raleway', sans-serif;
+  font-family: var(--font-sans-serif), sans-serif;
   margin-top: 1.2rem;
   margin-bottom: 0rem;
   weight: 600;
@@ -102,14 +175,13 @@ h4 {
 article .header {
   font-size: 90%;
   font-style: italic;
-  color: #555;
 }
 
 .logo a {
   font-weight: bold;
-  color: #2da49b;
+  color: var(--color-cyan);
   text-decoration: none;
-  font-family: 'Raleway', sans-serif;
+  font-family: var(--font-sans-serif), sans-serif;
   weight: 600;
 }
 
@@ -143,17 +215,17 @@ tr, td {
 }
 
 .tags > a {
-  color: #79871b !important;
+  color: var(--color-olive) !important;
   text-decoration: none;
 }
 
 .tags > a:not(:last-child):after {
   content: "," !important;
-  color: #515151;
+  color: var(--color-fg);
 }
 
 /* .header.tags > a { */
-/*   border: 1px solid #79871b; */
+/*   border: 1px solid var(--color-olive); */
 /*   border-radius: 5px; */
 /*   padding: 1px 4px 1px 4px; */
 /* } */
@@ -163,7 +235,7 @@ tr, td {
 }
 
 .posts-table-description {
-  color: #838383;
+  color: var(--color-grey);
   font-style: italic;
   font-size: 85%;
 }
@@ -173,11 +245,7 @@ tr, td {
 }
 
 .posts-table td {
-  border-top: 1px solid #e3e3e3;
-}
-
-.talks-location {
-  color: #79871b !important;
+  border-top: 1px solid var(--color-grey-light);
 }
 
 sup {
@@ -186,13 +254,13 @@ sup {
 }
 
 li:target {
-  background-color: #dff2f0;
+  background-color: var(--color-info-bg);
 }
 
 blockquote {
   font-style: oblique;
   padding-left: 0.8em;
-  border-left: 2px solid #e0e0e0;
+  border-left: 2px solid var(--color-grey-light);
 }
 
 .MathJax_Display {
@@ -203,32 +271,32 @@ blockquote {
 
 .info {
   display: block;
-  background-color: #e5f2ff;
-  border-left: 0.23em solid #92c3f2;
+  background-color: var(--color-info-bg);
+  border-left: 0.23em solid var(--color-info-border);
   padding: 0.2em 0em 0.2em 0.6em;
   font-size: 90%;
 }
 
 .success {
   display: block;
-  background-color: #e6fff6;
-  border-left: 0.23em solid #a5f0d5;
+  background-color: var(--color-success-bg);
+  border-left: 0.23em solid var(--color-success-border);
   padding: 0.2em 0em 0.2em 0.6em;
   font-size: 90%;
 }
 
 .warn {
   display: block;
-  background-color: #fffae0;
-  border-left: 0.23em solid #f2e3a5;
+  background-color: var(--color-warn-bg);
+  border-left: 0.23em solid var(--color-warn-border);
   padding: 0.2em 0em 0.2em 0.6em;
   font-size: 90%;
 }
 
 .error {
   display: block;
-  background-color: #ffeded;
-  border-left: 0.23em solid #f7b5b5;
+  background-color: var(--color-error-bg);
+  border-left: 0.23em solid var(--color-error-border);
   padding: 0.2em 0em 0.2em 0.6em;
   font-size: 90%;
 }
@@ -362,4 +430,42 @@ blockquote {
   .MathJax_Display {
     font-size: 98%;
   }
+}
+
+code {
+  white-space: pre;
+  position: relative;
+}
+
+code {
+  color: var(--color-inline-code-fg);
+  background-color: var(--color-inline-code-bg);
+  padding: 0.3em;
+  white-space: pre-wrap;
+  white-space: -moz-pre-wrap;
+  white-space: -pre-wrap;
+  white-space: -o-pre-wrap;
+  word-wrap: break-word;
+}
+
+.highlight  {
+  background: var(--color-code-bg) !important;
+  color: var(--color-code-fg);
+  padding-left: 1.3rem;
+  padding-top: 0.6em;
+  padding-bottom: 0.6em;
+}
+
+@media screen {
+  .highlight {
+    overflow: auto;
+  }
+}
+
+.highlight > pre {
+  margin: 0;
+}
+
+.highlight .n {
+  color: var(--color-code-fg);
 }
