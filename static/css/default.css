@@ -110,7 +110,6 @@ nav a {
 #dark-mode-toggle {
   cursor: pointer;
   font-size: 110%;
-  margin: 0 0 0 1rem;
 }
 
 .dark-mode-enabled {
@@ -301,7 +300,7 @@ blockquote {
   font-size: 90%;
 }
 
-@media (max-width: 419px) {
+@media (max-width: 529px) {
   body {
     width: 90%;
     margin: 0;
@@ -339,7 +338,7 @@ blockquote {
   }
 }
 
-@media (min-width: 420px) {
+@media (min-width: 530px) {
   body {
     width: 90%;
     margin: 0;
@@ -413,6 +412,10 @@ blockquote {
     text-align: right;
   }
   nav a {
+    margin: 0 0 0 1rem;
+    display: inline;
+  }
+  #dark-mode-toggle {
     margin: 0 0 0 1rem;
     display: inline;
   }

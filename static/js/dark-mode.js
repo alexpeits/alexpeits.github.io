@@ -1,6 +1,7 @@
 clsWhenLight = "dark-mode-disabled";
 clsWhenDark = "dark-mode-enabled";
 btnId = "dark-mode-toggle";
+faIcon = "fa-moon";
 storeKey = "dark-mode";
 
 function isDarkMode() {
@@ -41,5 +42,7 @@ if (isDarkMode()) {
 }
 
 window.onload = function () {
+  btn = document.getElementById(btnId);
+  btn.classList.add(faIcon);
   setDarkModeIcon(isDarkMode());
 }
