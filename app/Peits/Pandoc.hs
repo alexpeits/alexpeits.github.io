@@ -38,25 +38,41 @@ parseAndRenderPage fp = do
   let htmlFp = "/" <> fp -<.> "html"
   pure $ Page meta fp htmlFp html
 
-parseAndRenderMd :: (MonadIO m, MonadFail m, Ae.FromJSON meta) => FilePath -> m (meta, Html)
+parseAndRenderMd ::
+  (MonadIO m, MonadFail m, Ae.FromJSON meta, Toc meta) =>
+  FilePath ->
+  m (meta, Html)
 parseAndRenderMd fp = do
-  (meta, md) <- parseMd fp
-  (meta,) <$> renderMd md
+  (meta, _content, full) <- parseMd fp
+  (meta,) <$> renderMd meta full
 
-parseMd :: (MonadIO m, MonadFail m, Ae.FromJSON meta) => FilePath -> m (meta, Md)
+parseMd :: (MonadIO m, MonadFail m, Ae.FromJSON meta) => FilePath -> m (meta, MdContent, MdFull)
 parseMd fp = do
-  contents <- liftIO $ Tx.IO.readFile fp
-  (metaStr, md) <- case partitionMd fp contents of
+  mdFull <- liftIO $ Tx.IO.readFile fp
+  (metaStr, md) <- case partitionMd fp mdFull of
     Left err -> fail err
     Right (Nothing, _) -> fail [i|No metadata block in #{fp}|]
     Right (Just m, c) -> pure $ Bi.first encodeUtf8 (m, c)
   meta <- liftIO $ Yaml.decodeThrow metaStr
-  pure (meta, Md md)
+  pure (meta, MdContent md, MdFull mdFull)
 
-renderMd :: MonadIO m => Md -> m Html
-renderMd (Md md) = liftIO $ do
+renderMd :: (MonadIO m, Toc meta) => meta -> MdFull -> m Html
+renderMd meta (MdFull md) = liftIO $ do
   let readerOptions = P.def {P.readerExtensions = P.pandocExtensions}
-  let writerOptions = P.def {P.writerHTMLMathMethod = P.MathJax ""}
+      tocTemplate =
+        either error id $
+          either (error . show) id $
+            P.runPure $
+              P.runWithDefaultPartials $
+                P.compileTemplate "" "<div id=\"toc\">$toc$</div>\n<div id=\"main\">$body$</div>"
+      writerOptions =
+        P.def
+          { P.writerExtensions = P.pandocExtensions,
+            P.writerHTMLMathMethod = P.MathJax "",
+            P.writerTemplate = Just tocTemplate,
+            P.writerTableOfContents = renderToc meta,
+            P.writerTOCDepth = tocDepth meta
+          }
   result <- P.runIO $ do
     doc <- P.readMarkdown readerOptions md
     doc' <- liftIO $ pygmentize doc

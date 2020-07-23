@@ -29,6 +29,10 @@ import qualified Text.Mustache as Mu
 buildDir :: FilePath
 buildDir = "_build"
 
+--- $> :main clean
+
+--- $> :main
+
 main :: IO ()
 main = S.shakeArgs S.shakeOptions $ do
   S.phony "clean" $ do

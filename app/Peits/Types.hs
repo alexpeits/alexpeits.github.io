@@ -43,10 +43,14 @@ postDateShowLongFmt = DateFmt "%B %e,%0Y"
 postDateShowShortFmt :: DateFmt
 postDateShowShortFmt = DateFmt "%0Y.%m.%d"
 
-newtype Md = Md {unMd :: Text}
+defaultTocDepth :: Int
+defaultTocDepth = 2
+
+newtype MdFull = MdFull {unMdFull :: Text}
+
+newtype MdContent = MdContent {unMdContent :: Text}
 
 newtype Html = Html {unHtml :: Text}
-  deriving (Show)
 
 newtype DateFmt = DateFmt {unDateFmt :: Text}
 
@@ -55,7 +59,9 @@ data Meta = Meta
     mTitle :: Text,
     mDate :: T.UTCTime,
     mTags :: Set.Set Tag,
-    mDesc :: Maybe Text
+    mDesc :: Maybe Text,
+    mToc :: Bool,
+    mTocDepth :: Int
   }
   deriving (Show)
 
@@ -70,6 +76,8 @@ instance Ae.FromJSON Meta where
         fail [i|Cannot parse date "#{dateStr}" for post titled "#{mTitle}"|]
     mTags <- v .:? "tags" .!= mempty
     mDesc <- v .:? "description"
+    mToc <- v .:? "toc" .!= False
+    mTocDepth <- v .:? "toc_depth" .!= defaultTocDepth
     pure Meta {..}
 
 instance Ae.ToJSON Meta where
@@ -81,7 +89,9 @@ instance Ae.ToJSON Meta where
         "date_short" .= showDate postDateShowShortFmt mDate,
         "date_iso" .= showDateIso mDate,
         "tags" .= Set.map TagLink mTags,
-        "description" .= mDesc
+        "description" .= mDesc,
+        "toc" .= mToc,
+        "toc_depth" .= mTocDepth
       ]
 
 newtype Tag = Tag {unTag :: Text}
@@ -150,7 +160,9 @@ data Page = Page
 
 data PageMeta = PageMeta
   { pgmId :: Text,
-    pgmTitle :: Text
+    pgmTitle :: Text,
+    pgmToc :: Bool,
+    pgmTocDepth :: Int
   }
 
 instance Ae.FromJSON PageMeta where
@@ -158,12 +170,16 @@ instance Ae.FromJSON PageMeta where
     PageMeta
       <$> v .: "id"
       <*> v .: "title"
+      <*> v .:? "toc" .!= False
+      <*> v .:? "toc_depth" .!= defaultTocDepth
 
 instance Ae.ToJSON PageMeta where
   toJSON PageMeta {..} =
     Ae.object
       [ "id" .= pgmId,
-        "title" .= pgmTitle
+        "title" .= pgmTitle,
+        "toc" .= pgmToc,
+        "toc_depth" .= pgmTocDepth
       ]
 
 data Config = Config
@@ -248,3 +264,15 @@ instance Ae.ToJSON Feed where
       [ "feed_file" .= fFile,
         "feed_updated" .= showDateIso fUpdated
       ]
+
+class Toc a where
+  renderToc :: a -> Bool
+  tocDepth :: a -> Int
+
+instance Toc Meta where
+  renderToc = mToc
+  tocDepth = mTocDepth
+
+instance Toc PageMeta where
+  renderToc = pgmToc
+  tocDepth = pgmTocDepth
