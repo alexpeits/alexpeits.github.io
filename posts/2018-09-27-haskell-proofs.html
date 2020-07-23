@@ -9,7 +9,16 @@
     <link rel="shortcut icon" type="image/png" href="/images/favicon.png"/>
     <link rel="stylesheet" href="/css/solarized.css">
     <link rel="stylesheet" href="/css/default.css">
+    <!-- <script
+         src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+         integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs="
+         crossorigin="anonymous"></script> -->
+    <script
+      src="https://code.jquery.com/jquery-3.5.1.min.js"
+      integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
+      crossorigin="anonymous"></script>
     <script src="/js/dark-mode.js"></script>
+    <script src="/js/footnotes.js"></script>
     <script src="https://kit.fontawesome.com/f39770a341.js" crossorigin="anonymous"></script>
     <link
       rel="stylesheet"
@@ -32,11 +41,11 @@
         <a href="/">Alex&#39;s blog</a>
       </div>
       <nav>
-        <a class="nav-link" href="/">Home</a>
-        <a class="nav-link" href="/tags.html">Tags</a>
-        <a class="nav-link" href="/lists/projects.html">Projects</a>
-        <a class="nav-link" href="/lists/talks.html">Talks</a>
-        <a class="nav-link" href="/pages/about.html">About</a>
+          <a class="nav-link" href="/">Home</a>
+          <a class="nav-link" href="/tags.html">Tags</a>
+          <a class="nav-link" href="/lists/projects.html">Projects</a>
+          <a class="nav-link" href="/lists/talks.html">Talks</a>
+          <a class="nav-link" href="/pages/about.html">About</a>
         <span id="dark-mode-toggle" class="far fa-moon dark-mode-disabled" onclick="toggleDarkMode()"></span>
       </nav>
     </header>
@@ -52,7 +61,8 @@
     <a href="/tags/haskell.html">haskell</a>
   </section>
   <section>
-    <p>This post has an accompanying <a href="https://github.com/alexpeits/haskell-proofs">github repo</a>.</p>
+    <div id="toc"></div>
+<div id="main"><p>This post has an accompanying <a href="https://github.com/alexpeits/haskell-proofs">github repo</a>.</p>
 <h2 id="intro">Intro</h2>
 <p>Haskell’s type system has long been sort of a lab rat for experiments on many concepts relevant to type theory. Especially lately there has been quite a lot of interest in type-level programming and dependent types.</p>
 <p>What initially piqued my interest in trying to use Haskell to prove mathematical theorems at the type level was a blog post called “Proving stuff in Haskell” by Mads Buch <a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. It is quite fun to follow so I’m not going to go into detail, but the gist is to use propositional equality to prove a theorem by showing that two haskell types are actually the same type. So for example, if we wanted to prove that <span class="math inline">\(a + b = b + a\)</span> (commutativity of addition of natural numbers) then we’ll have a function whose type reflects exactly that property, rather than using actual values to prove it (more on that later).</p>
@@ -586,7 +596,7 @@ append lengthX lengthY x y
 <li id="fn3" role="doc-endnote"><p><a href="https://www.patreon.com/isovector">Book of Types on Patreon</a><a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn4" role="doc-endnote"><p><a href="http://docs.idris-lang.org/en/latest/tutorial/typesfuns.html" class="uri">http://docs.idris-lang.org/en/latest/tutorial/typesfuns.html</a><a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
-</section>
+</section></div>
   </section>
 </article>
     </main>
