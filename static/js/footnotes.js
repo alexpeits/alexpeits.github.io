@@ -64,7 +64,7 @@ var Footnotes = {
     clearTimeout(Footnotes.footnotetimeout);
     $('#footnotediv').stop();
     $('#footnotediv').css({
-      opacity: 0.9
+      // opacity: 0.9
     });
   }
 }
