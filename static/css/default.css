@@ -300,6 +300,19 @@ blockquote {
   font-family: var(--font-monospace), monospace;
 }
 
+#footnotediv {
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-fg);
+  font-size: 80%;
+  padding-left: 0.6em;
+  padding-right: 0.6em;
+}
+
+#footnotediv > p {
+  margin-top: 0.6em;
+  margin-bottom: 0.6em;
+}
+
 @media (max-width: 449px) {
   .MathJax_Display {
     font-size: 83%;
