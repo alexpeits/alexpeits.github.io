@@ -76,10 +76,6 @@ header {
   border-bottom: 2px solid var(--color-cyan);
 }
 
-section > p {
-  text-align: justify;
-}
-
 hr {
   display: block;
   height: 1px;
