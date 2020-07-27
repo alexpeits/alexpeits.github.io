@@ -9,6 +9,11 @@ National Technical University of Athens. I currently write Haskell at work (and
 home). I am interested in software, type theory, formal verification and emacs.
 After 6pm I also play guitar (mostly jazz) and the oud.
 
+In this site you can also find a [list of some of my projects](/lists/projects.html)
+and a [list of talks I have given](/lists/talks.html).
+
+---
+
 - []{.fas .fa-at} `alexpeitsinis [at] gmail [dot] com`
 - []{.fab .fa-github} [alexpeits](https://github.com/alexpeits)
 - []{.fab .fa-twitter} [\@alexpeits](https://twitter.com/alexpeits)

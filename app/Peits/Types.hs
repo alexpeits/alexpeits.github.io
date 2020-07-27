@@ -145,6 +145,7 @@ instance Ae.ToJSON PostList where
           [ "title" .= mTitle postMeta,
             "date_long" .= showDate postDateShowLongFmt (mDate postMeta),
             "date_short" .= showDate postDateShowShortFmt (mDate postMeta),
+            "date_iso" .= showDateIso (mDate postMeta),
             "tags" .= unTagList (mkTagList $ mTags postMeta),
             "description" .= mDesc postMeta,
             "md_file" .= postMdFile,

@@ -5,14 +5,10 @@ copyright: © 2017–present Alex Peitsinis
 host: https://alexpeits.github.io
 
 nav:
-  - name: Home
+  - name: Posts
     url: /
   - name: Tags
     url: /tags.html
-  - name: Projects
-    url: /lists/projects.html
-  - name: Talks
-    url: /lists/talks.html
   - name: About
     url: /pages/about.html
 

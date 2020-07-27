@@ -93,20 +93,24 @@ main = S.shakeArgs S.shakeOptions $ do
 
   getPage <- S.newCache $ \fp ->
     parseAndRenderPage fp
-  buildRoute pageR $ \input output -> do
-    cfg <- config
-    ts <- templates
-    S.need [input]
-    page <- getPage input
-    let content = unHtml $ pageRendered page
-        ctx = Ae.toJSON $ pageMeta page
-    renderTemplate
-      cfg
-      ts
-      ["page", "default"]
-      (Just content)
-      [ctx]
-      output
+
+  let buildPage input output = do
+        cfg <- config
+        ts <- templates
+        S.need [input]
+        page <- getPage input
+        let content = unHtml $ pageRendered page
+            ctx = Ae.toJSON $ pageMeta page
+        renderTemplate
+          cfg
+          ts
+          ["page", "default"]
+          (Just content)
+          [ctx]
+          output
+
+  buildRoute pageR buildPage
+  buildRoute draftR buildPage
 
   buildRoute tagR $ \output -> do
     cfg <- config
@@ -234,6 +238,9 @@ postListR = Fixed "index.html"
 
 pageR :: Route InputAndOutput
 pageR = Mapping "pages/*.md" (-<.> "html")
+
+draftR :: Route InputAndOutput
+draftR = Mapping "drafts/*.md" (-<.> "html")
 
 cssR :: Route InputAndOutput
 cssR = Mapping "static/css/*.css" SF.dropDirectory1
