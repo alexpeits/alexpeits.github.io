@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <title>Alex&#39;s blog</title>
-  <link href="https://alexpeits.github.ioatom.xml" rel="self"/>
+  <link href="https://alexpeits.github.io/atom.xml" rel="self"/>
   <link href="https://alexpeits.github.io"/>
-  <id>https://alexpeits.github.ioatom.xml</id>
+  <id>https://alexpeits.github.io/atom.xml/</id>
   <author>
     <name>Alex Peitsinis</name>
     <email>alexpeitsinis@gmail.com</email>
@@ -13,16 +13,14 @@
     <title>Writing and using proofs in Haskell</title>
     <link href="https://alexpeits.github.io/posts/2018-09-27-haskell-proofs.html" />
     <id>https://alexpeits.github.io/posts/2018-09-27-haskell-proofs.html</id>
-    <published></published>
-    <updated></updated>
-    <summary type="html"><![CDATA[]]></summary>
+    <published>2018-09-27T00:00:00Z</published>
+    <updated>2018-09-27T00:00:00Z</updated>
   </entry>
   <entry>
     <title>Formatting timesheet tables in org-mode</title>
     <link href="https://alexpeits.github.io/posts/2017-02-12-org-timesheets.html" />
     <id>https://alexpeits.github.io/posts/2017-02-12-org-timesheets.html</id>
-    <published></published>
-    <updated></updated>
-    <summary type="html"><![CDATA[]]></summary>
+    <published>2017-02-12T00:00:00Z</published>
+    <updated>2017-02-12T00:00:00Z</updated>
   </entry>
 </feed>
