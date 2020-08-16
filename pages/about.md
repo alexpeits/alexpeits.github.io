@@ -19,3 +19,56 @@ and a [list of talks I have given](/lists/talks.html).
 - []{.fab .fa-twitter} [\@alexpeits](https://twitter.com/alexpeits)
 - []{.fab .fa-reddit-alien} [u/primitiveinds](https://reddit.com/u/primitiveinds)
 - []{.fab .fa-keybase} [alexpeits](https://keybase.io/alexpeits)
+
+
+---
+
+stuff stuff stuff
+
+<aside class="right">
+I'm a sofware engineer from Greece, currently living in London and working at
+[Habito](https://www.habito.com/). I have a degree in engineering from the
+National Technical University of Athens. I currently write Haskell at work (and
+home). I am interested in software, type theory, formal verification and emacs.
+After 6pm I also play guitar (mostly jazz) and the oud.
+</aside>
+
+stuff stuff stuff
+ye ye
+
+
+---
+
+stuff stuff stuff
+
+<aside class="left">
+I'm a sofware engineer from Greece, currently living in London and working at
+[Habito](https://www.habito.com/). I have a degree in engineering from the
+National Technical University of Athens. I currently write Haskell at work (and
+home). I am interested in software, type theory, formal verification and emacs.
+After 6pm I also play guitar (mostly jazz) and the oud.
+
+I'm a sofware engineer from Greece, currently living in London and working at
+[Habito](https://www.habito.com/). I have a degree in engineering from the
+National Technical University of Athens. I currently write Haskell at work (and
+home). I am interested in software, type theory, formal verification and emacs.
+After 6pm `data Foo = Foo | Bar` I also play guitar (mostly jazz) and the oud.
+
+
+```haskell
+data Foo = Bar
+```
+
+> I'm a sofware engineer from Greece, currently living in London and working at
+> [Habito](https://www.habito.com/). I have a degree in engineering from the
+> National Technical University of Athens. I currently write Haskell at work
+> (and home). I am interested in software, type theory, formal verification and
+> emacs. After 6pm `data Foo = Foo | Bar` I also play guitar (mostly jazz) and
+> the oud.
+
+stuff
+
+</aside>
+
+stuff stuff stuff
+ye ye
