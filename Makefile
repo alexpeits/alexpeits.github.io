@@ -1,4 +1,4 @@
-NIXPKGS?=nixpkgs-unstable
+NIXPKGS?=nixpkgs
 HOOGLE_PORT?=8888
 PORT?=8080
 EXE?=peits
