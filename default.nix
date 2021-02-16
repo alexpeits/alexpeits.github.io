@@ -1,18 +1,18 @@
 { pkgs ? null, compiler ? null }:
-
 let
+  nixpkgs =
+    if isNull pkgs then
+      import (import ./nix/sources.nix).nixpkgs { }
+    else if builtins.typeOf pkgs == "set" then
+      pkgs
+    else
+      import (builtins.getAttr pkgs (import ./nix/sources.nix)) { };
 
-  nixpkgs = if isNull pkgs then
-    import (import ./nix/sources.nix).nixpkgs-unstable {}
-  else if builtins.typeOf pkgs == "set" then
-    pkgs
-  else
-    import (builtins.getAttr pkgs (import ./nix/sources.nix)) {};
-
-  haskellPackagesBase = if isNull compiler then
-    nixpkgs.haskellPackages
-  else
-    nixpkgs.haskell.packages.${compiler};
+  haskellPackagesBase =
+    if isNull compiler then
+      nixpkgs.haskellPackages
+    else
+      nixpkgs.haskell.packages.${compiler};
 
   appSrcRegex = [
     "^app.*$"
@@ -37,9 +37,9 @@ let
           super = super;
         };
         src = nixpkgs.lib.sourceByRegex ./. appSrcRegex;
-        drv = self.callCabal2nix "peits" src {};
+        drv = self.callCabal2nix "peits" src { };
       in
-        hsPkgs // { peits = drv; };
+      hsPkgs // { peits = drv; };
   };
 
   deps = [
@@ -63,18 +63,23 @@ let
     '';
   };
 
+  isDarwin =
+    builtins.any
+      (arch: builtins.currentSystem == arch)
+      [ "x86_64-darwin" ];
+
+  inotify = if isDarwin then [ ] else [ nixpkgs.inotify-tools ];
+
   shell = haskellPackages.shellFor {
     packages = ps: [ ps.peits ];
-    buildInputs = deps ++ [
+    buildInputs = deps ++ inotify ++ [
       haskellPackages.ghcid
       haskellPackages.cabal-install
-      nixpkgs.inotify-tools
     ];
     withHoogle = true;
   };
 
 in
-
 if nixpkgs.lib.inNixShell
 then shell
 else { site = site; peits = haskellPackages.peits; }
