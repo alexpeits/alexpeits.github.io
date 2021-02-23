@@ -7,7 +7,12 @@
     <a href="{{ html_file }}">{{ name }}</a>
     {{/ tags }}
   </section>
-  <section>
+  {{# description }}
+  <section class="description">
+    {{ . }}
+  </section>
+  {{/ description }}
+  <section class="content">
     {{& content}}
   </section>
 </article>

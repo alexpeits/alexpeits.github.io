@@ -21,9 +21,11 @@
   --color-success-bg: #e6fff6;
   --color-success-border: #a5f0d5;
   --color-warn-bg: #fffae0;
-  --color-warn-border: #f2e3a5;
+  --color-warn-border: #e8d99e;
   --color-error-bg: #ffeded;
   --color-error-border: #f7b5b5;
+
+  --color-highlight-bg: #fefcbf;
 
   --font-serif: 'Source Serif Pro';
   --font-sans-serif: 'Raleway';
@@ -56,6 +58,8 @@
   --color-warn-border: #ada668;
   --color-error-bg: #543b41;
   --color-error-border: #b3707a;
+
+  --color-highlight-bg: #635c39;
 }
 
 /* main */
@@ -237,8 +241,13 @@ article .header {
 }
 
 article .description {
-  font-size: 95%;
-  margin-bottom: 1rem;
+  font-size: 90%;
+  font-style: italic;
+  color: var(--color-grey-2);
+}
+
+article .content {
+  margin-top: 2rem;
 }
 
 blockquote {
@@ -382,6 +391,27 @@ li:target {
   font-size: 90%;
 }
 
+/* inline highlights */
+
+.hi {
+  background-color: var(--color-highlight-bg);
+  padding-left: 0.2rem;
+  padding-right: 0.2rem;
+  border-radius: 0.2rem;
+}
+
+.gr {
+  background-color: var(--color-success-bg);
+}
+
+.bl {
+  background-color: var(--color-info-bg);
+}
+
+.rd {
+  background-color: var(--color-error-bg);
+}
+
 /* code */
 
 code {
@@ -432,7 +462,7 @@ code {
 
 @media (max-width: 449px) {
   .MathJax_Display {
-    font-size: 83%;
+    font-size: 84%;
   }
 }
 
