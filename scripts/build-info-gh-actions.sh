@@ -21,6 +21,7 @@ main() {
     declare -r output="$2"
     declare -r buildInfo="$(build-info-json)"
 
+    echo "$buildInfo"
     echo "$buildInfo" > "$rootDir/$output"
 }
 
