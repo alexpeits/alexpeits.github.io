@@ -54,6 +54,18 @@ main = S.shakeArgs S.shakeOptions $ do
   -- get a post by file path
   getPost <- S.newCache $ \fp ->
     parseAndRenderPost fp
+
+  preparePost <- S.newCache $ \fp -> do
+    x <- parseMd fp
+    pure (x :: (Meta, MdContent, MdFull))
+
+  allSplitPosts <- newConstCache $ do
+    files <- getMatchingFiles "posts/*.md"
+    forM files $ \fp -> do
+      S.need [fp]
+      preparePost fp
+      -- use state to store id -> meta
+
   -- collect all posts in a list, sorted in reverse chronological order
   allPosts <- newConstCache $ do
     files <- getMatchingFiles "posts/*.md"

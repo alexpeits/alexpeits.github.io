@@ -9,6 +9,7 @@ import Control.Applicative ((<|>))
 import Control.Monad (void)
 import Control.Monad.Combinators (manyTill)
 import Control.Monad.IO.Class (MonadIO, liftIO)
+import qualified Control.Monad.State.Strict as St
 import qualified Data.Aeson as Ae
 import qualified Data.Bifunctor as Bi
 import Data.String.Interpolate.IsString (i)
@@ -29,6 +30,12 @@ import qualified Text.Pandoc.Walk as PW
 parseAndRenderPost :: (MonadIO m, MonadFail m) => FilePath -> m Post
 parseAndRenderPost fp = do
   (meta, html) <- parseAndRenderMd fp
+  let htmlFp = "/" <> fp -<.> "html"
+  pure $ Post meta fp htmlFp html
+
+renderPost :: MonadIO m => FilePath -> Meta -> MdFull -> m Post
+renderPost fp meta full = do
+  html <- renderMd meta full
   let htmlFp = "/" <> fp -<.> "html"
   pure $ Post meta fp htmlFp html
 
@@ -76,7 +83,9 @@ renderMd meta (MdFull md) = liftIO $ do
   result <- P.runIO $ do
     doc <- P.readMarkdown readerOptions md
     doc' <- liftIO $ pygmentize doc
-    P.writeHtml5String writerOptions doc'
+    (doc'', x) <- liftIO $ St.runStateT (processLinks doc') []
+    liftIO $ print x
+    P.writeHtml5String writerOptions doc''
   Html <$> P.handleError result
 
 -- stolen from https://github.com/srid/neuron
@@ -113,3 +122,18 @@ pygmentize = PW.walkM pfilter
             Just l -> ["-l", l]
           args = Tx.unpack <$> langArgs <> ["-f", "html"]
       Tx.pack <$> readProcess "pygmentize" args (Tx.unpack code)
+
+processLinks :: P.Pandoc -> St.StateT [Text] IO P.Pandoc
+processLinks = PW.walkM pfilter
+  where
+    pfilter :: P.Inline -> St.StateT [Text] IO P.Inline
+    pfilter = \case
+      (P.Link (ids, clss, options) inlines t@(url, _title)) -> do
+        St.modify (url :)
+        pure $ P.Link (ids, "foo" : clss, options) inlines t
+      a@(P.RawInline "html" txt) -> case Tx.stripPrefix "<id:" txt of
+        Nothing -> pure a
+        Just url -> do
+          St.modify (url :)
+          pure $ P.Link ("", ["foo"], []) [] ("foo", "bar")
+      other -> pure other
