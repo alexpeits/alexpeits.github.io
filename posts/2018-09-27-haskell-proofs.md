@@ -76,7 +76,7 @@ using e.g. type classes, but I'm going to use dependent types here.
 
 [^stitch]: 'Stitch: The Sound Type-Indexed Type Checker' (Richard A. Eisenberg)
     <https://cs.brynmawr.edu/~rae/papers/2018/stitch/stitch.pdf>
-[^thinking-with-types][Thinking with Types](https://thinkingwithtypes.com/)
+[^thinking-with-types]: [Thinking with Types](https://thinkingwithtypes.com/)
 [^idris]: <http://docs.idris-lang.org/en/latest/tutorial/typesfuns.html>
 
 ## Natural numbers
