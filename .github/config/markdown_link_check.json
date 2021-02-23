@@ -3,5 +3,6 @@
     {
       "pattern": "^(?!http)"
     }
-  ]
+  ],
+  "aliveStatusCodes": [200, 429]
 }
