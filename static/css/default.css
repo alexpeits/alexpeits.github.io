@@ -92,6 +92,8 @@
 /* main */
 
 html {
+  font-size: 18px;
+  text-size-adjust: none;
   font-family: var(--font-serif), serif;
   line-height: 1.5;
 }
@@ -99,11 +101,9 @@ html {
 body {
   color: var(--color-fg);
   background-color: var(--color-bg);
-}
-
-pre {
-  font-family: var(--font-monospace), monospace;
-  font-variant-ligatures: none;
+  max-width: 700px;
+  margin: auto;
+  padding: 40px;
 }
 
 ::selection {
@@ -120,6 +120,8 @@ pre {
 
 header {
   border-bottom: 2px solid var(--color-primary);
+  margin: 0 0 2rem;
+  padding: 0.7rem 0;
 }
 
 header a {
@@ -137,19 +139,29 @@ nav {
   text-align: right;
   font-family: var(--font-sans-serif), sans-serif;
   weight: 600;
+  margin: 0;
 }
 
 nav a {
-  font-size: 110%;
+  font-size: 1.1em;
   font-weight: bold;
   text-transform: uppercase;
+  margin: 0 0 0 1rem;
+  display: inline;
 }
 
 .nav-link {
   color: var(--color-primary);
 }
 
+.logo {
+  margin: auto;
+  text-align: left;
+}
+
 .logo a {
+  float: left;
+  font-size: 1.3em;
   font-weight: bold;
   color: var(--color-primary);
   font-family: var(--font-sans-serif), sans-serif;
@@ -159,7 +171,9 @@ nav a {
 
 #dark-mode-toggle {
   cursor: pointer;
-  font-size: 110%;
+  font-size: 1.1em;
+  margin-left: 1rem;
+  display: inline;
 }
 
 .dark-mode-enabled {
@@ -213,8 +227,9 @@ footer {
   padding: 0.8rem 0;
   margin-bottom: 0.2rem;
   border-top: 2px solid var(--color-primary);
-  font-size: 75%;
+  font-size: 0.75em;
   color: var(--color-grey-1);
+  text-align: right;
 }
 
 footer span.copyright {
@@ -229,7 +244,7 @@ footer span.copyright {
 /* headings */
 
 h1 {
-  font-size: 145%;
+  font-size: 1.5em;
   font-family: var(--font-sans-serif), sans-serif;
   margin-top: 1.5rem;
   margin-bottom: 1rem;
@@ -237,7 +252,7 @@ h1 {
 }
 
 h2 {
-  font-size: 125%;
+  font-size: 1.3em;
   font-family: var(--font-sans-serif), sans-serif;
   margin-top: 1.7rem;
   margin-bottom: 0rem;
@@ -245,7 +260,7 @@ h2 {
 }
 
 h3 {
-  font-size: 110%;
+  font-size: 1.1em;
   font-family: var(--font-sans-serif), sans-serif;
   margin-top: 1.4rem;
   margin-bottom: 0rem;
@@ -253,7 +268,7 @@ h3 {
 }
 
 h4 {
-  font-size: 107%;
+  font-size: 1em;
   font-family: var(--font-sans-serif), sans-serif;
   margin-top: 1.2rem;
   margin-bottom: 0rem;
@@ -263,12 +278,12 @@ h4 {
 /* content */
 
 article .header {
-  font-size: 85%;
+  font-size: 0.85em;
   font-style: italic;
 }
 
 article .description {
-  font-size: 90%;
+  font-size: 0.85em;
   font-style: italic;
   color: var(--color-grey-2);
 }
@@ -279,16 +294,16 @@ article .content {
 
 blockquote {
   font-style: oblique;
-  padding-left: 0.8em;
+  padding-left: 0.88em;
   border-left: 2px solid var(--color-primary);
-  margin: 0 0 0 0;
+  margin: 0 0 0 1rem;
 }
 
 /* table of contents */
 
 #toc {
   padding-left: 1rem;
-  font-size: 85%;
+  font-size: 0.8em;
 }
 
 #toc ul {
@@ -300,7 +315,7 @@ blockquote {
 #footnotediv {
   background-color: var(--color-bg);
   border: 3px double var(--color-grey-3);
-  font-size: 75%;
+  font-size: 0.7em;
   padding-left: 0.6em;
   padding-right: 0.6em;
 }
@@ -322,7 +337,7 @@ tr, td {
 
 sup {
   vertical-align: super;
-  font-size: small;
+  font-size: 0.7em;
 }
 
 hr {
@@ -378,13 +393,13 @@ li:target {
 }
 
 .posts-table-tags, .posts-table-tags a {
-  font-size: 90%;
+  font-size: 0.9em;
 }
 
 .posts-table-description {
   color: var(--color-grey-2);
   font-style: italic;
-  font-size: 90%;
+  font-size: 0.9em;
 }
 
 .posts-table tr:first-child td {
@@ -402,7 +417,7 @@ li:target {
   background-color: var(--color-info-bg);
   border-left: 0.23em solid var(--color-info-border);
   padding: 0.2em 0em 0.2em 0.6em;
-  font-size: 90%;
+  font-size: 0.9em;
 }
 
 .success {
@@ -410,7 +425,7 @@ li:target {
   background-color: var(--color-success-bg);
   border-left: 0.23em solid var(--color-success-border);
   padding: 0.2em 0em 0.2em 0.6em;
-  font-size: 90%;
+  font-size: 0.9em;
 }
 
 .warn {
@@ -418,7 +433,7 @@ li:target {
   background-color: var(--color-warn-bg);
   border-left: 0.23em solid var(--color-warn-border);
   padding: 0.2em 0em 0.2em 0.6em;
-  font-size: 90%;
+  font-size: 0.9em;
 }
 
 .error {
@@ -426,7 +441,7 @@ li:target {
   background-color: var(--color-error-bg);
   border-left: 0.23em solid var(--color-error-border);
   padding: 0.2em 0em 0.2em 0.6em;
-  font-size: 90%;
+  font-size: 0.9em;
 }
 
 /* inline highlights */
@@ -452,12 +467,16 @@ li:target {
 
 /* code */
 
-code {
-  white-space: pre;
-  position: relative;
+pre {
+  font-family: var(--font-monospace), monospace;
+  font-variant-ligatures: none;
+  font-size: 0.85em;
 }
 
 code {
+  white-space: pre;
+  position: relative;
+  font-size: 0.9em;
   color: var(--color-inline-code-fg);
   background-color: var(--color-inline-code-bg);
   padding: 0.2em;
@@ -471,9 +490,7 @@ code {
 .highlight  {
   background: var(--color-code-bg) !important;
   color: var(--color-code-fg);
-  padding-left: 1rem;
-  padding-top: 0.4rem;
-  padding-bottom: 0.4rem;
+  padding: 0.4rem 1rem;
 }
 
 @media screen {
@@ -498,147 +515,76 @@ code {
   display: block;
 }
 
-@media (max-width: 449px) {
-  .MathJax_Display {
-    font-size: 84%;
-  }
-}
-
-@media (min-width: 450px) {
-  .MathJax_Display {
-    font-size: 92%;
-  }
-}
-
 /* screen sizes */
-
-@media (max-width: 559px) {
-  body {
-    width: 90%;
-    margin: 0;
-    padding: 0 5%;
-  }
+@media screen and (min-width: 470px) and (max-width: 699px) {
   html {
-    font-size: 12pt;
+    font-size: 17px;
   }
-  pre {
-    font-size: 10.5pt;
-  }
-  code {
-    font-size: 10pt;
-  }
-  header {
-    margin: 2rem 0;
-  }
-  nav {
-    margin: 0 auto 1rem;
-    text-align: center;
-  }
-  footer {
-    text-align: center;
+  body {
+    padding: 40px;
+    margin: auto;
   }
   .logo {
     text-align: center;
     margin: 1rem auto 1rem;
   }
   .logo a {
-    font-size: 150%;
-  }
-  nav a {
-    display: block;
-    line-height: 1.6;
-  }
-  #dark-mode-toggle {
-    display: block;
-    line-height: 1.6;
-  }
-}
-
-@media (min-width: 560px) {
-  body {
-    width: 90%;
-    margin: 0;
-    padding: 0 5%;
-  }
-  html {
-    font-size: 13pt;
-  }
-  pre {
-    font-size: 11.5pt;
-  }
-  code {
-    font-size: 10pt;
-  }
-  header {
-    margin: 2rem 0;
+    float: none;
+    font-size: 1.5em;
   }
   nav {
     margin: 0 auto 1rem;
     text-align: center;
   }
+  nav a {
+    margin: 0 0.6rem;
+  }
   footer {
     text-align: center;
   }
-  .logo {
-    text-align: center;
-    margin: 1rem auto 1rem;
-  }
-  .logo a {
-    font-size: 150%;
-  }
-  nav a {
-    display: inline;
-    margin: 0 0.6rem;
-  }
   #dark-mode-toggle {
-    display: inline;
     margin: 0 0.6rem;
-  }
-}
-
-@media (min-width: 900px) {
-  body {
-    width: 42rem;
-    margin: 0 auto;
-    padding: 0;
-  }
-  html {
-    font-size: 14pt;
-  }
-  pre {
-    font-size: 12pt;
-  }
-  code {
-    font-size: 11pt;
-  }
-  header {
-    margin: 0 0 2rem;
-    padding: 0.7rem 0;
-  }
-  nav {
-    margin: 0;
-    text-align: right;
-  }
-  nav a {
-    margin: 0 0 0 1rem;
-    display: inline;
-  }
-  #dark-mode-toggle {
-    margin: 0 0 0 1rem;
-    display: inline;
-  }
-  footer {
-    text-align: right;
-  }
-  .logo {
-    margin: 0;
-    text-align: left;
-  }
-  .logo a {
-    float: left;
-    font-size: 115%;
   }
   .MathJax_Display {
-    font-size: 98%;
+    font-size: 0.9em;
+  }
+}
+
+@media screen and (max-width: 469px) {
+  html {
+    font-size: 16px;
+  }
+  body {
+    padding: 20px;
+    margin: auto;
+  }
+  .logo {
+    text-align: center;
+    margin: 1rem auto 1rem;
+  }
+  .logo a {
+    float: none;
+    font-size: 1.5em;
+  }
+  nav {
+    margin: 0 auto 1rem;
+    text-align: center;
+  }
+  nav a {
+    display: block;
+    line-height: 1.6;
+  }
+  footer {
+    text-align: center;
+  }
+  #dark-mode-toggle {
+    display: block;
+    line-height: 1.6;
+  }
+  .MathJax_Display {
+    font-size: 0.9em;
+  }
+  pre {
+    font-size: 0.9em;
   }
 }
