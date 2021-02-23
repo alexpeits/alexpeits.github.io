@@ -110,7 +110,26 @@ main = S.shakeArgs S.shakeOptions $ do
           output
 
   buildRoute pageR buildPage
+
   buildRoute draftR buildPage
+
+  allDrafts <- newConstCache $ do
+    files <- getMatchingFiles "drafts/*.md"
+    forM files getPage
+
+  buildRoute draftListR $ \output -> do
+    cfg <- config
+    ts <- templates
+    drafts <- allDrafts
+    let ctx = Ae.toJSON (PageList drafts)
+        ctxTitle = json "title" (Ae.String "Drafts")
+    renderTemplate
+      cfg
+      ts
+      ["draft_list", "default"]
+      Nothing
+      [ctxTitle, ctx]
+      output
 
   buildRoute tagR $ \output -> do
     cfg <- config
@@ -241,6 +260,9 @@ pageR = Mapping "pages/*.md" (-<.> "html")
 
 draftR :: Route InputAndOutput
 draftR = Mapping "drafts/*.md" (-<.> "html")
+
+draftListR :: Route OnlyOutput
+draftListR = Fixed "drafts.html"
 
 cssR :: Route InputAndOutput
 cssR = Mapping "static/css/*.css" SF.dropDirectory1

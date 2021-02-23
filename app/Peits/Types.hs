@@ -159,6 +159,21 @@ data Page = Page
     pageRendered :: Html
   }
 
+newtype PageList = PageList {unPageList :: [Page]}
+
+instance Ae.ToJSON PageList where
+  toJSON (PageList pages) = Ae.object ["pages" .= pageListJSON]
+    where
+      pageListJSON =
+        Ae.Array . V.fromList . fmap pageJSON $ pages
+      pageJSON :: Page -> Ae.Value
+      pageJSON Page {..} =
+        Ae.object
+          [ "title" .= pgmTitle pageMeta,
+            "md_file" .= pageMdFile,
+            "html_file" .= pageHtmlFile
+          ]
+
 data PageMeta = PageMeta
   { pgmId :: Text,
     pgmTitle :: Text,

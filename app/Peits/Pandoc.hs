@@ -64,7 +64,7 @@ renderMd meta (MdFull md) = liftIO $ do
           either (error . show) id $
             P.runPure $
               P.runWithDefaultPartials $
-                P.compileTemplate "" "<div id=\"toc\">$toc$</div>\n<div id=\"main\">$body$</div>"
+                P.compileTemplate "" "<div id=\"toc\">$table-of-contents$</div>\n<div id=\"main\">$body$</div>"
       writerOptions =
         P.def
           { P.writerExtensions = P.pandocExtensions,
