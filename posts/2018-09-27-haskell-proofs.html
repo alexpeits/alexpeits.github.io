@@ -75,9 +75,8 @@
 
 <p>I’ll also try to note why and when an extension should be enabled.</p>
 <h2 id="dependent-types">Dependent types</h2>
-<p>I’ve already given some spoilers, so here it is: to achieve what we want to do I’m going to use whatever Haskell offers to simulate a dependently typed language. To better understand the what and how of dependent types, I suggest taking a look at any work by <a href="https://cs.brynmawr.edu/~rae/">Richard Eisenberg</a>, especially the extremely well written <em>Stitch</em> functional pearl <a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>. Another great resource for everything type-level related is the Book of Types [^thinking-with-types] by <a href="http://reasonablypolymorphic.com/">Sandy Maguire</a> (consider buying it, it’s awesome). Finally, the Idris language tutorial [^idris] is a great resource, especially to understand what needs to be done differently in Haskell and how.</p>
+<p>I’ve already given some spoilers, so here it is: to achieve what we want to do I’m going to use whatever Haskell offers to simulate a dependently typed language. To better understand the what and how of dependent types, I suggest taking a look at any work by <a href="https://cs.brynmawr.edu/~rae/">Richard Eisenberg</a>, especially the extremely well written <em>Stitch</em> functional pearl <a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>. Another great resource for everything type-level related is the book “Thinking with Types” <a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> by <a href="http://reasonablypolymorphic.com/">Sandy Maguire</a> (consider buying it, it’s awesome). Finally, the Idris language tutorial <a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> is a great resource, especially to understand what needs to be done differently in Haskell and how.</p>
 <p>Many of the following do not require dependent types and can probably be modeled using e.g. type classes, but I’m going to use dependent types here.</p>
-<p>[^thinking-with-types]<a href="https://thinkingwithtypes.com/">Thinking with Types</a> [^idris]: <a href="http://docs.idris-lang.org/en/latest/tutorial/typesfuns.html" class="uri">http://docs.idris-lang.org/en/latest/tutorial/typesfuns.html</a></p>
 <h2 id="natural-numbers">Natural numbers</h2>
 <p>To prove theorems on natural number operations we first need a way to represent natural numbers at the type level. The canonical way to do this is to use <a href="https://wiki.haskell.org/Peano_numbers">Peano numbers</a>:</p>
 <div class="highlight"><pre><span></span><span class="kr">data</span> <span class="kt">Nat</span> <span class="ow">=</span> <span class="kt">Z</span> <span class="o">|</span> <span class="kt">S</span> <span class="kt">Nat</span>
@@ -588,6 +587,8 @@ append lengthX lengthY x y
 <ol>
 <li id="fn1" role="doc-endnote"><p><a href="https://www.madsbuch.com/proving-stuff-in-haskell/">Proving stuff in Haskell</a><a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn2" role="doc-endnote"><p>‘Stitch: The Sound Type-Indexed Type Checker’ (Richard A. Eisenberg) <a href="https://cs.brynmawr.edu/~rae/papers/2018/stitch/stitch.pdf" class="uri">https://cs.brynmawr.edu/~rae/papers/2018/stitch/stitch.pdf</a><a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3" role="doc-endnote"><p><a href="https://thinkingwithtypes.com/">Thinking with Types</a><a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4" role="doc-endnote"><p><a href="http://docs.idris-lang.org/en/latest/tutorial/typesfuns.html" class="uri">http://docs.idris-lang.org/en/latest/tutorial/typesfuns.html</a><a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section></div>
   </section>
