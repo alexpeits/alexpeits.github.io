@@ -65,11 +65,11 @@ I'm going to use whatever Haskell offers to simulate a dependently typed
 language. To better understand the what and how of dependent types, I suggest
 taking a look at any work by [Richard Eisenberg](https://cs.brynmawr.edu/~rae/),
 especially the extremely well written *Stitch* functional pearl [^stitch].
-Another great resource for everything type-level related is the Book of Types
-[^thinking-with-types] by [Sandy Maguire](http://reasonablypolymorphic.com/)
-(consider buying it, it's awesome). Finally, the Idris language tutorial
-[^idris] is a great resource, especially to understand what needs to be done
-differently in Haskell and how.
+Another great resource for everything type-level related is the book "Thinking
+with Types" [^thinking-with-types] by [Sandy Maguire][sandy-maguire] (consider
+buying it, it's awesome). Finally, the Idris language tutorial [^idris] is a
+great resource, especially to understand what needs to be done differently in
+Haskell and how.
 
 Many of the following do not require dependent types and can probably be modeled
 using e.g. type classes, but I'm going to use dependent types here.
@@ -885,6 +885,7 @@ translating mathematical proofs to Haskell. After all, as someone said in the
 
 
 [github-repo]: <https://github.com/alexpeits/haskell-proofs>
+[sandy-maguire]: <http://reasonablypolymorphic.com/>
 [hackage-data-type-equality]: <http://hackage.haskell.org/package/base-4.12.0.0/docs/Data-Type-Equality.html>
 [peano-axiom-addition]: <https://en.wikipedia.org/wiki/Peano_axioms#Addition>
 [hackage-gcastWith]: <http://hackage.haskell.org/package/base-4.12.0.0/docs/Data-Type-Equality.html#v:gcastWith>
