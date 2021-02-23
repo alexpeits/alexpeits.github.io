@@ -32,4 +32,4 @@ build-info:
 	git log -1 --format=%H%n%cd > site/build-info.txt
 
 build-info-gh-actions:
-	scripts/build-info-gh-actions.sh ${ROOT_DIR} site/build-info.txt
+	scripts/build-info-gh-actions.sh ${ROOT_DIR} site/build-info.json
