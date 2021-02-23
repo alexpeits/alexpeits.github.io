@@ -3,6 +3,8 @@ HOOGLE_PORT?=8888
 PORT?=8080
 EXE?=peits
 
+ROOT_DIR=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
+
 NIX_SHELL=nix-shell --argstr pkgs ${NIXPKGS}
 
 ghcid:
@@ -28,3 +30,6 @@ copy-nix-files:
 
 build-info:
 	git log -1 --format=%H%n%cd > site/build-info.txt
+
+build-info-gh-actions:
+	scripts/build-info-gh-actions.sh ${ROOT_DIR} site/build-info.txt
