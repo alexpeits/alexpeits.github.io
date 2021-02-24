@@ -37,7 +37,7 @@ postDateReadFmt = DateFmt "%0Y-%m-%d"
 
 -- | January 2, 2020
 postDateShowLongFmt :: DateFmt
-postDateShowLongFmt = DateFmt "%B %e,%0Y"
+postDateShowLongFmt = DateFmt "%B %e, %0Y"
 
 -- | 2020.01.02
 postDateShowShortFmt :: DateFmt
