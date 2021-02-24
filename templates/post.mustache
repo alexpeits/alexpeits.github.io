@@ -2,10 +2,12 @@
   <section class="header date">
     Posted on {{ date_long }}
   </section>
-  <section class="header tags">
+  <section class="header">
+    <div class="tags">
     {{# tags }}
-    <a href="{{ html_file }}">{{ name }}</a>
+    <a class="tag" href="{{ html_file }}">{{ name }}</a>
     {{/ tags }}
+    </div>
   </section>
   {{# description }}
   <section class="description">

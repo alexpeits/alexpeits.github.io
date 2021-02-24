@@ -1,17 +1,13 @@
-<table class="posts-table">
-  <tbody>
-    {{# data }}
-    <tr>
-      <td>
-        <a href="{{ link }}" class="posts-table-title">{{ name }}</a>
-        <div class="posts-table-description">{{ description }}</div>
+<div class="item-list">
+  {{# data }}
+    <div class="item-list-item">
+      <div class="item-list-right">
+        <a class="item-list-title" href="{{ link }}">{{ name }}</a>
+        <div class="item-list-description">{{ description }}</div>
         {{# docs }}
-        <div class="posts-table-tags tags">
-          <a href="{{ . }}">Go to docs</a>
-        </div>
+          <a class="tag" href="{{ . }}">Go to docs</a>
         {{/ docs }}
-      </td>
-    </tr>
-    {{/ data }}
-  </tbody>
-</table>
+      </div>
+    </div>
+  {{/ data }}
+</div>

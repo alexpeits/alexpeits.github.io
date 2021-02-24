@@ -1,16 +1,13 @@
 <p>Here you can find all my past talks:</p>
-<table class="posts-table">
-  <tbody>
-    {{# data }}
-    <tr>
-      <td>
-        <a href="{{ link }}" class="posts-table-title">{{ name }}</a>
-        <div class="posts-table-description">{{ date }}</div>
-        <div class="posts-table-tags tags">
-          <a href="{{ location_link }}">{{ location }}</a>
-        </div>
-      </td>
-    </tr>
-    {{/ data }}
-  </tbody>
-</table>
+
+<div class="item-list">
+  {{# data }}
+    <div class="item-list-item">
+      <div class="item-list-right">
+        <a class="item-list-title" href="{{ link }}">{{ name }}</a>
+        <div class="item-list-description">{{ date }}</div>
+        <a class="tag" href="{{ location_link }}">{{ location }}</a>
+      </div>
+    </div>
+  {{/ data }}
+</div>
