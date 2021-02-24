@@ -6,7 +6,7 @@
 .highlight .g { color: var(--color-code-other); } /* Generic */
 .highlight .k { color: var(--color-code-keyword); } /* Keyword */
 .highlight .l { color: var(--color-code-constant); } /* Literal */
-.highlight .n { color: var(--color-code-variable); } /* Name */
+.highlight .n { color: 'inherit'; } /* Name */
 .highlight .o { color: var(--color-code-builtin); } /* Operator */
 .highlight .x { color: var(--color-code-other); } /* Other */
 .highlight .p { color: var(--color-code-other); } /* Punctuation */
