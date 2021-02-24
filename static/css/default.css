@@ -103,7 +103,7 @@ body {
   background-color: var(--color-bg);
   max-width: 700px;
   margin: auto;
-  padding: 40px;
+  padding: 0 40px;
 }
 
 ::selection {
@@ -120,7 +120,7 @@ body {
 
 header {
   border-bottom: 2px solid var(--color-primary);
-  margin: 0 0 2rem;
+  margin: 0.5rem 0 2rem;
   padding: 0.7rem 0;
 }
 
@@ -241,38 +241,40 @@ footer span.copyright {
   border: none !important;
 }
 
+/* paragraphs */
+
+p {
+  margin: 1rem 0;
+}
+
 /* headings */
 
 h1 {
   font-size: 1.5em;
   font-family: var(--font-sans-serif), sans-serif;
-  margin-top: 1.5rem;
-  margin-bottom: 1rem;
-  weight: 600;
+  font-weight: 600;
+  margin: 2em 0 1.2em;
 }
 
 h2 {
   font-size: 1.3em;
   font-family: var(--font-sans-serif), sans-serif;
-  margin-top: 1.7rem;
-  margin-bottom: 0rem;
-  weight: 600;
+  font-weight: 600;
+  margin: 1.8em 0 1.2em;
 }
 
 h3 {
   font-size: 1.1em;
   font-family: var(--font-sans-serif), sans-serif;
-  margin-top: 1.4rem;
-  margin-bottom: 0rem;
-  weight: 600;
+  font-weight: 600;
+  margin: 1.6em 0 1em;
 }
 
 h4 {
   font-size: 1em;
   font-family: var(--font-sans-serif), sans-serif;
-  margin-top: 1.2rem;
-  margin-bottom: 0rem;
-  weight: 600;
+  font-weight: 600;
+  margin: 1.4em 0 1em;
 }
 
 /* content */
@@ -524,20 +526,19 @@ code {
     padding: 40px;
     margin: auto;
   }
+  header {
+    margin: 1rem 0 2rem;
+  }
   .logo {
     text-align: center;
-    margin: 1rem auto 1rem;
   }
   .logo a {
     float: none;
     font-size: 1.5em;
   }
   nav {
-    margin: 0 auto 1rem;
+    margin: 1rem auto;
     text-align: center;
-  }
-  nav a {
-    margin: 0 0.6rem;
   }
   footer {
     text-align: center;
@@ -558,16 +559,18 @@ code {
     padding: 20px;
     margin: auto;
   }
+  header {
+    margin: 1rem 0 2rem;
+  }
   .logo {
     text-align: center;
-    margin: 1rem auto 1rem;
   }
   .logo a {
     float: none;
     font-size: 1.5em;
   }
   nav {
-    margin: 0 auto 1rem;
+    margin: 1rem auto 0.6rem;
     text-align: center;
   }
   nav a {
