@@ -15,16 +15,16 @@
 
   --color-primary: #0097c9;
 
-  --color-info-bg: #e5f2ff;
-  --color-info-border: #92c3f2;
-  --color-success-bg: #e6fff6;
-  --color-success-border: #a5f0d5;
-  --color-warn-bg: #fffae0;
-  --color-warn-border: #e8d99e;
-  --color-error-bg: #ffeded;
-  --color-error-border: #f7b5b5;
+  --color-blue-bg: #e5f2ff;
+  --color-blue-border: #92c3f2;
+  --color-green-bg: #e6fff6;
+  --color-green-border: #a5f0d5;
+  --color-yellow-bg: #fffae0;
+  --color-yellow-border: #dbcd93;
+  --color-red-bg: #ffeded;
+  --color-red-border: #f7b5b5;
 
-  --color-highlight-bg: #fefcbf;
+  --color-yellow-highlight-bg: #fefcbf;
 
   --color-code-fg: #5c7078;
   --color-code-bg: #f5f5f5;
@@ -46,8 +46,8 @@
 }
 
 [data-theme="dark"] {
-  --color-fg: #cdcdcd;
-  --color-bg: #282828;
+  --color-fg: #c9d1d9;
+  --color-bg: #06090f;
 
   --color-dark-mode-disabled: #707070;
 
@@ -58,18 +58,18 @@
 
   --color-primary: #00afe8;
 
-  --color-info-bg: #3d5559;
-  --color-info-border: #77b0bd;
-  --color-success-bg: #3c5444;
-  --color-success-border: #81b590;
-  --color-warn-bg: #574833;
-  --color-warn-border: #ada668;
-  --color-error-bg: #543b41;
-  --color-error-border: #b3707a;
+  --color-blue-bg: #32464a;
+  --color-blue-border: #73adba;
+  --color-green-bg: #324d3b;
+  --color-green-border: #79b089;
+  --color-yellow-bg: #524431;
+  --color-yellow-border: #a8a163;
+  --color-red-bg: #4f353b;
+  --color-red-border: #b36974;
 
-  --color-highlight-bg: #635c39;
+  --color-yellow-highlight-bg: #575236;
 
-  --color-code-bg: #313131;
+  --color-code-bg: #161b22;
   --color-code-fg: #d1e2e6;
   --color-code-comment: #a8a8a8;
   --color-code-function: #e0abc2;
@@ -86,7 +86,7 @@
   --color-code-other: #e7e7e7;
 
   --color-inline-code-fg: #cf8f95;
-  --color-inline-code-bg: #353535;
+  --color-inline-code-bg: #2f333a;
 }
 
 /* main */
@@ -101,7 +101,7 @@ html {
 body {
   color: var(--color-fg);
   background-color: var(--color-bg);
-  max-width: 700px;
+  max-width: 770px;
   margin: auto;
   padding: 0 40px;
 }
@@ -298,7 +298,8 @@ blockquote {
   font-style: oblique;
   padding-left: 0.88em;
   border-left: 2px solid var(--color-primary);
-  margin: 0 0 0 1rem;
+  margin: 1rem 0;
+  margin: 1.6rem 0 1.6rem 1rem;
 }
 
 /* table of contents */
@@ -412,76 +413,67 @@ li:target {
   border-top: 1px solid var(--color-grey-4);
 }
 
-/* info box */
+/* info box and highlights */
 
-.info {
+.box {
   display: block;
-  background-color: var(--color-info-bg);
-  border-left: 0.23em solid var(--color-info-border);
+  background-color: var(--color-blue-bg);
+  border-left: 0.23em solid var(--color-blue-border);
   padding: 0.2em 0em 0.2em 0.6em;
   font-size: 0.9em;
 }
 
-.success {
-  display: block;
-  background-color: var(--color-success-bg);
-  border-left: 0.23em solid var(--color-success-border);
-  padding: 0.2em 0em 0.2em 0.6em;
-  font-size: 0.9em;
+.box.gr {
+  border-left: 0.23em solid var(--color-green-border);
 }
 
-.warn {
-  display: block;
-  background-color: var(--color-warn-bg);
-  border-left: 0.23em solid var(--color-warn-border);
-  padding: 0.2em 0em 0.2em 0.6em;
-  font-size: 0.9em;
+.box.yl {
+  border-left: 0.23em solid var(--color-yellow-border);
 }
 
-.error {
-  display: block;
-  background-color: var(--color-error-bg);
-  border-left: 0.23em solid var(--color-error-border);
-  padding: 0.2em 0em 0.2em 0.6em;
-  font-size: 0.9em;
+.box.rd {
+  border-left: 0.23em solid var(--color-red-border);
 }
-
-/* inline highlights */
 
 .hi {
-  background-color: var(--color-highlight-bg);
-  padding-left: 0.2rem;
-  padding-right: 0.2rem;
+  background-color: var(--color-yellow-highlight-bg);
+  padding-left: 0.3rem;
+  padding-right: 0.3rem;
   border-radius: 0.2rem;
 }
 
-.gr {
-  background-color: var(--color-success-bg);
+.bl {
+  background-color: var(--color-blue-bg) !important;
 }
 
-.bl {
-  background-color: var(--color-info-bg);
+.gr {
+  background-color: var(--color-green-bg) !important;
+}
+
+.yl {
+  background-color: var(--color-yellow-bg) !important;
 }
 
 .rd {
-  background-color: var(--color-error-bg);
+  background-color: var(--color-red-bg) !important;
 }
 
 /* code */
 
 pre {
   font-family: var(--font-monospace), monospace;
-  font-variant-ligatures: none;
   font-size: 0.85em;
+  font-variant-ligatures: none;
 }
 
 code {
-  white-space: pre;
-  position: relative;
-  font-size: 0.9em;
+  font-family: var(--font-monospace), monospace;
+  font-size: 0.83em;
+  font-variant-ligatures: none;
   color: var(--color-inline-code-fg);
   background-color: var(--color-inline-code-bg);
-  padding: 0.2em;
+  padding: 0.1rem 0.2rem;
+  white-space: pre;
   white-space: pre-wrap;
   white-space: -moz-pre-wrap;
   white-space: -pre-wrap;
@@ -585,9 +577,6 @@ code {
     line-height: 1.6;
   }
   .MathJax_Display {
-    font-size: 0.9em;
-  }
-  pre {
     font-size: 0.9em;
   }
 }
