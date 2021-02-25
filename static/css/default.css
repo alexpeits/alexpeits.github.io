@@ -46,8 +46,8 @@
 }
 
 [data-theme="dark"] {
-  --color-fg: #c9d1d9;
-  --color-bg: #06090f;
+  --color-fg: #afbecc;
+  --color-bg: #12141b;
 
   --color-dark-mode-disabled: #707070;
 
@@ -58,18 +58,18 @@
 
   --color-primary: #00afe8;
 
-  --color-blue-bg: #32464a;
+  --color-blue-bg: #27383b;
   --color-blue-border: #73adba;
-  --color-green-bg: #324d3b;
+  --color-green-bg: #294030;
   --color-green-border: #79b089;
-  --color-yellow-bg: #524431;
+  --color-yellow-bg: #4a3d2c;
   --color-yellow-border: #a8a163;
-  --color-red-bg: #4f353b;
+  --color-red-bg: #472e34;
   --color-red-border: #b36974;
 
   --color-yellow-highlight-bg: #575236;
 
-  --color-code-bg: #161b22;
+  --color-code-bg: #191e25;
   --color-code-fg: #d1e2e6;
   --color-code-comment: #a8a8a8;
   --color-code-function: #e0abc2;
@@ -86,7 +86,7 @@
   --color-code-other: #e7e7e7;
 
   --color-inline-code-fg: #cf8f95;
-  --color-inline-code-bg: #2f333a;
+  --color-inline-code-bg: #1c2229;
 }
 
 /* main */

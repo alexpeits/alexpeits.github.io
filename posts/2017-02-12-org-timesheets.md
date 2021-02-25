@@ -8,7 +8,7 @@ tags:
 
 [
 This post is originally adapted from [this][so-answer] stackoverflow answer.
-]{.info}
+]{.box}
 
 Org-mode is a great productivity tool, and has a lot of functionality out of the
 box, including utilities for tracking time spent on a task/project. For example,
