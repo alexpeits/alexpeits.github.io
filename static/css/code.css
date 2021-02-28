@@ -1,4 +1,4 @@
-.highlight .hll { background-color: var(--color-code-bg); }
+.highlight .hll { background-color: var(--color-code-highlight-bg); }
 .highlight  { background: var(--color-code-bg); color: var(--color-code-fg); }
 .highlight .c { color: var(--color-code-comment); font-style: italic; } /* Comment */
 .highlight .err { color: var(--color-code-error); font-weight: bold; } /* Error */

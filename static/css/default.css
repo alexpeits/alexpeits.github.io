@@ -28,6 +28,7 @@
 
   --color-code-fg: #5c7078;
   --color-code-bg: #f5f5f5;
+  --color-code-highlight-bg: #fefcbf;
   --color-code-comment: #93a1a1;
   --color-code-function: #268bd2;
   --color-code-type: #b58900;
@@ -71,6 +72,7 @@
 
   --color-code-bg: #191e25;
   --color-code-fg: #d1e2e6;
+  --color-code-highlight-bg: #47442e;
   --color-code-comment: #a8a8a8;
   --color-code-function: #e0abc2;
   --color-code-type: #8ae4f2;
