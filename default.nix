@@ -2,11 +2,11 @@
 let
   nixpkgs =
     if isNull pkgs then
-      import (import ./nix/sources.nix).nixpkgs { }
+      import (import ./nix/sources.nix).nixpkgs {}
     else if builtins.typeOf pkgs == "set" then
       pkgs
     else
-      import (builtins.getAttr pkgs (import ./nix/sources.nix)) { };
+      import (builtins.getAttr pkgs (import ./nix/sources.nix)) {};
 
   haskellPackagesBase =
     if isNull compiler then
@@ -37,14 +37,17 @@ let
           super = super;
         };
         src = nixpkgs.lib.sourceByRegex ./. appSrcRegex;
-        drv = self.callCabal2nix "peits" src { };
+        drv = self.callCabal2nix "peits" src {};
       in
-      hsPkgs // { peits = drv; };
+        hsPkgs // { peits = drv; };
   };
 
+  yarn = nixpkgs.yarn.override { nodejs = nixpkgs.nodejs-12_x; };
   deps = [
     nixpkgs.python37Packages.pygments
     nixpkgs.minify
+    nixpkgs.nodejs-12_x
+    yarn
   ];
 
   site = nixpkgs.stdenv.mkDerivation {
@@ -68,7 +71,7 @@ let
       (arch: builtins.currentSystem == arch)
       [ "x86_64-darwin" ];
 
-  inotify = if isDarwin then [ ] else [ nixpkgs.inotify-tools ];
+  inotify = if isDarwin then [] else [ nixpkgs.inotify-tools ];
 
   shell = haskellPackages.shellFor {
     packages = ps: [ ps.peits ];

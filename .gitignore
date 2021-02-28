@@ -27,3 +27,5 @@ site/
 .shake/
 _build/
 .direnv/
+
+node_modules/
