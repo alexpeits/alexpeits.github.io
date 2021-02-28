@@ -89,6 +89,10 @@
   --color-inline-code-bg: #1c2229;
 }
 
+* {
+  transition: background-color 0.6s ease;
+}
+
 /* main */
 
 html {
@@ -168,7 +172,6 @@ nav a {
 }
 
 /* dark mode */
-
 #dark-mode-toggle {
   cursor: pointer;
   font-size: 1.1em;
