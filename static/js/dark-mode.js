@@ -77,9 +77,6 @@ if (shouldDarkMode()) {
 }
 
 window.onload = function () {
-  btn = document.getElementById(btnId);
-  btn.classList.remove("dark-mode-disabled")
-
   if (shouldDarkMode()) {
     updateIcon(true);
   } else {
