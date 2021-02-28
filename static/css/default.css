@@ -312,7 +312,6 @@ blockquote {
 }
 
 /* footnotes */
-
 #footnotediv {
   background-color: var(--color-bg);
   border: 3px double var(--color-grey-3);

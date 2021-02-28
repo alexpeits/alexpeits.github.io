@@ -3,19 +3,60 @@ id: about
 title: About
 ---
 
-I'm a sofware engineer from Greece, currently living in London and working at
-[Habito](https://www.habito.com/). I have a degree in engineering from the
-National Technical University of Athens. I currently write Haskell at work (and
-home). I am interested in software, type theory, formal verification and emacs.
-After 6pm I also play guitar (mostly jazz) and the oud.
+I'm a software engineer from Athens, Greece, currently living and working in
+London. Some of my interests include functional programming (mostly Haskell),
+type systems, domain design, infrastructure (terraform) and formal verification
+(Coq).
 
-In this site you can also find a [list of some of my projects](/lists/projects.html)
-and a [list of talks I have given](/lists/talks.html).
+When not smashing on a keyboard, I also play guitar (mostly jazz) and the
+[oud][oud].
+
+Things I use:
+
+- [emacs][emacs.d]
+- [Nix / NixOS][nixos-config]
+- [xmonad][dot-xmonad]
+
+This site is built using Haskell, [Pandoc][pandoc] and the [Shake][shake] build
+system, and it is of course [open source][site-source]. The idea and much of the
+code was taken from [Mark Karpov][mark-karpov]'s site.
+
+In this site you can also find a [list of some of my projects][projects] and a
+[list of talks I have given](/lists/talks.html).
 
 ---
 
 - []{.fas .fa-at} `alexpeitsinis [at] gmail [dot] com`
-- []{.fab .fa-github} [alexpeits](https://github.com/alexpeits)
-- []{.fab .fa-twitter} [\@alexpeits](https://twitter.com/alexpeits)
-- []{.fab .fa-reddit-alien} [u/primitiveinds](https://reddit.com/u/primitiveinds)
-- []{.fab .fa-keybase} [alexpeits](https://keybase.io/alexpeits)
+- []{.fab .fa-github} [alexpeits][github]
+- []{.fab .fa-twitter} [\@alexpeits][twitter]
+- []{.fab .fa-linkedin-in} [alexpeits][linkedin]
+- []{.fab .fa-reddit-alien} [u/primitiveinds][reddit]
+- []{.fab .fa-keybase} [alexpeits][keybase]
+
+
+<!-- links -->
+
+<!-- site -->
+[projects]: </lists/projects.html>
+[talks]: </lists/talks.html>
+
+<!-- repos -->
+[emacs.d]: <https://github.com/alexpeits/emacs.d>
+[nixos-config]: <https://github.com/alexpeits/nixos-config>
+[dot-xmonad]: <https://github.com/alexpeits/xmonad-config>
+[site-source]: <https://github.com/alexpeits/alexpeits.github.io>
+
+<!-- software -->
+[shake]: <https://shakebuild.com/>
+[pandoc]: <https://pandoc.org/>
+[mark-karpov]: <https://markkarpov.com/>
+
+<!-- various -->
+[oud]: <https://en.wikipedia.org/wiki/Oud>
+
+<!-- social -->
+[github]: <https://github.com/alexpeits>
+[twitter]: <https://twitter.com/alexpeits>
+[linkedin]: <https://www.linkedin.com/in/alexandros-peitsinis/>
+[reddit]: <https://reddit.com/u/primitiveinds>
+[keybase]: <https://keybase.io/alexpeits>
