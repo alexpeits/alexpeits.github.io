@@ -1,8 +1,10 @@
 {
   "ignorePatterns": [
-    {
-      "pattern": "^(?!http)"
-    }
+    { "pattern": "^(?!http)" },
+    { "pattern": "^https://www.reddit.com/u/primitiveinds" },
+    { "pattern": "^https://reddit.com/u/primitiveinds" },
+    { "pattern": "^https://www.linkedin.com/.*" },
+    { "pattern": "^https://linkedin.com/.*" }
   ],
   "aliveStatusCodes": [200, 429]
 }
