@@ -9,6 +9,5 @@ function setDarkMode(){document.documentElement.setAttribute("data-theme","dark"
 function setLightMode(){document.documentElement.removeAttribute("data-theme");}
 function shouldDarkMode(){if(userPrefersDarkMode()){return true;}else if(userPrefersLightMode()){return false;}else if(window.matchMedia(systemPrefersMatch).matches){return true;}else{return false;}}
 if(shouldDarkMode()){setDarkMode();}else{setLightMode();}
-window.onload=function(){btn=document.getElementById(btnId);btn.classList.remove("dark-mode-disabled")
-if(shouldDarkMode()){updateIcon(true);}else{updateIcon(false);}
+window.onload=function(){if(shouldDarkMode()){updateIcon(true);}else{updateIcon(false);}
 window.matchMedia(systemPrefersMatch).addEventListener("change",event=>{if(event.matches){clearUserPreference();setDarkMode();updateIcon(true);}else{clearUserPreference();setLightMode();updateIcon(false);}});}
