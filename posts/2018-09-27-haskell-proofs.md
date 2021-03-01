@@ -4,7 +4,7 @@ title: Writing and using proofs in Haskell
 date: 2018-09-27
 tags:
   - haskell
-  - dependent-types
+  - dependent types
 ---
 
 This post has an accompanying [github repo][github-repo].
