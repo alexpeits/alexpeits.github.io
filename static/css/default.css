@@ -539,6 +539,13 @@ code {
   display: block;
 }
 
+.mjpage__block {
+  margin: 0 !important;
+  overflow-y: hidden;
+  display: block;
+  font-size: 14px;
+}
+
 /* screen sizes */
 @media screen and (min-width: 470px) and (max-width: 699px) {
   html {

@@ -48,6 +48,7 @@ let
     nixpkgs.minify
     nixpkgs.nodejs-12_x
     yarn
+    nixpkgs.moreutils
   ];
 
   site = nixpkgs.stdenv.mkDerivation {
