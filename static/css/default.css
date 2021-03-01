@@ -71,7 +71,7 @@
 
   --color-yellow-highlight-bg: #575236;
 
-  --color-code-bg: #23242e;
+  --color-code-bg: #282936;
   --color-code-fg: #d1e2e6;
   --color-code-highlight-bg: #47442e;
   --color-code-comment: #a8a8a8;
@@ -89,7 +89,7 @@
   --color-code-other: #d1e2e6;
 
   --color-inline-code-fg: #cf8f95;
-  --color-inline-code-bg: #1c2229;
+  --color-inline-code-bg: var(--color-code-bg);
 }
 
 * {
