@@ -5,6 +5,7 @@ build-info-json() {
 {
   "date": "$(git log -1 --format=%cd)",
   "sha": "$(git log -1 --format=%H)",
+  "commit_message": "$GIT_COMMIT_MESSAGE",
   "home": "https://alexpeits.github.io",
   "gh_actor": "$GITHUB_ACTOR",
   "gh_repository": "$GITHUB_REPOSITORY",
