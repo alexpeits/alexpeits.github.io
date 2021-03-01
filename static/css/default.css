@@ -47,7 +47,7 @@
 }
 
 [data-theme="dark"] {
-  --color-fg: #afbecc;
+  --color-fg: #c5d3e0;
   --color-bg: #12141b;
 
   --color-dark-mode-disabled: #707070;
@@ -70,7 +70,7 @@
 
   --color-yellow-highlight-bg: #575236;
 
-  --color-code-bg: #191e25;
+  --color-code-bg: #23242e;
   --color-code-fg: #d1e2e6;
   --color-code-highlight-bg: #47442e;
   --color-code-comment: #a8a8a8;
