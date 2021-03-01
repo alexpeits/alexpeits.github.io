@@ -4,11 +4,24 @@ cabal new-build
 cabal new-exec peits -- "$@"
 
 if command -v inotifywait; then
-  while inotifywait -e close_write config.yml posts/*.md pages/*.md templates/* static/**/*; do
+  while inotifywait -e close_write \
+      app/*.hs \
+      config.yml \
+      posts/*.md \
+      pages/*.md \
+      templates/*.mustache \
+      static/**/*; do
+    cabal new-build
     cabal new-exec peits -- "$@"
   done
 elif command -v entr; then
-  find . -name '*.md' -or -name '*.css' -or -name '*.js' -or -name '*.mustache' -type f | entr -c cabal new-exec peits
+  find . -type f \
+      -wholename './app/*.hs' \
+      -or -wholename './config.yml' \
+      -or -wholename './posts/*.md' \
+      -or -wholename './pages/*.md' \
+      -or -wholename './templates/*.mustache' \
+      -or -wholename './static/*/**' | entr -d -c sh -c 'cabal new-build; cabal new-exec peits'
 else
   echo "Install inotify wait or entr"
   exit 1
