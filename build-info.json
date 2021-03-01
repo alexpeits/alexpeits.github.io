@@ -1,13 +1,13 @@
 {
-  "date": "Mon Mar 1 18:26:18 2021 +0000",
-  "sha": "f8bc39b65487e341d0de935c0b2732a4a03f2d77",
-  "commit_message": "Fix page load flicker",
+  "date": "Mon Mar 1 18:31:49 2021 +0000",
+  "sha": "41173dc725b61629b1e4e24544fa3a1c0c0665c7",
+  "commit_message": "Remove css transitions completely",
   "home": "https://alexpeits.github.io",
   "gh_actor": "alexpeits",
   "gh_repository": "alexpeits/alexpeits.github.io",
   "gh_event_name": "push",
-  "gh_run_id": "611460840",
-  "gh_run_number": "79",
-  "gh_sha": "f8bc39b65487e341d0de935c0b2732a4a03f2d77",
+  "gh_run_id": "611475411",
+  "gh_run_number": "80",
+  "gh_sha": "41173dc725b61629b1e4e24544fa3a1c0c0665c7",
   "gh_ref": "refs/heads/develop"
 }

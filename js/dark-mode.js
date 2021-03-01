@@ -10,5 +10,4 @@ function setLightMode(){document.documentElement.removeAttribute("data-theme");}
 function shouldDarkMode(){if(userPrefersDarkMode()){return true;}else if(userPrefersLightMode()){return false;}else if(window.matchMedia(systemPrefersMatch).matches){return true;}else{return false;}}
 if(shouldDarkMode()){setDarkMode();}else{setLightMode();}
 window.onload=function(){if(shouldDarkMode()){updateIcon(true);}else{updateIcon(false);}
-document.body.classList.remove("preload")
 window.matchMedia(systemPrefersMatch).addEventListener("change",event=>{if(event.matches){clearUserPreference();setDarkMode();updateIcon(true);}else{clearUserPreference();setLightMode();updateIcon(false);}});}
