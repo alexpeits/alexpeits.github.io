@@ -34,5 +34,8 @@ build-info:
 build-info-gh-actions:
 	scripts/build-info-gh-actions.sh ${ROOT_DIR} site/build-info.json
 
+serve-watch:
+	yarn 'serve:watch'
+
 check-links:
 	yarn 'check-links:all'

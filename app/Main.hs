@@ -24,6 +24,7 @@ import qualified Development.Shake.FilePath as SF
 import Peits.Pandoc
 import Peits.Types
 import Peits.Util
+import System.Console.GetOpt (ArgDescr (..), OptDescr (..))
 import qualified Text.Mustache as Mu
 
 buildDir :: FilePath
@@ -33,8 +34,22 @@ buildDir = "_build"
 
 --- $> :main
 
+data Flags = NoPygments deriving (Eq)
+
+shakeArgs :: [OptDescr (Either a Flags)]
+shakeArgs =
+  [ Option
+      ""
+      ["no-pygments"]
+      (NoArg $ Right NoPygments)
+      "Don't run `pygmentize` on code blocks"
+  ]
+
 main :: IO ()
-main = S.shakeArgs S.shakeOptions $ do
+main = S.shakeArgsWith S.shakeOptions shakeArgs $ \flags _ -> (pure . Just) $ do
+  let codeHighlight =
+        if NoPygments `elem` flags then Default else Pygments
+
   S.phony "clean" $ do
     S.putNormal [i|Cleaning files in #{buildDir}|]
     S.removeFilesAfter buildDir ["//*"]
@@ -53,7 +68,7 @@ main = S.shakeArgs S.shakeOptions $ do
 
   -- get a post by file path
   getPost <- S.newCache $ \fp ->
-    parseAndRenderPost fp
+    parseAndRenderPost fp codeHighlight
   -- collect all posts in a list, sorted in reverse chronological order
   allPosts <- newConstCache $ do
     files <- getMatchingFiles "posts/*.md"
@@ -92,7 +107,7 @@ main = S.shakeArgs S.shakeOptions $ do
       output
 
   getPage <- S.newCache $ \fp ->
-    parseAndRenderPage fp
+    parseAndRenderPage fp codeHighlight
 
   let buildPage input output = do
         cfg <- config

@@ -23,7 +23,7 @@ elif command -v entr; then
       -or -wholename './pages/*.md' \
       -or -wholename './drafts/*.md' \
       -or -wholename './templates/*.mustache' \
-      -or -wholename './static/*/**' | entr -d -c sh -c 'cabal new-build; cabal new-exec peits'
+      -or -wholename './static/*/**' | entr -d -c sh -c "cabal new-build; cabal new-exec peits -- $@"
 else
   echo "Install inotify wait or entr"
   exit 1

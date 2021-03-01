@@ -21,6 +21,10 @@ import qualified Data.Vector as V
 import Development.Shake.FilePath ((<.>), (</>))
 import qualified Text.Mustache as Mu
 
+data CodeHighlight
+  = Pygments
+  | Default
+
 parseDate :: DateFmt -> Text -> Maybe T.UTCTime
 parseDate (DateFmt fmt) =
   TF.parseTimeM True TF.defaultTimeLocale (Tx.unpack fmt) . Tx.unpack

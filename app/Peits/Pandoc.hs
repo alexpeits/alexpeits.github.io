@@ -19,33 +19,36 @@ import qualified Data.Text.IO as Tx.IO
 import Data.Void (Void)
 import qualified Data.Yaml as Yaml
 import Development.Shake.FilePath ((-<.>))
+import Network.URI (isRelativeReference)
 import Peits.Types
 import System.Process (readProcess)
 import qualified Text.Megaparsec as M
 import qualified Text.Megaparsec.Char as M
 import qualified Text.Pandoc as P
 import qualified Text.Pandoc.Walk as PW
-import Network.URI (isRelativeReference)
 
-parseAndRenderPost :: (MonadIO m, MonadFail m) => FilePath -> m Post
-parseAndRenderPost fp = do
-  (meta, html) <- parseAndRenderMd fp
+parseAndRenderPost ::
+  (MonadIO m, MonadFail m) => FilePath -> CodeHighlight -> m Post
+parseAndRenderPost fp codeHi = do
+  (meta, html) <- parseAndRenderMd fp codeHi
   let htmlFp = "/" <> fp -<.> "html"
   pure $ Post meta fp htmlFp html
 
-parseAndRenderPage :: (MonadIO m, MonadFail m) => FilePath -> m Page
-parseAndRenderPage fp = do
-  (meta, html) <- parseAndRenderMd fp
+parseAndRenderPage ::
+  (MonadIO m, MonadFail m) => FilePath -> CodeHighlight -> m Page
+parseAndRenderPage fp codeHi = do
+  (meta, html) <- parseAndRenderMd fp codeHi
   let htmlFp = "/" <> fp -<.> "html"
   pure $ Page meta fp htmlFp html
 
 parseAndRenderMd ::
   (MonadIO m, MonadFail m, Ae.FromJSON meta, Toc meta) =>
   FilePath ->
+  CodeHighlight ->
   m (meta, Html)
-parseAndRenderMd fp = do
+parseAndRenderMd fp codeHi = do
   (meta, _content, full) <- parseMd fp
-  (meta,) <$> renderMd meta full
+  (meta,) <$> renderMd meta full codeHi
 
 parseMd :: (MonadIO m, MonadFail m, Ae.FromJSON meta) => FilePath -> m (meta, MdContent, MdFull)
 parseMd fp = do
@@ -57,8 +60,9 @@ parseMd fp = do
   meta <- liftIO $ Yaml.decodeThrow metaStr
   pure (meta, MdContent md, MdFull mdFull)
 
-renderMd :: (MonadIO m, Toc meta) => meta -> MdFull -> m Html
-renderMd meta (MdFull md) = liftIO $ do
+renderMd ::
+  (MonadIO m, Toc meta) => meta -> MdFull -> CodeHighlight -> m Html
+renderMd meta (MdFull md) codeHi = liftIO $ do
   let readerOptions = P.def {P.readerExtensions = P.pandocExtensions}
       tocTemplate =
         either error id $
@@ -76,7 +80,7 @@ renderMd meta (MdFull md) = liftIO $ do
           }
   result <- P.runIO $ do
     doc <- P.readMarkdown readerOptions md
-    doc' <- liftIO $ filterPandoc doc
+    doc' <- liftIO $ filterPandoc codeHi doc
     P.writeHtml5String writerOptions doc'
   Html <$> P.handleError result
 
@@ -96,22 +100,24 @@ partitionMd fp md = Bi.first M.errorBundlePretty (M.parse parser fp md)
       b <- M.takeRest
       pure (Just a, b)
 
-filterPandoc :: P.Pandoc -> IO P.Pandoc
-filterPandoc = PW.walkM bfilter
+filterPandoc :: CodeHighlight -> P.Pandoc -> IO P.Pandoc
+filterPandoc codeHi = PW.walkM bfilter
   where
     bfilter :: P.Block -> IO P.Block
     bfilter = \case
-      (P.CodeBlock (_ids, clss, options) code) ->
-        P.RawBlock (P.Format "html") <$> pygments code clss options
+      cb@(P.CodeBlock (_ids, clss, options) code) ->
+        case codeHi of
+          Default -> pure $
+            P.Div ("", ["skylighting"], []) [cb]
+          Pygments -> P.RawBlock (P.Format "html") <$> pygments code clss options
       other -> PW.walkM ifilter other
     ifilter :: P.Inline -> IO P.Inline
     ifilter = \case
       (P.Link (ids, clss, options) inlines tgt@(uri, _title)) -> do
-        let
-          newClss =
-            if isRelativeReference (Tx.unpack uri)
-              then "internal-link":clss
-            else clss
+        let newClss =
+              if isRelativeReference (Tx.unpack uri)
+                then "internal-link" : clss
+                else clss
         pure $ P.Link (ids, newClss, options) inlines tgt
       other -> pure other
     pygments :: Text -> [Text] -> [(Text, Text)] -> IO Text

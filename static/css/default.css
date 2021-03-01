@@ -561,7 +561,7 @@ pre {
   font-variant-ligatures: none;
 }
 
-code {
+p code {
   font-family: var(--font-monospace), monospace;
   font-size: 0.83em;
   font-variant-ligatures: none;
@@ -574,6 +574,25 @@ code {
   white-space: -pre-wrap;
   white-space: -o-pre-wrap;
   word-wrap: break-word;
+}
+
+/* default pandoc stuff, used in dev */
+.skylighting code {
+  font-family: var(--font-monospace), monospace;
+  font-variant-ligatures: none;
+  line-height: 1.5;
+}
+
+.skylighting pre {
+  background-color: var(--color-code-bg);
+  color: var(--color-code-fg);
+  white-space: pre;
+  white-space: pre-wrap;
+  white-space: -moz-pre-wrap;
+  white-space: -pre-wrap;
+  white-space: -o-pre-wrap;
+  word-wrap: break-word;
+  padding: 0.5rem 1rem;
 }
 
 .highlight  {
