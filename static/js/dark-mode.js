@@ -83,6 +83,8 @@ window.onload = function () {
     updateIcon(false);
   }
 
+  document.body.classList.remove("preload")
+
   window.matchMedia(systemPrefersMatch).addEventListener("change", event => {
     if (event.matches) {
       clearUserPreference();
