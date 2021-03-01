@@ -33,6 +33,7 @@ executable peits
     , interpolate >= 0.2.1 && < 0.3
     , megaparsec >= 8.0.0 && < 8.1
     , mtl >= 2.2.2  && < 2.3
+    , network-uri >= 2.6.3 && < 2.7
     , pandoc >= 2.9.2 && < 2.10
     , pandoc-types >= 1.20 && < 1.21
     , parser-combinators >= 1.2.1 && < 1.3

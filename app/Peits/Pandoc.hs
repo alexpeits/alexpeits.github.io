@@ -25,6 +25,7 @@ import qualified Text.Megaparsec as M
 import qualified Text.Megaparsec.Char as M
 import qualified Text.Pandoc as P
 import qualified Text.Pandoc.Walk as PW
+import Network.URI (isRelativeReference)
 
 parseAndRenderPost :: (MonadIO m, MonadFail m) => FilePath -> m Post
 parseAndRenderPost fp = do
@@ -75,7 +76,7 @@ renderMd meta (MdFull md) = liftIO $ do
           }
   result <- P.runIO $ do
     doc <- P.readMarkdown readerOptions md
-    doc' <- liftIO $ pygmentize doc
+    doc' <- liftIO $ filterPandoc doc
     P.writeHtml5String writerOptions doc'
   Html <$> P.handleError result
 
@@ -95,13 +96,23 @@ partitionMd fp md = Bi.first M.errorBundlePretty (M.parse parser fp md)
       b <- M.takeRest
       pure (Just a, b)
 
-pygmentize :: P.Pandoc -> IO P.Pandoc
-pygmentize = PW.walkM pfilter
+filterPandoc :: P.Pandoc -> IO P.Pandoc
+filterPandoc = PW.walkM bfilter
   where
-    pfilter :: P.Block -> IO P.Block
-    pfilter = \case
+    bfilter :: P.Block -> IO P.Block
+    bfilter = \case
       (P.CodeBlock (_ids, clss, options) code) ->
         P.RawBlock (P.Format "html") <$> pygments code clss options
+      other -> PW.walkM ifilter other
+    ifilter :: P.Inline -> IO P.Inline
+    ifilter = \case
+      (P.Link (ids, clss, options) inlines tgt@(uri, _title)) -> do
+        let
+          newClss =
+            if isRelativeReference (Tx.unpack uri)
+              then "internal-link":clss
+            else clss
+        pure $ P.Link (ids, newClss, options) inlines tgt
       other -> pure other
     pygments :: Text -> [Text] -> [(Text, Text)] -> IO Text
     pygments code clss _opts = do
