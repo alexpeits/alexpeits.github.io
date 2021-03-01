@@ -1,12 +1,13 @@
 {
-  "date": "Mon Mar 1 17:24:13 2021 +0000",
-  "sha": "6170108f0a7f7e5f6954edac5706b6f10a93a5f7",
+  "date": "Mon Mar 1 18:05:40 2021 +0000",
+  "sha": "49c0798c67b6d0acf0302e05743c0bce44c4cc54",
+  "commit_message": "Add git commit message to action env",
   "home": "https://alexpeits.github.io",
   "gh_actor": "alexpeits",
   "gh_repository": "alexpeits/alexpeits.github.io",
   "gh_event_name": "push",
-  "gh_run_id": "611292665",
-  "gh_run_number": "76",
-  "gh_sha": "6170108f0a7f7e5f6954edac5706b6f10a93a5f7",
+  "gh_run_id": "611405498",
+  "gh_run_number": "77",
+  "gh_sha": "49c0798c67b6d0acf0302e05743c0bce44c4cc54",
   "gh_ref": "refs/heads/develop"
 }
