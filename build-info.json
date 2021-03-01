@@ -1,13 +1,13 @@
 {
-  "date": "Mon Mar 1 18:05:40 2021 +0000",
-  "sha": "49c0798c67b6d0acf0302e05743c0bce44c4cc54",
-  "commit_message": "Add git commit message to action env",
+  "date": "Mon Mar 1 18:07:47 2021 +0000",
+  "sha": "62ffc008723b51dc4bcc901ff1271a9ace190a05",
+  "commit_message": "Remove GITHUB_TOKEN input from gh pages deploy action",
   "home": "https://alexpeits.github.io",
   "gh_actor": "alexpeits",
   "gh_repository": "alexpeits/alexpeits.github.io",
   "gh_event_name": "push",
-  "gh_run_id": "611405498",
-  "gh_run_number": "77",
-  "gh_sha": "49c0798c67b6d0acf0302e05743c0bce44c4cc54",
+  "gh_run_id": "611411829",
+  "gh_run_number": "78",
+  "gh_sha": "62ffc008723b51dc4bcc901ff1271a9ace190a05",
   "gh_ref": "refs/heads/develop"
 }
