@@ -29,3 +29,6 @@ _build/
 .direnv/
 
 node_modules/
+
+# for testing md features
+pages/test.md
