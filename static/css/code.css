@@ -22,7 +22,7 @@
 .highlight .gh { color: var(--color-code-other); font-weight: bold } /* Generic.Heading */
 .highlight .gi { color: var(--color-code-other); } /* Generic.Inserted */
 .highlight .go { color: var(--color-code-other); } /* Generic.Output */
-.highlight .gp { color: var(--color-code-other); } /* Generic.Prompt */
+.highlight .gp { color: var(--color-code-string); } /* Generic.Prompt */
 .highlight .gs { color: var(--color-code-other); font-weight: bold } /* Generic.Strong */
 .highlight .gu { color: var(--color-code-other); text-decoration: underline } /* Generic.Subheading */
 .highlight .gt { color: var(--color-code-constant); } /* Generic.Traceback */
