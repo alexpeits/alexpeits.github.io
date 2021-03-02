@@ -5,6 +5,8 @@ date: 2018-09-27
 tags:
   - haskell
   - dependent types
+toc: true
+toc-depth: 2
 ---
 
 This post has an accompanying [github repo][github-repo].

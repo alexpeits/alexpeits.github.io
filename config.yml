@@ -4,6 +4,8 @@ email: alexpeitsinis@gmail.com
 copyright: © 2017–present Alex Peitsinis
 host: https://alexpeits.github.io
 
+syntax_highlight: pygments
+
 nav:
   - name: Posts
     url: /
