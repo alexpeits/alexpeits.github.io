@@ -1,6 +1,7 @@
 {-# LANGUAGE LambdaCase #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE QuasiQuotes #-}
+{-# LANGUAGE RecordWildCards #-}
 {-# LANGUAGE TupleSections #-}
 
 module Peits.Pandoc where
@@ -11,7 +12,7 @@ import Control.Monad.Combinators (manyTill)
 import Control.Monad.IO.Class (MonadIO, liftIO)
 import qualified Data.Aeson as Ae
 import qualified Data.Bifunctor as Bi
-import Data.String.Interpolate.IsString (i)
+import Data.String.Interpolate (i, iii, __i)
 import Data.Text (Text)
 import qualified Data.Text as Tx
 import Data.Text.Encoding (encodeUtf8)
@@ -25,30 +26,31 @@ import System.Process (readProcess)
 import qualified Text.Megaparsec as M
 import qualified Text.Megaparsec.Char as M
 import qualified Text.Pandoc as P
+import Text.Pandoc.Citeproc (processCitations)
 import qualified Text.Pandoc.Walk as PW
 
 parseAndRenderPost ::
-  (MonadIO m, MonadFail m) => FilePath -> CodeHighlight -> m Post
-parseAndRenderPost fp codeHi = do
-  (meta, html) <- parseAndRenderMd fp codeHi
+  (MonadIO m, MonadFail m) => FilePath -> Config -> m Post
+parseAndRenderPost fp config = do
+  (meta, html) <- parseAndRenderMd fp config
   let htmlFp = "/" <> fp -<.> "html"
   pure $ Post meta fp htmlFp html
 
 parseAndRenderPage ::
-  (MonadIO m, MonadFail m) => FilePath -> CodeHighlight -> m Page
-parseAndRenderPage fp codeHi = do
-  (meta, html) <- parseAndRenderMd fp codeHi
+  (MonadIO m, MonadFail m) => FilePath -> Config -> m Page
+parseAndRenderPage fp config = do
+  (meta, html) <- parseAndRenderMd fp config
   let htmlFp = "/" <> fp -<.> "html"
   pure $ Page meta fp htmlFp html
 
 parseAndRenderMd ::
-  (MonadIO m, MonadFail m, Ae.FromJSON meta, Toc meta) =>
+  (MonadIO m, MonadFail m, Ae.FromJSON meta, Toc meta, Bibliography meta) =>
   FilePath ->
-  CodeHighlight ->
+  Config ->
   m (meta, Html)
-parseAndRenderMd fp codeHi = do
+parseAndRenderMd fp config = do
   (meta, _content, full) <- parseMd fp
-  (meta,) <$> renderMd meta full codeHi
+  (meta,) <$> renderMd meta full config
 
 parseMd :: (MonadIO m, MonadFail m, Ae.FromJSON meta) => FilePath -> m (meta, MdContent, MdFull)
 parseMd fp = do
@@ -60,27 +62,48 @@ parseMd fp = do
   meta <- liftIO $ Yaml.decodeThrow metaStr
   pure (meta, MdContent md, MdFull mdFull)
 
+pandocTemplate :: Text -> Text
+pandocTemplate tocTitle =
+  [iii|
+    $if(toc)$
+    <div id="toc">
+      <div class="toc-title">
+        #{tocTitle}
+      </div>
+      <div class="toc-contents">
+        $table-of-contents$
+      </div>
+    </div>
+    $endif$
+    <div id="main">
+      $body$
+    </div>
+    |]
+
 renderMd ::
-  (MonadIO m, Toc meta) => meta -> MdFull -> CodeHighlight -> m Html
-renderMd meta (MdFull md) codeHi = liftIO $ do
+  (MonadIO m, Toc meta, Bibliography meta) => meta -> MdFull -> Config -> m Html
+renderMd meta (MdFull md) config = liftIO $ do
   let readerOptions = P.def {P.readerExtensions = P.pandocExtensions}
       tocTemplate =
         either error id $
           either (error . show) id $
             P.runPure $
               P.runWithDefaultPartials $
-                P.compileTemplate "" "<div id=\"toc\">$table-of-contents$</div>\n<div id=\"main\">$body$</div>"
+                P.compileTemplate "" (pandocTemplate (getTocTitle meta))
       writerOptions =
         P.def
           { P.writerExtensions = P.pandocExtensions,
             P.writerHTMLMathMethod = P.MathJax "",
             P.writerTemplate = Just tocTemplate,
-            P.writerTableOfContents = renderToc meta,
-            P.writerTOCDepth = tocDepth meta
+            P.writerTableOfContents = usesToc meta,
+            P.writerTOCDepth = getTocDepth meta
           }
   result <- P.runIO $ do
     doc <- P.readMarkdown readerOptions md
-    doc' <- liftIO $ filterPandoc codeHi doc
+    let citeFilters = [processCitations | usesCitations meta]
+        otherFilters = citeFilters
+        filters = (liftIO . filterPandoc config) : otherFilters
+    doc' <- foldl (>>=) (pure doc) filters
     P.writeHtml5String writerOptions doc'
   Html <$> P.handleError result
 
@@ -100,17 +123,21 @@ partitionMd fp md = Bi.first M.errorBundlePretty (M.parse parser fp md)
       b <- M.takeRest
       pure (Just a, b)
 
-filterPandoc :: CodeHighlight -> P.Pandoc -> IO P.Pandoc
-filterPandoc codeHi = PW.walkM bfilter
+filterPandoc :: Config -> P.Pandoc -> IO P.Pandoc
+filterPandoc Config {..} = PW.walkM bfilter
   where
     bfilter :: P.Block -> IO P.Block
     bfilter = \case
       cb@(P.CodeBlock (_ids, clss, options) code) ->
-        case codeHi of
-          Default -> pure $
-            P.Div ("", ["skylighting"], []) [cb]
-          Pygments -> P.RawBlock (P.Format "html") <$> pygments code clss options
+        let (lang, classes) = splitCodeClasses clss
+         in case cSyntaxHighlightMethod of
+              Default ->
+                pure $
+                  P.Div ("", ["skylighting"], []) [cb]
+              Pygments -> P.RawBlock (P.Format "html") <$> pygments code lang classes options
+              PrismJS -> pure $ P.RawBlock (P.Format "html") (prismjs code lang classes options)
       other -> PW.walkM ifilter other
+
     ifilter :: P.Inline -> IO P.Inline
     ifilter = \case
       (P.Link (ids, clss, options) inlines tgt@(uri, _title)) -> do
@@ -120,13 +147,21 @@ filterPandoc codeHi = PW.walkM bfilter
                 else clss
         pure $ P.Link (ids, newClss, options) inlines tgt
       other -> pure other
-    pygments :: Text -> [Text] -> [(Text, Text)] -> IO Text
-    pygments code clss _opts = do
-      let (lang, _classes) = case clss of
-            [] -> (Nothing, [])
-            (l : rest) -> (Just l, rest)
-          langArgs = case lang of
+
+    splitCodeClasses :: [Text] -> (Maybe Text, [Text])
+    splitCodeClasses = \case
+      [] -> (Nothing, [])
+      (l : rest) -> (Just l, rest)
+
+    pygments :: Text -> Maybe Text -> [Text] -> [(Text, Text)] -> IO Text
+    pygments code mLang _clss _opts = do
+      let langArgs = case mLang of
             Nothing -> []
             Just l -> ["-l", l]
           args = Tx.unpack <$> langArgs <> ["-f", "html"]
       Tx.pack <$> readProcess "pygmentize" args (Tx.unpack code)
+
+    prismjs :: Text -> Maybe Text -> [Text] -> [(Text, Text)] -> Text
+    prismjs code mLang _class _opts =
+      let lang = maybe "language-none" ("language-" `Tx.append`) mLang
+       in [__i|<pre><code class="#{lang}">#{code}</code></pre>|]

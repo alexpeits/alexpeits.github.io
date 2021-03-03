@@ -7,6 +7,9 @@ ROOT_DIR=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 
 NIX_SHELL=nix-shell --argstr pkgs ${NIXPKGS}
 
+clean:
+	rm -rf _build/* .shake/
+
 ghcid:
 	${NIX_SHELL} --run "ghcid -a --command='cabal new-repl exe:${EXE}'"
 
@@ -19,8 +22,8 @@ hoogle:
 serve:
 	cd _build && python -m http.server ${PORT}
 
-watch:
-	./watch.sh
+watch: clean
+	./watch.sh --highlight=prismjs
 
 copy-nix-files:
 	mkdir -p site

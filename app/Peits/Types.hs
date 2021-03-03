@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingStrategies #-}
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
+{-# LANGUAGE LambdaCase #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE QuasiQuotes #-}
 {-# LANGUAGE RecordWildCards #-}
@@ -10,8 +11,9 @@ import Data.Aeson ((.!=), (.:), (.:?), (.=))
 import qualified Data.Aeson as Ae
 import Data.List (sortOn)
 import qualified Data.Map.Strict as Map
+import Data.Maybe (isJust)
 import qualified Data.Set as Set
-import Data.String.Interpolate.IsString (i)
+import Data.String.Interpolate (i)
 import Data.Text (Text)
 import qualified Data.Text as Tx
 import qualified Data.Time.Clock as T
@@ -21,9 +23,18 @@ import qualified Data.Vector as V
 import Development.Shake.FilePath ((<.>), (</>))
 import qualified Text.Mustache as Mu
 
-data CodeHighlight
-  = Pygments
-  | Default
+data SyntaxHighlightMethod
+  = Default
+  | Pygments
+  | PrismJS
+  deriving (Eq, Show)
+
+instance Ae.FromJSON SyntaxHighlightMethod where
+  parseJSON = Ae.withText "SyntaxHighlightMethod" $ \case
+    "default" -> pure Default
+    "pygments" -> pure Pygments
+    "prismjs" -> pure PrismJS
+    other -> fail [i|Cannot parse syntax highlight method "#{other}"|]
 
 parseDate :: DateFmt -> Text -> Maybe T.UTCTime
 parseDate (DateFmt fmt) =
@@ -47,6 +58,9 @@ postDateShowLongFmt = DateFmt "%B %e, %0Y"
 postDateShowShortFmt :: DateFmt
 postDateShowShortFmt = DateFmt "%0Y.%m.%d"
 
+defaultTocTitle :: Text
+defaultTocTitle = "Table of contents"
+
 defaultTocDepth :: Int
 defaultTocDepth = 2
 
@@ -65,7 +79,9 @@ data Meta = Meta
     mTags :: Set.Set Tag,
     mDesc :: Maybe Text,
     mToc :: Bool,
-    mTocDepth :: Int
+    mTocTitle :: Text,
+    mTocDepth :: Int,
+    mBibliography :: Maybe Text
   }
   deriving (Show)
 
@@ -81,7 +97,9 @@ instance Ae.FromJSON Meta where
     mTags <- v .:? "tags" .!= mempty
     mDesc <- v .:? "description"
     mToc <- v .:? "toc" .!= False
-    mTocDepth <- v .:? "toc_depth" .!= defaultTocDepth
+    mTocTitle <- v .:? "toc-title" .!= defaultTocTitle
+    mTocDepth <- v .:? "toc-depth" .!= defaultTocDepth
+    mBibliography <- v .:? "bibliography"
     pure Meta {..}
 
 instance Ae.ToJSON Meta where
@@ -95,7 +113,9 @@ instance Ae.ToJSON Meta where
         "tags" .= Set.map TagLink mTags,
         "description" .= mDesc,
         "toc" .= mToc,
-        "toc_depth" .= mTocDepth
+        "toc-title" .= mTocTitle,
+        "toc-depth" .= mTocDepth,
+        "bibliography" .= mBibliography
       ]
 
 newtype Tag = Tag {unTag :: Text}
@@ -182,7 +202,9 @@ data PageMeta = PageMeta
   { pgmId :: Text,
     pgmTitle :: Text,
     pgmToc :: Bool,
-    pgmTocDepth :: Int
+    pgmTocTitle :: Text,
+    pgmTocDepth :: Int,
+    pgmBibliography :: Maybe Text
   }
 
 instance Ae.FromJSON PageMeta where
@@ -191,7 +213,9 @@ instance Ae.FromJSON PageMeta where
       <$> v .: "id"
       <*> v .: "title"
       <*> v .:? "toc" .!= False
-      <*> v .:? "toc_depth" .!= defaultTocDepth
+      <*> v .:? "toc-title" .!= defaultTocTitle
+      <*> v .:? "toc-depth" .!= defaultTocDepth
+      <*> v .:? "bibliography"
 
 instance Ae.ToJSON PageMeta where
   toJSON PageMeta {..} =
@@ -199,7 +223,9 @@ instance Ae.ToJSON PageMeta where
       [ "id" .= pgmId,
         "title" .= pgmTitle,
         "toc" .= pgmToc,
-        "toc_depth" .= pgmTocDepth
+        "toc-title" .= pgmTocTitle,
+        "toc-depth" .= pgmTocDepth,
+        "bibliography" .= pgmBibliography
       ]
 
 data Config = Config
@@ -208,6 +234,7 @@ data Config = Config
     cEmail :: Text,
     cCopyright :: Text,
     cHost :: Text,
+    cSyntaxHighlightMethod :: SyntaxHighlightMethod,
     cNav :: [NavItem],
     cLists :: Map.Map Text ListPage
   }
@@ -220,6 +247,7 @@ instance Ae.FromJSON Config where
       <*> v .: "email"
       <*> v .: "copyright"
       <*> v .: "host"
+      <*> v .: "syntax_highlight"
       <*> v .: "nav"
       <*> v .: "lists"
 
@@ -230,6 +258,10 @@ instance Ae.ToJSON Config where
         "author" .= cAuthor,
         "email" .= cEmail,
         "copyright" .= cCopyright,
+        "syntax_highlight" .= ("" :: Text),
+        "highlight_default" .= (cSyntaxHighlightMethod == Default),
+        "highlight_pygments" .= (cSyntaxHighlightMethod == Pygments),
+        "highlight_prismjs" .= (cSyntaxHighlightMethod == PrismJS),
         "host" .= cHost,
         "nav" .= cNav,
         "lists" .= cLists
@@ -286,13 +318,28 @@ instance Ae.ToJSON Feed where
       ]
 
 class Toc a where
-  renderToc :: a -> Bool
-  tocDepth :: a -> Int
+  usesToc :: a -> Bool
+  getTocTitle :: a -> Text
+  getTocDepth :: a -> Int
 
 instance Toc Meta where
-  renderToc = mToc
-  tocDepth = mTocDepth
+  usesToc = mToc
+  getTocTitle = mTocTitle
+  getTocDepth = mTocDepth
 
 instance Toc PageMeta where
-  renderToc = pgmToc
-  tocDepth = pgmTocDepth
+  usesToc = pgmToc
+  getTocTitle = pgmTocTitle
+  getTocDepth = pgmTocDepth
+
+class Bibliography a where
+  getBibliography :: a -> Maybe Text
+
+  usesCitations :: a -> Bool
+  usesCitations = isJust . getBibliography
+
+instance Bibliography Meta where
+  getBibliography = mBibliography
+
+instance Bibliography PageMeta where
+  getBibliography = pgmBibliography

@@ -43,7 +43,7 @@
   --color-code-error: #dc322f;
   --color-code-other: #5c7078;
 
-  --color-inline-code-fg: #BF616A;
+  --color-inline-code-fg: #b8545e;
   --color-inline-code-bg: var(--color-code-bg);
 }
 
@@ -88,7 +88,7 @@
   --color-code-error: #ff8059;
   --color-code-other: #d1e2e6;
 
-  --color-inline-code-fg: #cf8f95;
+  --color-inline-code-fg: #db9ea4;
   --color-inline-code-bg: var(--color-code-bg);
 }
 
@@ -116,6 +116,18 @@ body {
 ::-moz-selection {
   color: #ffffff;
   background: var(--color-primary);
+}
+
+span.smallcaps{
+  font-variant: small-caps;
+}
+
+span.underline{
+  text-decoration: underline;
+}
+
+ul.task-list{
+  list-style: none;
 }
 
 /* nav */
@@ -281,13 +293,13 @@ article .header {
 }
 
 article .description {
-  font-size: 0.85em;
+  margin-top: 1.5rem;
+  font-size: 1em;
   font-style: italic;
-  color: var(--color-grey-2);
 }
 
 article .content {
-  margin-top: 2rem;
+  margin-top: 1.5rem;
 }
 
 blockquote {
@@ -299,14 +311,32 @@ blockquote {
 }
 
 /* table of contents */
-
 #toc {
+  border-top: 1px solid var(--color-grey-3);
+  border-bottom: 1px solid var(--color-grey-3);
+  padding: 1rem;
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+#toc .toc-title {
+  margin-bottom: 0.8rem;
+  font-family: var(--font-sans-serif), sans-serif;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+#toc .toc-contents {
   padding-left: 1rem;
-  font-size: 0.8em;
+  font-size: 0.9em;
 }
 
 #toc ul {
   padding-inline-start: 1.2rem;
+}
+
+#toc li {
+  margin-bottom: 0.1rem;
 }
 
 /* tables */
@@ -372,6 +402,31 @@ table caption {
   color: var(--color-grey-2);
   text-align: center;
   border-bottom: 1px solid var(--color-grey-3);
+}
+
+/* bibliography references */
+#refs {
+  font-size: 0.9rem;
+  padding: 1rem 1rem 0;
+  border-top: 1px solid var(--color-primary);
+}
+
+#refs:before {
+  font-weight: bold;
+  font-style: italic;
+  content: "References:";
+}
+
+#refs > div:before {
+  content: "\2022 ";
+}
+
+#refs > div {
+  margin-top: 0.5rem;
+}
+
+#refs div:first-child {
+  margin-top: 0.8rem;
 }
 
 /* footnotes */
@@ -549,70 +604,7 @@ li:target {
   background-color: var(--color-red-bg) !important;
 }
 
-/* code */
-
-pre {
-  font-family: var(--font-monospace), monospace;
-  font-size: 0.85em;
-  font-variant-ligatures: none;
-}
-
-p code {
-  font-family: var(--font-monospace), monospace;
-  font-size: 0.83em;
-  font-variant-ligatures: none;
-  color: var(--color-inline-code-fg);
-  background-color: var(--color-inline-code-bg);
-  padding: 0.1rem 0.2rem;
-  white-space: pre;
-  white-space: pre-wrap;
-  white-space: -moz-pre-wrap;
-  white-space: -pre-wrap;
-  white-space: -o-pre-wrap;
-  word-wrap: break-word;
-}
-
-/* default pandoc stuff, used in dev */
-.skylighting code {
-  font-family: var(--font-monospace), monospace;
-  font-variant-ligatures: none;
-  line-height: 1.5;
-}
-
-.skylighting pre {
-  background-color: var(--color-code-bg);
-  color: var(--color-code-fg);
-  white-space: pre;
-  white-space: pre-wrap;
-  white-space: -moz-pre-wrap;
-  white-space: -pre-wrap;
-  white-space: -o-pre-wrap;
-  word-wrap: break-word;
-  padding: 0.5rem 1rem;
-}
-
-.highlight  {
-  background: var(--color-code-bg) !important;
-  color: var(--color-code-fg);
-  padding: 0.4rem 1rem;
-}
-
-@media screen {
-  .highlight {
-    overflow: auto;
-  }
-}
-
-.highlight > pre {
-  margin: 0;
-}
-
-.highlight .n {
-  color: var(--color-code-fg);
-}
-
 /* math */
-
 .MathJax_Display {
   margin: 0 !important;
   overflow-y: hidden;
