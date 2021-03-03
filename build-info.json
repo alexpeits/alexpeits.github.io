@@ -1,13 +1,15 @@
 {
-  "date": "Tue Mar 2 00:23:21 2021 +0000",
-  "sha": "6ff39f8a8eeefb7bd351e166a44d37f26360dc0a",
-  "commit_message": "update niv",
+  "date": "Wed Mar 3 18:36:45 2021 +0000",
+  "sha": "32ad77ce15d5b5ac94928f6d5c469cbc5a5d12eb",
+  "commit_message": "Merge pull request #16 from alexpeits/citations-prismjs-etc
+
+Nixpkgs update, prismjs support, citation support",
   "home": "https://alexpeits.github.io",
   "gh_actor": "alexpeits",
   "gh_repository": "alexpeits/alexpeits.github.io",
   "gh_event_name": "push",
-  "gh_run_id": "612331166",
-  "gh_run_number": "81",
-  "gh_sha": "6ff39f8a8eeefb7bd351e166a44d37f26360dc0a",
+  "gh_run_id": "618542305",
+  "gh_run_number": "83",
+  "gh_sha": "32ad77ce15d5b5ac94928f6d5c469cbc5a5d12eb",
   "gh_ref": "refs/heads/develop"
 }

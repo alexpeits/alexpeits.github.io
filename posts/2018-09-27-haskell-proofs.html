@@ -10,7 +10,7 @@
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Raleway:ital,wght@0,400;0,600;1,400;1,600&family=Source+Serif+Pro:ital,wght@0,400;0,700;1,400;1,700&display=swap">
     <link rel="stylesheet" href="/css/default.css">
-    <link rel="stylesheet" href="/css/code.css">
+    <link rel="stylesheet" href="/css/code_pygments.css">
     <script
       src="https://code.jquery.com/jquery-3.5.1.min.js"
       integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
@@ -59,8 +59,22 @@
     </div>
   </section>
   <section class="content">
-    <div id="toc"></div>
-<div id="main"><p>This post has an accompanying <a href="https://github.com/alexpeits/haskell-proofs">github repo</a>.</p>
+     <div id="toc"> <div class="toc-title"> Table of contents </div> <div class="toc-contents"> <ul>
+<li><a href="#intro">Intro</a></li>
+<li><a href="#setting-up">Setting up</a></li>
+<li><a href="#dependent-types">Dependent types</a></li>
+<li><a href="#natural-numbers">Natural numbers</a></li>
+<li><a href="#type-equality">Type equality</a></li>
+<li><a href="#type-level-functions">Type-level functions</a></li>
+<li><a href="#first-proof">First proof</a></li>
+<li><a href="#singletons">Singletons</a></li>
+<li><a href="#revisiting-the-proof">Revisiting the proof</a></li>
+<li><a href="#proofs-with-multiple-steps">Proofs with multiple steps</a></li>
+<li><a href="#proving-the-associativity-of-addition">Proving the associativity of addition</a></li>
+<li><a href="#commutativity">Commutativity</a></li>
+<li><a href="#using-the-proofs">Using the proofs</a></li>
+<li><a href="#conclusion">Conclusion</a></li>
+</ul> </div> </div>  <div id="main"> <p>This post has an accompanying <a href="https://github.com/alexpeits/haskell-proofs">github repo</a>.</p>
 <h2 id="intro">Intro</h2>
 <p>Haskell’s type system has long been sort of a lab rat for experiments on many concepts relevant to type theory. Especially lately there has been quite a lot of interest in type-level programming and dependent types.</p>
 <p>What initially piqued my interest in trying to use Haskell to prove mathematical theorems at the type level was a blog post called “Proving stuff in Haskell” by Mads Buch <a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. It is quite fun to follow so I’m not going to go into detail, but the gist is to use propositional equality to prove a theorem by showing that two haskell types are actually the same type. So for example, if we wanted to prove that <span class="math inline">\(a + b = b + a\)</span> (commutativity of addition of natural numbers) then we’ll have a function whose type reflects exactly that property, rather than using actual values to prove it (more on that later).</p>
@@ -594,7 +608,7 @@ append lengthX lengthY x y
 <li id="fn3" role="doc-endnote"><p><a href="https://thinkingwithtypes.com/">Thinking with Types</a><a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn4" role="doc-endnote"><p><a href="http://docs.idris-lang.org/en/latest/tutorial/typesfuns.html" class="uri">http://docs.idris-lang.org/en/latest/tutorial/typesfuns.html</a><a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
-</section></div>
+</section> </div>
   </section>
 </article>
     </main>
