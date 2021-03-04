@@ -54,9 +54,9 @@
   --color-dark-mode-disabled: #707070;
 
   --color-grey-1: #a7b7c4;
-  --color-grey-2: #9fb0bd;
-  --color-grey-3: #758694;
-  --color-grey-4: #60707d;
+  --color-grey-2: #96a8b5;
+  --color-grey-3: #667785;
+  --color-grey-4: #3e4b54;
 
   --color-primary: #00afe8;
 
@@ -257,18 +257,27 @@ p {
 
 /* headings */
 
+#title {
+  font-size: 1.6em;
+  font-weight: 600;
+  margin: 1.8em 0 1.2em;
+  border: 0;
+}
+
 h1 {
-  font-size: 1.5em;
+  font-size: 1.35em;
   font-family: var(--font-sans-serif), sans-serif;
   font-weight: 600;
-  margin: 2em 0 1.2em;
+  margin: 1.7em 0 1em;
+  border-bottom: 1px solid var(--color-grey-4);
+  padding-bottom: 0.2rem;
 }
 
 h2 {
-  font-size: 1.3em;
+  font-size: 1.15em;
   font-family: var(--font-sans-serif), sans-serif;
   font-weight: 600;
-  margin: 1.8em 0 1.2em;
+  margin: 1.8em 0 1.1em;
 }
 
 h3 {
@@ -276,13 +285,16 @@ h3 {
   font-family: var(--font-sans-serif), sans-serif;
   font-weight: 600;
   margin: 1.6em 0 1em;
+  color: var(--color-grey-2);
 }
 
 h4 {
   font-size: 1em;
   font-family: var(--font-sans-serif), sans-serif;
   font-weight: 600;
-  margin: 1.4em 0 1em;
+  margin: 1.6em 0 1.1em;
+  color: var(--color-grey-2);
+  font-style: italic;
 }
 
 /* content */
@@ -409,6 +421,11 @@ table caption {
   border-top: 1px solid var(--color-grey-3);
   padding-top: 1.5rem;
   margin-bottom: 1.5rem;
+}
+
+.citation {
+  font-style: italic;
+  color: var(--color-grey-1);
 }
 
 #refs > div:before {

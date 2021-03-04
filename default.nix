@@ -26,6 +26,7 @@ let
     "^static.*$"
     "^templates.*$"
     "^config\.yml$"
+    "^citations.*$"
   ];
 
   haskellPackages = haskellPackagesBase.override {

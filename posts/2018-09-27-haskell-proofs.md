@@ -7,11 +7,12 @@ tags:
   - dependent types
 toc: true
 toc-depth: 2
+bibliography: ./citations/stitch.bib
 ---
 
 This post has an accompanying [github repo][github-repo].
 
-## Intro
+# Intro
 
 Haskell's type system has long been sort of a lab rat for experiments on many
 concepts relevant to type theory. Especially lately there has been quite a lot
@@ -60,24 +61,23 @@ required language extensions:
 
 I'll also try to note why and when an extension should be enabled.
 
-## Dependent types
+# Dependent types
 
 I've already given some spoilers, so here it is: to achieve what we want to do
 I'm going to use whatever Haskell offers to simulate a dependently typed
 language. To better understand the what and how of dependent types, I suggest
 taking a look at any work by [Richard Eisenberg](https://cs.brynmawr.edu/~rae/),
-especially the extremely well written *Stitch* functional pearl [^stitch].
-Another great resource for everything type-level related is the book "Thinking
-with Types" [^thinking-with-types] by [Sandy Maguire][sandy-maguire] (consider
-buying it, it's awesome). Finally, the Idris language tutorial [^idris] is a
-great resource, especially to understand what needs to be done differently in
-Haskell and how.
+especially the extremely well written [*Stitch*][stitch] functional pearl
+[@eisenberg-2020-stitch]. Another great resource for everything type-level
+related is the book "Thinking with Types" [^thinking-with-types] by [Sandy
+Maguire][sandy-maguire] (consider buying it, it's awesome). Finally, the Idris
+language tutorial [^idris] is a great resource, especially to understand what
+needs to be done differently in Haskell and how.
 
 Many of the following do not require dependent types and can probably be modeled
 using e.g. type classes, but I'm going to use dependent types here.
 
-[^stitch]: 'Stitch: The Sound Type-Indexed Type Checker' (Richard A. Eisenberg)
-    <https://cs.brynmawr.edu/~rae/papers/2018/stitch/stitch.pdf>
+[stitch]: <https://cs.brynmawr.edu/~rae/papers/2018/stitch/stitch.pdf>
 [^thinking-with-types]: [Thinking with Types](https://thinkingwithtypes.com/)
 [^idris]: <http://docs.idris-lang.org/en/latest/tutorial/typesfuns.html>
 
@@ -162,7 +162,7 @@ function, for the same reason the type `Z` does not clash with the value `Z` (if
 there is an ambiguity in that case we can tell the type system that we're
 talking about the *type* `Z` by writing `'Z`).
 
-## First proof
+# First proof
 
 Now let's try to combine this type family definition with propositional equality:
 
@@ -275,7 +275,7 @@ which means we'll need to reflect the **exact** type we have in the signature of
 something like `{a:Nat} -> (Z + S a) :~: S a`. There is a way to do this in
 Haskell, using singletons.
 
-## Singletons
+# Singletons
 
 Singletons, as their name implies, are values that have a 1-1 mapping with their
 relevant types. This means that, when we have a singleton value `v` of type `T`
@@ -383,7 +383,7 @@ plusRightId' :: SNat a -> (a + Z) :~: a
 plusRightId' n = gcastWith (given1 n) Refl
 ```
 
-## Proofs with multiple steps
+# Proofs with multiple steps
 
 The proof for left identity was a relatively simple one. Here it is in
 mathematical notation, copied from [here][nat-addition-proofs].
@@ -656,7 +656,7 @@ plusComm :: SNat a -> SNat b -> (a + b) :~: (b + a)
 
 The proof (and even more proofs) can be found in the repo.
 
-## Using the proofs
+# Using the proofs
 
 It was a bit difficult to find a use case for the proofs on addition, but I
 quickly found an issue trying to append two length-indexed vectors. The vector
@@ -872,7 +872,7 @@ the typeclass with some help from `TypeApplications` and `ScopedTypeVariables`:
 
 Magic!
 
-## Conclusion
+# Conclusion
 
 This was a lengthy blog post, and the ideas presented fall into the obscure side
 of things. Should there be a need to resort to dependent types, the above might
