@@ -58,6 +58,9 @@ postDateShowLongFmt = DateFmt "%B %e, %0Y"
 postDateShowShortFmt :: DateFmt
 postDateShowShortFmt = DateFmt "%0Y.%m.%d"
 
+defaultReferenceSectionTitle :: Text
+defaultReferenceSectionTitle = "References"
+
 defaultTocTitle :: Text
 defaultTocTitle = "Table of contents"
 
@@ -81,7 +84,8 @@ data Meta = Meta
     mToc :: Bool,
     mTocTitle :: Text,
     mTocDepth :: Int,
-    mBibliography :: Maybe Text
+    mBibliography :: Maybe Ae.Value,
+    mReferenceSectionTitle :: Text
   }
   deriving (Show)
 
@@ -100,6 +104,8 @@ instance Ae.FromJSON Meta where
     mTocTitle <- v .:? "toc-title" .!= defaultTocTitle
     mTocDepth <- v .:? "toc-depth" .!= defaultTocDepth
     mBibliography <- v .:? "bibliography"
+    mReferenceSectionTitle <-
+      v .:? "reference-section-title" .!= defaultReferenceSectionTitle
     pure Meta {..}
 
 instance Ae.ToJSON Meta where
@@ -115,7 +121,8 @@ instance Ae.ToJSON Meta where
         "toc" .= mToc,
         "toc-title" .= mTocTitle,
         "toc-depth" .= mTocDepth,
-        "bibliography" .= mBibliography
+        "bibliography" .= mBibliography,
+        "reference-section-title" .= mReferenceSectionTitle
       ]
 
 newtype Tag = Tag {unTag :: Text}
@@ -204,7 +211,8 @@ data PageMeta = PageMeta
     pgmToc :: Bool,
     pgmTocTitle :: Text,
     pgmTocDepth :: Int,
-    pgmBibliography :: Maybe Text
+    pgmBibliography :: Maybe Ae.Value,
+    pgmReferenceSectionTitle :: Text
   }
 
 instance Ae.FromJSON PageMeta where
@@ -216,6 +224,7 @@ instance Ae.FromJSON PageMeta where
       <*> v .:? "toc-title" .!= defaultTocTitle
       <*> v .:? "toc-depth" .!= defaultTocDepth
       <*> v .:? "bibliography"
+      <*> v .:? "reference-section-title" .!= defaultReferenceSectionTitle
 
 instance Ae.ToJSON PageMeta where
   toJSON PageMeta {..} =
@@ -225,7 +234,8 @@ instance Ae.ToJSON PageMeta where
         "toc" .= pgmToc,
         "toc-title" .= pgmTocTitle,
         "toc-depth" .= pgmTocDepth,
-        "bibliography" .= pgmBibliography
+        "bibliography" .= pgmBibliography,
+        "reference-section-title" .= pgmReferenceSectionTitle
       ]
 
 data Config = Config
@@ -333,13 +343,16 @@ instance Toc PageMeta where
   getTocDepth = pgmTocDepth
 
 class Bibliography a where
-  getBibliography :: a -> Maybe Text
+  getBibliography :: a -> Maybe Ae.Value
+  getReferenceSectionTitle :: a -> Text
 
   usesCitations :: a -> Bool
   usesCitations = isJust . getBibliography
 
 instance Bibliography Meta where
   getBibliography = mBibliography
+  getReferenceSectionTitle = mReferenceSectionTitle
 
 instance Bibliography PageMeta where
   getBibliography = pgmBibliography
+  getReferenceSectionTitle = pgmReferenceSectionTitle

@@ -405,16 +405,10 @@ table caption {
 }
 
 /* bibliography references */
-#refs {
-  font-size: 0.9rem;
-  padding: 1rem 1rem 0;
-  border-top: 1px solid var(--color-primary);
-}
-
-#refs:before {
-  font-weight: bold;
-  font-style: italic;
-  content: "References:";
+#bibliography {
+  border-top: 1px solid var(--color-grey-3);
+  padding-top: 1.5rem;
+  margin-bottom: 1.5rem;
 }
 
 #refs > div:before {
@@ -422,11 +416,11 @@ table caption {
 }
 
 #refs > div {
-  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
 }
 
-#refs div:first-child {
-  margin-top: 0.8rem;
+#refs > div:last-child {
+  margin-bottom: 1.5rem !important;
 }
 
 /* footnotes */

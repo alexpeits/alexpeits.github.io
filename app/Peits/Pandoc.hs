@@ -26,7 +26,9 @@ import System.Process (readProcess)
 import qualified Text.Megaparsec as M
 import qualified Text.Megaparsec.Char as M
 import qualified Text.Pandoc as P
+import Text.Pandoc.Builder (ToMetaValue)
 import Text.Pandoc.Citeproc (processCitations)
+import Text.Pandoc.Shared (addMetaField)
 import qualified Text.Pandoc.Walk as PW
 
 parseAndRenderPost ::
@@ -99,13 +101,25 @@ renderMd meta (MdFull md) config = liftIO $ do
             P.writerTOCDepth = getTocDepth meta
           }
   result <- P.runIO $ do
-    doc <- P.readMarkdown readerOptions md
+    doc <- setRefSectionTitle meta <$> P.readMarkdown readerOptions md
     let citeFilters = [processCitations | usesCitations meta]
         otherFilters = citeFilters
         filters = (liftIO . filterPandoc config) : otherFilters
     doc' <- foldl (>>=) (pure doc) filters
     P.writeHtml5String writerOptions doc'
   Html <$> P.handleError result
+
+setRefSectionTitle :: Bibliography meta => meta -> P.Pandoc -> P.Pandoc
+setRefSectionTitle meta (P.Pandoc pMeta blocks) = P.Pandoc pMeta' blocks
+  where
+    refSectionTitle = getReferenceSectionTitle meta
+    pMeta' = maybeAddMeta "reference-section-title" refSectionTitle pMeta
+
+maybeAddMeta :: ToMetaValue a => Text -> a -> P.Meta -> P.Meta
+maybeAddMeta k v m =
+  case P.lookupMeta k m of
+    Nothing -> addMetaField k v m
+    Just _ -> m
 
 -- stolen from https://github.com/srid/neuron
 partitionMd :: FilePath -> Text -> Either String (Maybe Text, Text)
