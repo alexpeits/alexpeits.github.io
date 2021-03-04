@@ -47,7 +47,7 @@
     </header>
 
     <main role="main">
-      <h1>Writing and using proofs in Haskell</h1>
+      <h1 id="title">Writing and using proofs in Haskell</h1>
       <article>
   <section class="header date">
     Posted on September 27, 2018
@@ -60,26 +60,35 @@
   </section>
   <section class="content">
      <div id="toc"> <div class="toc-title"> Table of contents </div> <div class="toc-contents"> <ul>
-<li><a href="#intro">Intro</a></li>
+<li><a href="#intro">Intro</a>
+<ul>
 <li><a href="#setting-up">Setting up</a></li>
-<li><a href="#dependent-types">Dependent types</a></li>
+</ul></li>
+<li><a href="#dependent-types">Dependent types</a>
+<ul>
 <li><a href="#natural-numbers">Natural numbers</a></li>
 <li><a href="#type-equality">Type equality</a></li>
 <li><a href="#type-level-functions">Type-level functions</a></li>
+</ul></li>
 <li><a href="#first-proof">First proof</a></li>
-<li><a href="#singletons">Singletons</a></li>
+<li><a href="#singletons">Singletons</a>
+<ul>
 <li><a href="#revisiting-the-proof">Revisiting the proof</a></li>
-<li><a href="#proofs-with-multiple-steps">Proofs with multiple steps</a></li>
+</ul></li>
+<li><a href="#proofs-with-multiple-steps">Proofs with multiple steps</a>
+<ul>
 <li><a href="#proving-the-associativity-of-addition">Proving the associativity of addition</a></li>
 <li><a href="#commutativity">Commutativity</a></li>
+</ul></li>
 <li><a href="#using-the-proofs">Using the proofs</a></li>
 <li><a href="#conclusion">Conclusion</a></li>
+<li><a href="#bibliography">References</a></li>
 </ul> </div> </div>  <div id="main"> <p>This post has an accompanying <a href="https://github.com/alexpeits/haskell-proofs">github repo</a>.</p>
-<h2 id="intro">Intro</h2>
+<h1 id="intro">Intro</h1>
 <p>Haskell’s type system has long been sort of a lab rat for experiments on many concepts relevant to type theory. Especially lately there has been quite a lot of interest in type-level programming and dependent types.</p>
-<p>What initially piqued my interest in trying to use Haskell to prove mathematical theorems at the type level was a blog post called “Proving stuff in Haskell” by Mads Buch <a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. It is quite fun to follow so I’m not going to go into detail, but the gist is to use propositional equality to prove a theorem by showing that two haskell types are actually the same type. So for example, if we wanted to prove that <span class="math inline">\(a + b = b + a\)</span> (commutativity of addition of natural numbers) then we’ll have a function whose type reflects exactly that property, rather than using actual values to prove it (more on that later).</p>
+<p>What initially piqued my interest in trying to use Haskell to prove mathematical theorems at the type level was a blog post called “Proving stuff in Haskell” by Mads Buch.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> It is quite fun to follow so I’m not going to go into detail, but the gist is to use propositional equality to prove a theorem by showing that two haskell types are actually the same type. So for example, if we wanted to prove that <span class="math inline">\(a + b = b + a\)</span> (commutativity of addition of natural numbers) then we’ll have a function whose type reflects exactly that property, rather than using actual values to prove it (more on that later).</p>
 <p>Writing proofs using the type system is nothing new. What I describe in this post is first of all a way to write readable proofs by induction using the same steps we would use if the proof was done on paper, and then how to actually use these proofs to “nudge” the type system to compile code that could not be compiled otherwise.</p>
-<p>One disclaimer: I am definitely not an expert so many things might not be correct. This post’s style is informal and more of a braindump, much like some of my <a href="https://artyom.me/lens-over-tea-1">favourite posts</a> out there. If you find any errors or if you have any question or comment, feel free to leave a comment below, drop me an email (<code>alexpeitsinis [at] gmail [dot] com</code>) or find me at fpslack (<code>@alexpeits</code>). What follows is also most definitely not suitable for “production use”. However I believe it’s a good application of using dependent types and some more exotic language extensions.</p>
+<p>One disclaimer: I am definitely not an expert so many things might not be correct. This post’s style is informal and more of a braindump, much like some of my <a href="https://artyom.me/lens-over-tea-1">favourite posts</a> out there. If you find any errors or if you have any question or comment, feel free to leave a comment below, drop me an email (<code>alexpeitsinis [at] gmail [dot] com</code>) or find me at fpslack (<code>@alexpeits</code>). What follows is also most definitely not suitable for “production use.” However I believe it’s a good application of using dependent types and some more exotic language extensions.</p>
 <h2 id="setting-up">Setting up</h2>
 <p>Unless I am completely mistaken, code should compile along the way. Here are the required language extensions:</p>
 <div class="highlight"><pre><span></span><span class="cm">{-# LANGUAGE DataKinds            #-}</span>
@@ -92,8 +101,8 @@
 </pre></div>
 
 <p>I’ll also try to note why and when an extension should be enabled.</p>
-<h2 id="dependent-types">Dependent types</h2>
-<p>I’ve already given some spoilers, so here it is: to achieve what we want to do I’m going to use whatever Haskell offers to simulate a dependently typed language. To better understand the what and how of dependent types, I suggest taking a look at any work by <a href="https://cs.brynmawr.edu/~rae/">Richard Eisenberg</a>, especially the extremely well written <em>Stitch</em> functional pearl <a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>. Another great resource for everything type-level related is the book “Thinking with Types” <a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> by <a href="http://reasonablypolymorphic.com/">Sandy Maguire</a> (consider buying it, it’s awesome). Finally, the Idris language tutorial <a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> is a great resource, especially to understand what needs to be done differently in Haskell and how.</p>
+<h1 id="dependent-types">Dependent types</h1>
+<p>I’ve already given some spoilers, so here it is: to achieve what we want to do I’m going to use whatever Haskell offers to simulate a dependently typed language. To better understand the what and how of dependent types, I suggest taking a look at any work by <a href="https://cs.brynmawr.edu/~rae/">Richard Eisenberg</a>, especially the extremely well written <a href="https://cs.brynmawr.edu/~rae/papers/2018/stitch/stitch.pdf"><em>Stitch</em></a> functional pearl <span class="citation" data-cites="eisenberg-2020-stitch">(Eisenberg 2020)</span>. Another great resource for everything type-level related is the book “Thinking with Types”<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> by <a href="http://reasonablypolymorphic.com/">Sandy Maguire</a> (consider buying it, it’s awesome). Finally, the Idris language tutorial<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> is a great resource, especially to understand what needs to be done differently in Haskell and how.</p>
 <p>Many of the following do not require dependent types and can probably be modeled using e.g. type classes, but I’m going to use dependent types here.</p>
 <h2 id="natural-numbers">Natural numbers</h2>
 <p>To prove theorems on natural number operations we first need a way to represent natural numbers at the type level. The canonical way to do this is to use <a href="https://wiki.haskell.org/Peano_numbers">Peano numbers</a>:</p>
@@ -130,7 +139,7 @@ a + S(b) = S (a + b) &amp;&amp; \text{(2)}\\
 
 <p>(from now on I’ll refer to those two properties as <code>(1)</code> and <code>(2)</code> respectively)</p>
 <p>We don’t need to specify a kind for this type family explicitly, as it is deduced to be <code>Nat -&gt; Nat -&gt; Nat</code> since the type family is closed (no more instances can be defined). Also, the symbol <code>+</code> does not clash with the addition function, for the same reason the type <code>Z</code> does not clash with the value <code>Z</code> (if there is an ambiguity in that case we can tell the type system that we’re talking about the <em>type</em> <code>Z</code> by writing <code>'Z</code>).</p>
-<h2 id="first-proof">First proof</h2>
+<h1 id="first-proof">First proof</h1>
 <p>Now let’s try to combine this type family definition with propositional equality:</p>
 <div class="highlight"><pre><span></span><span class="nf">testEquality</span> <span class="ow">::</span> <span class="p">(</span><span class="kt">Z</span> <span class="o">+</span> <span class="kt">Z</span><span class="p">)</span> <span class="kt">:~:</span> <span class="kt">Z</span>
 <span class="nf">testEquality</span> <span class="ow">=</span> <span class="kt">Refl</span>
@@ -190,9 +199,9 @@ a + S(b) = S (a + b) &amp;&amp; \text{(2)}\\
 <span class="nf">stupid</span> <span class="ow">=</span> <span class="n">gcastWith</span> <span class="n">helper</span> <span class="kt">Refl</span>
 </pre></div>
 
-<p>What this says is: “I know that <code>S Z + S Z</code> is <code>S (S Z + Z)</code>, now use that”. Then the <code>Refl</code> in <code>stupid</code> says “ok, I have <code>S Z + S Z</code> and the other guy says that this is <code>S (S Z + Z)</code>, can I use it? Ah, of course, from <code>(1)</code> I know that <code>S Z + Z</code> is <code>S Z</code>, so what I have is <code>S (S Z)</code>, that’s it!” (or as mathematicians say, <a href="https://en.wikipedia.org/wiki/Q.E.D.">Q.E.D.</a>). OK, to be fair this is not necessary as <code>stupid</code> is proven directly: it’s 2 reduction steps of the <code>+</code> type family.</p>
+<p>What this says is: “I know that <code>S Z + S Z</code> is <code>S (S Z + Z)</code>, now use that.” Then the <code>Refl</code> in <code>stupid</code> says “ok, I have <code>S Z + S Z</code> and the other guy says that this is <code>S (S Z + Z)</code>, can I use it? Ah, of course, from <code>(1)</code> I know that <code>S Z + Z</code> is <code>S Z</code>, so what I have is <code>S (S Z)</code>, that’s it!” (or as mathematicians say, <a href="https://en.wikipedia.org/wiki/Q.E.D.">Q.E.D.</a>). OK, to be fair this is not necessary as <code>stupid</code> is proven directly: it’s 2 reduction steps of the <code>+</code> type family.</p>
 <p>Still, we are talking about concrete values, whereas what we need to prove has a type variable <code>a</code>. We need to somehow recurse until we reach the base case, which means we’ll need to reflect the <strong>exact</strong> type we have in the signature of <code>plusLeftId</code> to a value. If you peeked at the Idris tutorial, you might say something like <code>{a:Nat} -&gt; (Z + S a) :~: S a</code>. There is a way to do this in Haskell, using singletons.</p>
-<h2 id="singletons">Singletons</h2>
+<h1 id="singletons">Singletons</h1>
 <p>Singletons, as their name implies, are values that have a 1-1 mapping with their relevant types. This means that, when we have a singleton value <code>v</code> of type <code>T</code> then we know for sure that <code>v</code> always has the type <code>T</code> (that makes sense), but also that type <code>T</code> has only one inhabitant (only one possible value), and that is <code>v</code>. This is the singleton definition for our <code>Nat</code>:</p>
 <div class="highlight"><pre><span></span><span class="kr">data</span> <span class="kt">SNat</span> <span class="ow">::</span> <span class="kt">Nat</span> <span class="ow">-&gt;</span> <span class="o">*</span> <span class="kr">where</span>
   <span class="kt">SZ</span> <span class="ow">::</span> <span class="kt">SNat</span> <span class="kt">Z</span>
@@ -255,7 +264,7 @@ a + S(b) = S (a + b) &amp;&amp; \text{(2)}\\
 <span class="nf">plusRightId&#39;</span> <span class="n">n</span> <span class="ow">=</span> <span class="n">gcastWith</span> <span class="p">(</span><span class="n">given1</span> <span class="n">n</span><span class="p">)</span> <span class="kt">Refl</span>
 </pre></div>
 
-<h2 id="proofs-with-multiple-steps">Proofs with multiple steps</h2>
+<h1 id="proofs-with-multiple-steps">Proofs with multiple steps</h1>
 <p>The proof for left identity was a relatively simple one. Here it is in mathematical notation, copied from <a href="https://en.wikipedia.org/wiki/Proofs_involving_the_addition_of_natural_numbers">here</a>. (I’ll refer to the addition axiom as <span class="math inline">\((1)\)</span> and <span class="math inline">\((2)\)</span>):</p>
 <p><span class="math display">\[
 \begin{align}
@@ -312,7 +321,7 @@ a + S(b) = S (a + b) &amp;&amp; \text{(2)}\\
 </pre></div>
 
 <p>What we do in those 2 steps is exactly what we do in the base case for <span class="math inline">\(c = 0\)</span>. I used <code>x</code> and <code>y</code> to make it clear that we’re not talking about <code>a</code> and <code>b</code>, but just defining steps based on two numbers, even though we’re going to pass <code>a</code> and <code>b</code> in those methods. In the first step, just as in the first step of the proof, we want to say that <code>((x + y) + Z) ~ (x + y)</code>. It’s the first time we’ve seen a more complex argument in the proofs so far. Given that we need to use <code>(1)</code> to prove this, we have to pass something of type <code>SNat n</code> where n is of type <code>x + y</code>. That’s why the addition for singletons (<code>!+</code>) is used here. The resulting type of this addition, if we pass in <code>x :: x</code> and <code>y :: y</code> is <code>x + y</code>. The second step is a bit easier to understand. The main trick here is to extract the <em>part</em> of the expression that we want to “transform” to something else, and then use another proof function to drive the process.</p>
-<p>It’s clear what needs to be done now. We want the type <code>((a + b) + Z) :~: (a + (b + Z))</code>, and we have the types (I substitute <code>x</code> and <code>y</code> for <code>a</code> and <code>b</code> for clarity) <code>((a + b) + Z) :~: (a + b)</code> and <code>(a + b) :~: (a + (b + Z))</code>. Fortunately, this is like saying “if type x is the same as type y, and type y is the same as type z, then is type x the same as type z”? Of course it is! Let’s prove it (I’ll also use a fancy symbol to make the process clearer later):</p>
+<p>It’s clear what needs to be done now. We want the type <code>((a + b) + Z) :~: (a + (b + Z))</code>, and we have the types (I substitute <code>x</code> and <code>y</code> for <code>a</code> and <code>b</code> for clarity) <code>((a + b) + Z) :~: (a + b)</code> and <code>(a + b) :~: (a + (b + Z))</code>. Fortunately, this is like saying “if type x is the same as type y, and type y is the same as type z, then is type x the same as type z?” Of course it is! Let’s prove it (I’ll also use a fancy symbol to make the process clearer later):</p>
 <div class="highlight"><pre><span></span><span class="p">(</span><span class="o">==&gt;</span><span class="p">)</span> <span class="ow">::</span> <span class="n">a</span> <span class="kt">:~:</span> <span class="n">b</span> <span class="ow">-&gt;</span> <span class="n">b</span> <span class="kt">:~:</span> <span class="n">c</span> <span class="ow">-&gt;</span> <span class="n">a</span> <span class="kt">:~:</span> <span class="n">c</span>
 <span class="kt">Refl</span> <span class="o">==&gt;</span> <span class="kt">Refl</span> <span class="ow">=</span> <span class="kt">Refl</span>
 </pre></div>
@@ -448,7 +457,7 @@ a + S(b) = S (a + b) &amp;&amp; \text{(2)}\\
 </pre></div>
 
 <p>The proof (and even more proofs) can be found in the repo.</p>
-<h2 id="using-the-proofs">Using the proofs</h2>
+<h1 id="using-the-proofs">Using the proofs</h1>
 <p>It was a bit difficult to find a use case for the proofs on addition, but I quickly found an issue trying to append two length-indexed vectors. The vector definition and several operations are more or less the same as the ones in the Stitch paper:</p>
 <div class="highlight"><pre><span></span><span class="kr">data</span> <span class="kt">Vec</span> <span class="ow">::</span> <span class="kt">Nat</span> <span class="ow">-&gt;</span> <span class="o">*</span> <span class="ow">-&gt;</span> <span class="o">*</span> <span class="kr">where</span>
   <span class="kt">V0</span>   <span class="ow">::</span> <span class="kt">Vec</span> <span class="kt">Z</span> <span class="n">a</span>
@@ -595,18 +604,23 @@ append lengthX lengthY x y
 </pre></div>
 
 <p>Magic!</p>
-<h2 id="conclusion">Conclusion</h2>
+<h1 id="conclusion">Conclusion</h1>
 <p>This was a lengthy blog post, and the ideas presented fall into the obscure side of things. Should there be a need to resort to dependent types, the above might prove useful. Nevertheless, it’s a fun way to explore both dependent types and translating mathematical proofs to Haskell. After all, as someone said in the <a href="https://fpchat-invite.herokuapp.com/">functional programming slack</a>,</p>
 <blockquote>
 <p>A relatively large number of people making zygosynchroid semi-applicative plesiofunctors, one madman pushing the type system to its limits, and like three people concerning themselves with practical software engineering using Haskell.</p>
 </blockquote>
+<h1 class="unnumbered" id="bibliography">References</h1>
+<div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography">
+<div id="ref-eisenberg-2020-stitch" class="csl-entry" role="doc-biblioentry">
+Eisenberg, Richard A. 2020. <span>“Stitch: The Sound Type-Indexed Type Checker (Functional Pearl).”</span> In <em>Proceedings of the 13th ACM SIGPLAN International Symposium on Haskell</em>, 39–53. Haskell 2020. New York, NY, USA: Association for Computing Machinery. <a href="https://doi.org/10.1145/3406088.3409015">https://doi.org/10.1145/3406088.3409015</a>.
+</div>
+</div>
 <section class="footnotes" role="doc-endnotes">
 <hr />
 <ol>
 <li id="fn1" role="doc-endnote"><p><a href="https://www.madsbuch.com/proving-stuff-in-haskell/">Proving stuff in Haskell</a><a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2" role="doc-endnote"><p>‘Stitch: The Sound Type-Indexed Type Checker’ (Richard A. Eisenberg) <a href="https://cs.brynmawr.edu/~rae/papers/2018/stitch/stitch.pdf" class="uri">https://cs.brynmawr.edu/~rae/papers/2018/stitch/stitch.pdf</a><a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn3" role="doc-endnote"><p><a href="https://thinkingwithtypes.com/">Thinking with Types</a><a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn4" role="doc-endnote"><p><a href="http://docs.idris-lang.org/en/latest/tutorial/typesfuns.html" class="uri">http://docs.idris-lang.org/en/latest/tutorial/typesfuns.html</a><a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2" role="doc-endnote"><p><a href="https://thinkingwithtypes.com/">Thinking with Types</a><a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3" role="doc-endnote"><p><a href="http://docs.idris-lang.org/en/latest/tutorial/typesfuns.html" class="uri">http://docs.idris-lang.org/en/latest/tutorial/typesfuns.html</a><a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section> </div>
   </section>
