@@ -62,30 +62,29 @@
 <p>Org-mode is a great productivity tool, and has a lot of functionality out of the box, including utilities for tracking time spent on a task/project. For example, by pressing <code>C-c C-x C-i</code> on a heading, a timer is added (clock-in), and by pressing <code>C-c C-x C-o</code> the timer stops (clock-out). Org-mode also supports adding a report with <code>org-clock-report</code> (<code>C-c C-x C-r</code>), but, even with the customization it offers, it is not ideal for having a fully custom report and be able to export it to csv and whatnot.</p>
 <p>Fortunately, newer versions of org-mode come with a utility called <em>org-element</em>, which adds the ability to parse org-mode buffers as trees. This proves really helpful to take all <code>clock</code> elements from a buffer and put them in a table.</p>
 <p>To do this, we use the following elisp code block in the respective buffer:</p>
-<div class="highlight"><pre><span></span>#+BEGIN_SRC elisp
-  (nconc
-   &#39;((&quot;date&quot; &quot;project&quot; &quot;hours&quot; &quot;task&quot;))
-   &#39;(hline)
-   (let ((ast (org-element-parse-buffer &#39;element)))
-     (org-element-map ast &#39;clock
-       (lambda (x)
-         (let* ((val (org-element-property :value x))
-                (task (org-element-property
-                       :parent
-                       (org-element-property :parent x))))
-           `(,(let ((year (org-element-property :year-start val))
-                    (month (calendar-month-name
-                            (org-element-property :month-start val)))
-                    (day (org-element-property :day-start val)))
-                ;; (insert (org-element-property :raw-value val))
-                (format &quot;%s %s, %s&quot; month day year))
-             ,(org-element-property :PROJECT task)
-             ,(org-element-property :duration x)
-             ,(org-element-property :title task)
-             )))))
-   &#39;(hline)
-   &#39;((&quot;&quot; &quot;total:&quot; &quot;:=vsum(@2..@-1);T&quot; &quot;&quot;)))
-#+END_SRC
+<div class="highlight"><pre><span></span><span class="o">#+</span><span class="nv">BEGIN_SRC</span> <span class="nv">elisp</span>
+  <span class="p">(</span><span class="nb">nconc</span>
+   <span class="o">&#39;</span><span class="p">((</span><span class="s">&quot;date&quot;</span> <span class="s">&quot;project&quot;</span> <span class="s">&quot;hours&quot;</span> <span class="s">&quot;task&quot;</span><span class="p">))</span>
+   <span class="o">&#39;</span><span class="p">(</span><span class="nv">hline</span><span class="p">)</span>
+   <span class="p">(</span><span class="k">let</span> <span class="p">((</span><span class="nv">ast</span> <span class="p">(</span><span class="nv">org-element-parse-buffer</span> <span class="ss">&#39;element</span><span class="p">)))</span>
+     <span class="p">(</span><span class="nv">org-element-map</span> <span class="nv">ast</span> <span class="ss">&#39;clock</span>
+       <span class="p">(</span><span class="k">lambda</span> <span class="p">(</span><span class="nv">x</span><span class="p">)</span>
+         <span class="p">(</span><span class="k">let*</span> <span class="p">((</span><span class="nv">val</span> <span class="p">(</span><span class="nv">org-element-property</span> <span class="ss">:value</span> <span class="nv">x</span><span class="p">))</span>
+                <span class="p">(</span><span class="nv">task</span> <span class="p">(</span><span class="nv">org-element-property</span>
+                       <span class="ss">:parent</span>
+                       <span class="p">(</span><span class="nv">org-element-property</span> <span class="ss">:parent</span> <span class="nv">x</span><span class="p">))))</span>
+           <span class="o">`</span><span class="p">(</span><span class="o">,</span><span class="p">(</span><span class="k">let</span> <span class="p">((</span><span class="nv">year</span> <span class="p">(</span><span class="nv">org-element-property</span> <span class="ss">:year-start</span> <span class="nv">val</span><span class="p">))</span>
+                    <span class="p">(</span><span class="nv">month</span> <span class="p">(</span><span class="nv">calendar-month-name</span>
+                            <span class="p">(</span><span class="nv">org-element-property</span> <span class="ss">:month-start</span> <span class="nv">val</span><span class="p">)))</span>
+                    <span class="p">(</span><span class="nv">day</span> <span class="p">(</span><span class="nv">org-element-property</span> <span class="ss">:day-start</span> <span class="nv">val</span><span class="p">)))</span>
+                <span class="p">(</span><span class="nb">format</span> <span class="s">&quot;%s %s, %s&quot;</span> <span class="nv">month</span> <span class="nv">day</span> <span class="nv">year</span><span class="p">))</span>
+             <span class="o">,</span><span class="p">(</span><span class="nv">org-element-property</span> <span class="ss">:PROJECT</span> <span class="nv">task</span><span class="p">)</span>
+             <span class="o">,</span><span class="p">(</span><span class="nv">org-element-property</span> <span class="ss">:duration</span> <span class="nv">x</span><span class="p">)</span>
+             <span class="o">,</span><span class="p">(</span><span class="nv">org-element-property</span> <span class="ss">:title</span> <span class="nv">task</span><span class="p">)</span>
+             <span class="p">)))))</span>
+   <span class="o">&#39;</span><span class="p">(</span><span class="nv">hline</span><span class="p">)</span>
+   <span class="o">&#39;</span><span class="p">((</span><span class="s">&quot;&quot;</span> <span class="s">&quot;total:&quot;</span> <span class="s">&quot;:=vsum(@2..@-1);T&quot;</span> <span class="s">&quot;&quot;</span><span class="p">)))</span>
+<span class="o">#+</span><span class="nv">END_SRC</span>
 </pre></div>
 
 <p>What this code block does is parse the buffer, and map the lambda function over all of the <code>clock</code> elements in the buffer. For each element, we get its value (which is the datetime range), and its header, which contains some properties, such as the project name. The name of the task is the header name.</p>
