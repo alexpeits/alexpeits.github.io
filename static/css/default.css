@@ -228,6 +228,10 @@ a:hover {
   color: var(--color-fg) !important;
 }
 
+.footnote-back {
+  border: 0;
+}
+
 /* footer */
 
 footer {
