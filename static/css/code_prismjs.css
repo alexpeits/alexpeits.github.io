@@ -40,7 +40,7 @@ pre[class*="language-"] {
 /* Code blocks */
 pre[class*="language-"] {
   overflow: auto;
-  padding: 0.4rem 1rem;
+  padding: 0.4em 1em;
 }
 
 /* inline code */
@@ -82,7 +82,6 @@ pre[class*="language-"] {
 
 .token.deleted {
   color: rgba(239, 83, 80, 0.56);
-  font-style: italic;
 }
 
 .token.symbol,
@@ -125,7 +124,6 @@ pre[class*="language-"] {
 .token.attr-name,
 .token.inserted {
   color: rgb(72, 118, 214);
-  font-style: italic;
 }
 
 .token.class-name,
@@ -147,4 +145,38 @@ pre[class*="language-"] {
 
 .token.italic {
   font-style: italic;
+}
+
+/* line-highlight */
+
+pre[data-line] {
+  position: relative;
+}
+
+.line-highlight {
+  background: hsla(24, 20%, 50%, .09);
+  color: inherit;
+  display: block;
+  position: absolute;
+  left: 0;
+  right: 0;
+  padding: 0.1em 0;
+  margin: 0.4em 1em 0;
+  line-height: inherit;
+}
+
+/* diff-highlight */
+
+pre.diff-highlight > code .token.deleted:not(.prefix),
+pre > code.diff-highlight .token.deleted:not(.prefix) {
+  background-color: rgba(255, 0, 0, .1);
+  color: inherit;
+  display: block;
+}
+
+pre.diff-highlight > code .token.inserted:not(.prefix),
+pre > code.diff-highlight .token.inserted:not(.prefix) {
+  background-color: rgba(0, 255, 128, .1);
+  color: inherit;
+  display: block;
 }

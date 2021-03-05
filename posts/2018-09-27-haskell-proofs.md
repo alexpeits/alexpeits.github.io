@@ -19,13 +19,13 @@ concepts relevant to type theory. Especially lately there has been quite a lot
 of interest in type-level programming and dependent types.
 
 What initially piqued my interest in trying to use Haskell to prove mathematical
-theorems at the type level was a blog post called "Proving stuff in Haskell" by
-Mads Buch [^mads]. It is quite fun to follow so I'm not going to go into detail,
-but the gist is to use propositional equality to prove a theorem by showing that
-two haskell types are actually the same type. So for example, if we wanted to
-prove that $a + b = b + a$ (commutativity of addition of natural numbers) then
-we'll have a function whose type reflects exactly that property, rather than
-using actual values to prove it (more on that later).
+theorems at the type level was a blog post called ["Proving stuff in Haskell"][mads]
+by Mads Buch. It is quite fun to follow so I'm not going to go into detail, but
+the gist is to use propositional equality to prove a theorem by showing that two
+haskell types are actually the same type. So for example, if we wanted to prove
+that $a + b = b + a$ (commutativity of addition of natural numbers) then we'll
+have a function whose type reflects exactly that property, rather than using
+actual values to prove it (more on that later).
 
 Writing proofs using the type system is nothing new. What I describe in this
 post is first of all a way to write readable proofs by induction using the same
@@ -42,14 +42,14 @@ me at fpslack (`@alexpeits`). What follows is also most definitely not suitable
 for "production use". However I believe it's a good application of using
 dependent types and some more exotic language extensions.
 
-[^mads]: [Proving stuff in Haskell](https://www.madsbuch.com/proving-stuff-in-haskell/)
+[mads]: <https://www.madsbuch.com/proving-stuff-in-haskell/>
 
 ## Setting up
 
 Unless I am completely mistaken, code should compile along the way. Here are the
 required language extensions:
 
-```haskell
+``` haskell
 {-# LANGUAGE DataKinds            #-}
 {-# LANGUAGE GADTs                #-}
 {-# LANGUAGE PolyKinds            #-}
@@ -69,17 +69,18 @@ language. To better understand the what and how of dependent types, I suggest
 taking a look at any work by [Richard Eisenberg](https://cs.brynmawr.edu/~rae/),
 especially the extremely well written [*Stitch*][stitch] functional pearl
 [@eisenberg-2020-stitch]. Another great resource for everything type-level
-related is the book "Thinking with Types" [^thinking-with-types] by [Sandy
-Maguire][sandy-maguire] (consider buying it, it's awesome). Finally, the Idris
-language tutorial [^idris] is a great resource, especially to understand what
-needs to be done differently in Haskell and how.
+related is the book ["Thinking with Types"][thinking-with-types] by [Sandy
+Maguire][sandy-maguire] (consider buying it, it's awesome). Finally, the
+[Idris language tutorial][idris] is a great resource, especially to understand
+what needs to be done differently in Haskell and how.
 
 Many of the following do not require dependent types and can probably be modeled
 using e.g. type classes, but I'm going to use dependent types here.
 
 [stitch]: <https://cs.brynmawr.edu/~rae/papers/2018/stitch/stitch.pdf>
-[^thinking-with-types]: [Thinking with Types](https://thinkingwithtypes.com/)
-[^idris]: <http://docs.idris-lang.org/en/latest/tutorial/typesfuns.html>
+[thinking-with-types]: <https://thinkingwithtypes.com/>
+[Sandy-maguire]: <http://reasonablypolymorphic.com/>
+[idris]: <http://docs.idris-lang.org/en/latest/tutorial/typesfuns.html>
 
 ## Natural numbers
 
@@ -87,7 +88,7 @@ To prove theorems on natural number operations we first need a way to represent
 natural numbers at the type level. The canonical way to do this is to use
 [Peano numbers]( https://wiki.haskell.org/Peano_numbers):
 
-```haskell
+``` haskell
 data Nat = Z | S Nat
 ```
 
@@ -107,7 +108,7 @@ types to kinds. One thing to note is that there is no way to get a value of one
 of those types, as their kinds is `Nat` and not `*`. We could also have written
 something like this:
 
-```haskell
+``` haskell
 data Z
 data S a
 ```
@@ -121,9 +122,9 @@ some cases, would allow for ill-formed types.
 
 There is a ridiculously simple way to convince the type system that two types
 are equal using propositional equality in the module
-[Data.Type.Equality][hackage-data-type-equality].
+[Data.Type.Equality][hackage-equality].
 
-```haskell
+``` haskell
 data a :~: b where
   Refl :: a :~: a
 ```
@@ -132,6 +133,9 @@ What this means is that, if somewhere in our code we have the type `a :~: b` and
 somehow manage to give it the value `Refl`, we have convinced the type checker
 that types `a` and `b` are exactly the same, which is exactly what we want to
 achieve in our proofs.
+
+[hackage-equality]:
+  <http://hackage.haskell.org/package/base-4.12.0.0/docs/Data-Type-Equality.html>
 
 ## Type-level functions
 
@@ -147,7 +151,7 @@ $$
 
 This can be achieved using a closed type family:
 
-```haskell
+``` haskell
 type family a + b where
   a + Z   = a          -- (1)
   a + S b = S (a + b)  -- (2)
@@ -162,11 +166,13 @@ function, for the same reason the type `Z` does not clash with the value `Z` (if
 there is an ambiguity in that case we can tell the type system that we're
 talking about the *type* `Z` by writing `'Z`).
 
+[peano-axiom-addition]: <https://en.wikipedia.org/wiki/Peano_axioms#Addition>
+
 # First proof
 
 Now let's try to combine this type family definition with propositional equality:
 
-```haskell
+``` haskell
 testEquality :: (Z + Z) :~: Z
 testEquality = Refl
 ```
@@ -178,14 +184,14 @@ we don't need to give any values or "nudge" the type system in any way means
 that the elaboration happens automatically, and this equality stands every time.
 Let's also try not with concrete types, but with a type variable:
 
-```haskell
+``` haskell
 testEquality' :: (a + Z) :~: a
 testEquality' = Refl
 ```
 
 This type checks, again thanks to `(1)`. Let's try `(2)`:
 
-```haskell
+``` haskell
 testEquality'' :: (a + S b) :~: S (a + b)
 testEquality'' = Refl
 ```
@@ -194,14 +200,15 @@ And yet again, this type checks, this time thanks to `(2)`. Now let's try
 something that is not immediately apparent. With `testEquality'`, we proved the
 right identity property of addition. What about left identity?
 
-```haskell
+``` haskell
 plusLeftId :: (Z + a) :~: a
 plusLeftId = Refl
 ```
 
 Which, when compiled, unfortunately fails:
 
-```text
+
+```
 • Couldn't match type ‘a’ with ‘'Z + a’
     ‘a’ is a rigid type variable bound by
     the type signature for:
@@ -228,7 +235,7 @@ natural numbers. That's because if we substitute $a$ for `Z` then our hypothesis
 holds because we've already proven for `Z`. So if we manage to prove for `S Z`,
 then we do the same for `S (S Z)` and so on. We could try something like this:
 
-```haskell
+``` haskell
 baseCase :: (Z + Z) :~: Z
 baseCase = Refl
 
@@ -242,7 +249,7 @@ another one.
 Long story short, looking in `Data.Type.Equality` again, there is a function
 that seems like it does exactly that: [gcastWith][hackage-gcastWith].
 
-```haskell
+``` haskell
 gcastWith :: (a :~: b) -> (a ~ b => r) -> r
 ```
 
@@ -252,7 +259,7 @@ that `a` is `b`, and I will tell your type checker that `r` is well typed. This
 seems like the same logic used in one step of a mathematical proof. So we could
 do things like:
 
-```haskell
+``` haskell
 helper :: (S Z + S Z) :~: S (S Z + Z)
 helper = Refl
 
@@ -275,6 +282,9 @@ which means we'll need to reflect the **exact** type we have in the signature of
 something like `{a:Nat} -> (Z + S a) :~: S a`. There is a way to do this in
 Haskell, using singletons.
 
+[hackage-gcastWith]:
+  <http://hackage.haskell.org/package/base-4.12.0.0/docs/Data-Type-Equality.html#v:gcastWith>
+
 # Singletons
 
 Singletons, as their name implies, are values that have a 1-1 mapping with their
@@ -283,7 +293,7 @@ then we know for sure that `v` always has the type `T` (that makes sense), but
 also that type `T` has only one inhabitant (only one possible value), and that
 is `v`. This is the singleton definition for our `Nat`:
 
-```haskell
+``` haskell
 data SNat :: Nat -> * where
   SZ :: SNat Z
   SS :: SNat a -> SNat (S a)
@@ -299,13 +309,13 @@ the `SNat` GADT.
 Let's try to prove left identity again, this time using an `SNat` to help us
 with the induction by allowing recursion:
 
-```haskell
+``` haskell
 plusLeftId :: SNat a -> (Z + a) :~: a
 ```
 
 The base case will be for `a ~ Z` (`~` is type equality):
 
-```haskell
+``` haskell
 plusLeftId :: SNat a -> (Z + a) :~: a
 plusLeftId SZ = Refl
 ```
@@ -320,7 +330,7 @@ Now for the induction step. Recall that we need to now prove for every type `S
 a`, assuming that the proof stands for `a`. So we'll use the singleton for the
 successor, `SS`:
 
-```haskell
+``` haskell
 plusLeftId :: SNat a -> (Z + a) :~: a
 plusLeftId SZ     = Refl
 plusLeftId (SS n) = Refl
@@ -328,7 +338,7 @@ plusLeftId (SS n) = Refl
 
 But this fails:
 
-```text
+```
 • Could not deduce: ('Z + n) ~ n
   from the context: m ~ 'S n
     bound by a pattern with constructor:
@@ -341,7 +351,7 @@ But this fails:
 Which makes sense: we have to *tell* the type checker that the equality holds
 for `n`. So, as described earlier, we'll use `gcastWith`:
 
-```haskell
+``` haskell
 plusLeftId :: SNat a -> (Z + a) :~: a
 plusLeftId SZ     = Refl
 plusLeftId (SS n) = gcastWith ??? Refl
@@ -352,7 +362,7 @@ Recall that `gcastWith :: (a :~: b) -> (a ~ b => r) -> r`. Here, `Refl` is the
 even better `(Z + n) :~: n`. But that's the result type of `plusLeftId` itself,
 if we called it with `n`:
 
-```haskell
+``` haskell
 plusLeftId :: SNat a -> (Z + a) :~: a
 plusLeftId SZ     = Refl
 plusLeftId (SS n) = gcastWith (plusLeftId n) Refl
@@ -363,7 +373,7 @@ And it type checks (try calling the function with any `SNat` value)!
 Let's also rewrite the proof for right identity, as well as the axioms we
 automatically get from the type family, to use values:
 
-```haskell
+``` haskell
 given1 :: SNat a -> (a + Z) :~: a
 given1 _ = Refl
 
@@ -378,7 +388,7 @@ Of course the first two don't need anything further to be proved. The same
 applies for right identity, but here I used `given1` to demonstrate the use of a
 proof in another proof. This would work too:
 
-```haskell
+``` haskell
 plusRightId' :: SNat a -> (a + Z) :~: a
 plusRightId' n = gcastWith (given1 n) Refl
 ```
@@ -402,10 +412,13 @@ the type family definition, and then proved what's inside the `S` inductively.
 It makes sense that we want to work on `Z + n`, since the error we first got
 said exactly that:
 
-```text
+```
 • Could not deduce: ('Z + n) ~ n
   from the context: m ~ 'S n
 ```
+
+[nat-addition-proofs]:
+  <https://en.wikipedia.org/wiki/Proofs_involving_the_addition_of_natural_numbers>
 
 ## Proving the associativity of addition
 
@@ -444,7 +457,7 @@ correspond 1-1 with the steps above. Let's also define addition for the
 singleton datatype, which will be useful because its type can directly reflect
 to the `+` type family:
 
-```haskell
+``` haskell
 (!+) :: SNat n -> SNat m -> SNat (n + m)
 n !+ SZ     = n
 n !+ (SS m) = SS (n !+ m)
@@ -453,7 +466,7 @@ n !+ (SS m) = SS (n !+ m)
 We'll use this function to construct, for example, the $a + b$ in the base case
 of the proof given $a$ and $b$. Here it goes:
 
-```haskell
+``` haskell
 plusAssoc
   :: SNat a
   -> SNat b
@@ -489,7 +502,7 @@ Fortunately, this is like saying "if type x is the same as type y, and type y is
 the same as type z, then is type x the same as type z"? Of course it is! Let's
 prove it (I'll also use a fancy symbol to make the process clearer later):
 
-```haskell
+``` haskell
 (==>) :: a :~: b -> b :~: c -> a :~: c
 Refl ==> Refl = Refl
 ```
@@ -499,7 +512,7 @@ property of `:~:` (propositional equality).
 
 Let's see how this helps:
 
-```haskell
+``` haskell
 plusAssoc
   :: SNat a
   -> SNat b
@@ -517,7 +530,7 @@ plusAssoc a b SZ =
 
 Voila! Onward to the next step, the induction.
 
-```haskell
+``` haskell
 plusAssoc
   :: SNat a
   -> SNat b
@@ -550,7 +563,7 @@ To be fair, none of this is needed for both stages of the proof. Since all but
 the induction step are inferred automatically by the `+` type family, the proof
 can be written more compactly:
 
-```haskell
+``` haskell
 plusAssoc
   :: SNat a
   -> SNat b
@@ -569,7 +582,7 @@ Bonus: using `ScopedTypeVariables` we can make it much prettier. We'll use a
 the steps inside it, using the same names in the types so that we don't have to
 pass variables to each step:
 
-```haskell
+``` haskell
 plusAssoc
   :: SNat a
   -> SNat b
@@ -650,7 +663,7 @@ The proof is left as an exercise, but using the same pattern as in the
 associativity proof it should be pretty straightforward. The signature should
 be:
 
-```haskell
+``` haskell
 plusComm :: SNat a -> SNat b -> (a + b) :~: (b + a)
 ```
 
@@ -663,7 +676,7 @@ quickly found an issue trying to append two length-indexed vectors. The vector
 definition and several operations are more or less the same as the ones in the
 Stitch paper:
 
-```haskell
+``` haskell
 data Vec :: Nat -> * -> * where
   V0   :: Vec Z a
   (:>) :: a -> Vec n a -> Vec (S n) a
@@ -679,7 +692,7 @@ One common example is appending two vectors. It is apparent that if one has
 length `n` and the other has length `m`, then the resulting vector will have
 length `n + m`. A naive first attemt would be the following:
 
-```haskell
+``` haskell
 append :: Vec n a -> Vec m a -> Vec (n + m) a
 append V0      ys = ys
 append (x:>xs) ys = undefined -- let's wait for now
@@ -687,7 +700,7 @@ append (x:>xs) ys = undefined -- let's wait for now
 
 But even the base case fails to typecheck:
 
-```text
+```
 • Could not deduce: ('Z + m) ~ m
       from the context: n ~ 'Z
 ```
@@ -698,7 +711,7 @@ length `m`, the resulting type `Z + m` should be the same as `m`, but the type
 checker is not convinced. Let's notice that what we need is to use the left
 identity property, and convince the checker:
 
-```haskell
+``` haskell
 append :: Vec n a -> Vec m a -> Vec (n + m) a
 append V0      ys = gcastWith (plusLeftId ?) ys
 append (x:>xs) ys = undefined -- let's wait for now
@@ -709,7 +722,7 @@ singletons to help drive the checking process, but here there is no mention of a
 singleton. So let's add it for now, and later we'll try to make this process
 implicit. We'll explicitly pass the lengths of both vectors:
 
-```haskell
+``` haskell
 append :: SNat n -> SNat m -> Vec n a -> Vec m a -> Vec (n + m) a
 append SZ m V0      ys = gcastWith (plusLeftId m) ys
 append n  m (x:>xs) ys = undefined -- let's wait for now
@@ -718,7 +731,7 @@ append n  m (x:>xs) ys = undefined -- let's wait for now
 OK, this works. Let's try to do the next case where the first vector is
 nonempty. We'll make it fail just to see the error message:
 
-```haskell
+``` haskell
 append :: SNat n -> SNat m -> Vec n a -> Vec m a -> Vec (n + m) a
 append SZ m V0      ys = gcastWith (plusLeftId m) ys
 append n  m (x:>xs) ys = x :> append ? m xs ys
@@ -728,7 +741,7 @@ Uh-oh. How do we get the length of the first vector after we remove the first
 element? Luckily, that's just `n - 1`. Let's create a helper function to get the
 *predecessor* number of a singleton of `Nat`:
 
-```haskell
+``` haskell
 spred :: SNat (S n) -> SNat n
 spred (SS n) = n
 ```
@@ -738,7 +751,7 @@ matter of fact, it wouldn't type check because it would mean trying to do `SZ ::
 SNat (S n)` which doesn't make sense. And because the first vector in the second
 case of `append` is not empty, we know that `n` is not `SZ` but `SS ...`.
 
-```haskell
+``` haskell
 append :: SNat n -> SNat m -> Vec n a -> Vec m a -> Vec (n + m) a
 append SZ m V0      ys = gcastWith (plusLeftId m) ys
 append n  m (x:>xs) ys = x :> append (spred n) m xs ys
@@ -746,7 +759,7 @@ append n  m (x:>xs) ys = x :> append (spred n) m xs ys
 
 This time we get this error:
 
-```text
+```
 • Could not deduce: ('S n1 + m) ~ 'S (n1 + m)
   from the context: n ~ 'S n1
 ```
@@ -769,7 +782,7 @@ $$
 
 And in Haskell:
 
-```haskell
+``` haskell
 append :: SNat n -> SNat m -> Vec n a -> Vec m a -> Vec (n + m) a
 append SZ m V0 ys
   = gcastWith (plusIdenL m) ys
@@ -793,7 +806,7 @@ append n m (x:>xs) ys
 And that's the proof. Now appending two vectors should work. First, here's an
 instance of `Show` for `Vec`:
 
-```haskell
+``` haskell
 instance (Show a) => Show (Vec n a) where
   show v = "[" ++ go v
     where
@@ -809,7 +822,7 @@ instance (Show a) => Show (Vec n a) where
 
 And two example vectors:
 
-```haskell
+``` haskell
 x = 1 :> 2 :> 3 :> 4 :> V0
 lengthX = SS (SS (SS (SS SZ)))
 
@@ -817,7 +830,7 @@ y = 5 :> 6 :> 7 :> 8 :> 9 :> V0
 lengthY = SS (SS (SS (SS (SS SZ))))
 ```
 
-```text
+```
 > append lengthX lengthY x y
 [1, 2, 3, 4, 5, 6, 7, 8, 9]
 > :t append lengthX lengthY x y
@@ -830,7 +843,7 @@ that, we have to resort to type classes (again, this is described in the Stitch
 paper). We will construct a type class with a single method that can magically
 give an `SNat` depending on the instance we are using:
 
-```haskell
+``` haskell
 class IsNat (n :: Nat) where nat :: SNat n
 
 instance IsNat Z where
@@ -844,12 +857,12 @@ Then we can just use `nat` to get the length. The instance of `IsNat` to use is
 resolved thanks to the fact that the `n` in the constraint `IsNat` is the same
 `n` that is the vector length:
 
-```haskell
+``` haskell
 vlength :: IsNat n => Vec n a -> SNat n
 vlength _ = nat
 ```
 
-```text
+```
 > append (vlength x) (vlength y) x y
 [1, 2, 3, 4, 5, 6, 7, 8, 9]
 ```
@@ -857,7 +870,7 @@ vlength _ = nat
 But I promised that we can have the length passed implicitly. Again, we'll use
 the typeclass with some help from `TypeApplications` and `ScopedTypeVariables`:
 
-```haskell
+``` haskell
 (+++) :: forall n m a. (IsNat n, IsNat m)
       => Vec n a
       -> Vec m a
@@ -865,7 +878,7 @@ the typeclass with some help from `TypeApplications` and `ScopedTypeVariables`:
 (+++) = append (nat @n) (nat @m)
 ```
 
-```text
+```
 > x +++ y
 [1, 2, 3, 4, 5, 6, 7, 8, 9]
 ```
@@ -885,10 +898,4 @@ translating mathematical proofs to Haskell. After all, as someone said in the
 > three people concerning themselves with practical software engineering using
 > Haskell.
 
-
 [github-repo]: <https://github.com/alexpeits/haskell-proofs>
-[sandy-maguire]: <http://reasonablypolymorphic.com/>
-[hackage-data-type-equality]: <http://hackage.haskell.org/package/base-4.12.0.0/docs/Data-Type-Equality.html>
-[peano-axiom-addition]: <https://en.wikipedia.org/wiki/Peano_axioms#Addition>
-[hackage-gcastWith]: <http://hackage.haskell.org/package/base-4.12.0.0/docs/Data-Type-Equality.html#v:gcastWith>
-[nat-addition-proofs]: <https://en.wikipedia.org/wiki/Proofs_involving_the_addition_of_natural_numbers>

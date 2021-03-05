@@ -12,6 +12,7 @@ import Control.Monad.Combinators (manyTill)
 import Control.Monad.IO.Class (MonadIO, liftIO)
 import qualified Data.Aeson as Ae
 import qualified Data.Bifunctor as Bi
+import Data.Maybe (fromMaybe)
 import Data.String.Interpolate (i, iii, __i)
 import Data.Text (Text)
 import qualified Data.Text as Tx
@@ -148,8 +149,10 @@ filterPandoc Config {..} = PW.walkM bfilter
               Default ->
                 pure $
                   P.Div ("", ["skylighting"], []) [cb]
-              Pygments -> P.RawBlock (P.Format "html") <$> pygments code lang classes options
-              PrismJS -> pure $ P.RawBlock (P.Format "html") (prismjs code lang classes options)
+              Pygments ->
+                P.RawBlock (P.Format "html") <$> pygments code lang classes options
+              PrismJS ->
+                pure $ P.RawBlock (P.Format "html") (prismjs code lang classes options)
       other -> PW.walkM ifilter other
 
     ifilter :: P.Inline -> IO P.Inline
@@ -169,13 +172,15 @@ filterPandoc Config {..} = PW.walkM bfilter
 
     pygments :: Text -> Maybe Text -> [Text] -> [(Text, Text)] -> IO Text
     pygments code mLang _clss _opts = do
-      let langArgs = case mLang of
-            Nothing -> []
-            Just l -> ["-l", l]
-          args = Tx.unpack <$> langArgs <> ["-f", "html"]
+      let lang = fromMaybe "text" mLang
+          args = Tx.unpack <$> ["-l", lang, "-f", "html"]
       Tx.pack <$> readProcess "pygmentize" args (Tx.unpack code)
 
     prismjs :: Text -> Maybe Text -> [Text] -> [(Text, Text)] -> Text
-    prismjs code mLang _class _opts =
+    prismjs code mLang clss opts =
       let lang = maybe "language-none" ("language-" `Tx.append`) mLang
-       in [__i|<pre><code class="#{lang}">#{code}</code></pre>|]
+          clss' = Tx.intercalate " " (lang:clss)
+          hlLines, dataLine :: Text
+          hlLines = fromMaybe "" (lookup "highlight" opts)
+          dataLine = if Tx.null hlLines then "" else [i|data-line=#{hlLines}|]
+       in [__i|<pre #{dataLine}><code class="#{clss'}">#{code}</code></pre>|]
