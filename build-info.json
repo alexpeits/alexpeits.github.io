@@ -1,13 +1,13 @@
 {
-  "date": "Thu Mar 4 17:16:21 2021 +0000",
-  "sha": "b9518f29890da1d7ba83bbc4a306d643d821bbe0",
-  "commit_message": "Citations and header css",
+  "date": "Fri Mar 5 09:22:48 2021 +0000",
+  "sha": "98751f12df1be19d1c33076e89f52a0bf2fac1f9",
+  "commit_message": "Update citation inline color",
   "home": "https://alexpeits.github.io",
   "gh_actor": "alexpeits",
   "gh_repository": "alexpeits/alexpeits.github.io",
   "gh_event_name": "push",
-  "gh_run_id": "621799660",
-  "gh_run_number": "86",
-  "gh_sha": "b9518f29890da1d7ba83bbc4a306d643d821bbe0",
+  "gh_run_id": "623953739",
+  "gh_run_number": "88",
+  "gh_sha": "98751f12df1be19d1c33076e89f52a0bf2fac1f9",
   "gh_ref": "refs/heads/develop"
 }
