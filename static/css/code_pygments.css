@@ -3,6 +3,7 @@
   background: var(--color-code-bg);
   color: var(--color-code-fg);
   padding: 0.4rem 1rem;
+  margin-bottom: 1em;
 }
 
 .highlight pre {

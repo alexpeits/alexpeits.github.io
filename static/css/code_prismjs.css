@@ -12,7 +12,7 @@ code {
 
 code[class*="language-"],
 pre[class*="language-"] {
-  color: #403f53;
+  color: var(--color-code-fg);
   text-align: left;
   white-space: pre;
   word-spacing: normal;
@@ -65,88 +65,6 @@ pre[class*="language-"] {
   background: var(--color-code-bg);
 }
 
-.token.comment,
-.token.prolog,
-.token.cdata {
-  color: rgb(152, 159, 177);
-  font-style: italic;
-}
-
-.token.punctuation {
-  color: rgb(153, 76, 195);
-}
-
-.namespace {
-  color: rgb(12, 150, 155);
-}
-
-.token.deleted {
-  color: rgba(239, 83, 80, 0.56);
-}
-
-.token.symbol,
-.token.operator,
-.token.keyword,
-.token.property {
-  color: rgb(12, 150, 155);
-}
-
-.token.tag {
-  color: rgb(153, 76, 195);
-}
-
-.token.boolean {
-  color: rgb(188, 84, 84);
-}
-
-.token.number {
-  color: rgb(170, 9, 130);
-}
-
-.token.constant,
-.token.builtin,
-.token.string,
-.token.url,
-.token.entity,
-.language-css .token.string,
-.style .token.string,
-.token.char {
-  color: rgb(72, 118, 214);
-}
-
-.token.selector,
-.token.function,
-.token.doctype {
-  color: rgb(153, 76, 195);
-  font-style: italic;
-}
-
-.token.attr-name,
-.token.inserted {
-  color: rgb(72, 118, 214);
-}
-
-.token.class-name,
-.token.atrule,
-.token.attr-value {
-  color: rgb(17, 17, 17);
-}
-
-.token.regex,
-.token.important,
-.token.variable {
-  color: rgb(201, 103, 101);
-}
-
-.token.important,
-.token.bold {
-  font-weight: bold;
-}
-
-.token.italic {
-  font-style: italic;
-}
-
 /* line-highlight */
 
 pre[data-line] {
@@ -171,12 +89,112 @@ pre.diff-highlight > code .token.deleted:not(.prefix),
 pre > code.diff-highlight .token.deleted:not(.prefix) {
   background-color: rgba(255, 0, 0, .1);
   color: inherit;
-  display: block;
+  display: pre;
 }
 
-pre.diff-highlight > code .token.inserted:not(.prefix),
+block.diff-highlight > code .token.inserted:not(.prefix),
 pre > code.diff-highlight .token.inserted:not(.prefix) {
   background-color: rgba(0, 255, 128, .1);
   color: inherit;
   display: block;
+}
+
+
+/*
+ Solarized Color Schemes originally by Ethan Schoonover
+ http://ethanschoonover.com/solarized
+
+ Ported for PrismJS by Hector Matos
+ Website: https://krakendev.io
+ Twitter Handle: https://twitter.com/allonsykraken)
+*/
+
+/*
+SOLARIZED HEX
+--------- -------
+base03    #002b36
+base02    #073642
+base01    #586e75
+base00    #657b83
+base0     #839496
+base1     #93a1a1
+base2     #eee8d5
+base3     #fdf6e3
+yellow    #b58900
+orange    #cb4b16
+red       #dc322f
+magenta   #d33682
+violet    #6c71c4
+blue      #268bd2
+cyan      #2aa198
+green     #859900
+*/
+
+
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+  color: var(--color-code-comment);
+}
+
+.token.punctuation {
+  color: var(--color-code-other);
+}
+
+.token.namespace {
+  opacity: var(--color-code-other);
+}
+
+.token.property,
+.token.tag,
+.token.boolean,
+.token.constant,
+.token.symbol,
+.token.deleted {
+  color: var(--color-code-constant);
+}
+
+.token.number,
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.url,
+.token.inserted {
+  color: var(--color-code-string);
+}
+
+.token.entity {
+  color: var(--color-code-other);
+}
+
+.token.atrule,
+.token.attr-value,
+.token.keyword {
+  color: var(--color-code-keyword);
+}
+
+.token.function {
+  color: var(--color-code-function);
+}
+
+.token.class-name {
+  color: var(--color-code-type);
+}
+
+.token.regex,
+.token.important,
+.token.variable {
+  color: var(--color-code-variable);
+}
+
+.token.important,
+.token.bold {
+  font-weight: bold;
+}
+
+.token.italic {
+  font-style: italic;
 }
