@@ -8,7 +8,7 @@
 
   --color-dark-mode-disabled: #c0c0c0;
 
-  --color-grey-1: #656565;
+  --color-grey-1: #707070;
   --color-grey-2: #838383;
   --color-grey-3: #aaaaaa;
   --color-grey-4: #e3e3e3;
@@ -429,7 +429,7 @@ table caption {
 
 .citation {
   font-style: italic;
-  color: var(--color-grey-1);
+  color: var(--color-grey-2);
 }
 
 #refs > div:before {
