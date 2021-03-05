@@ -1,15 +1,13 @@
 {
-  "date": "Fri Mar 5 09:30:40 2021 +0000",
-  "sha": "435d454d09a4e141d43747417b92206ce2219848",
-  "commit_message": "Merge pull request #17 from alexpeits/dependabot/github_actions/JamesIves/github-pages-deploy-action-4.1.0
-
-Bump JamesIves/github-pages-deploy-action from 4.0.0 to 4.1.0",
+  "date": "Fri Mar 5 10:59:25 2021 +0000",
+  "sha": "ae76a4c50e97e947a71ed4c3e86bcb5e0261b6d3",
+  "commit_message": "convert redundant footnotes to links, prismjs line hl",
   "home": "https://alexpeits.github.io",
   "gh_actor": "alexpeits",
   "gh_repository": "alexpeits/alexpeits.github.io",
   "gh_event_name": "push",
-  "gh_run_id": "623973267",
-  "gh_run_number": "89",
-  "gh_sha": "435d454d09a4e141d43747417b92206ce2219848",
+  "gh_run_id": "624192806",
+  "gh_run_number": "90",
+  "gh_sha": "ae76a4c50e97e947a71ed4c3e86bcb5e0261b6d3",
   "gh_ref": "refs/heads/develop"
 }
