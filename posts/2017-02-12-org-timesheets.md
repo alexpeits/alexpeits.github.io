@@ -25,7 +25,7 @@ a table.
 
 To do this, we use the following elisp code block in the respective buffer:
 
-```text
+``` lisp
 #+BEGIN_SRC elisp
   (nconc
    '(("date" "project" "hours" "task"))
@@ -41,7 +41,6 @@ To do this, we use the following elisp code block in the respective buffer:
                     (month (calendar-month-name
                             (org-element-property :month-start val)))
                     (day (org-element-property :day-start val)))
-                ;; (insert (org-element-property :raw-value val))
                 (format "%s %s, %s" month day year))
              ,(org-element-property :PROJECT task)
              ,(org-element-property :duration x)
@@ -67,7 +66,7 @@ table more presentable.
 
 Suppose the buffer looks like this:
 
-```text
+```
 #+BEGIN_SRC
   * project 1
 
@@ -99,7 +98,7 @@ Suppose the buffer looks like this:
 If the above code is wrapped in an `elisp` block and executed (`C-c C-c`), it
 outputs the following table:
 
-```text
+```
 #+BEGIN_SRC
   | date          | project   |             hours | task   |
   |---------------+-----------+-------------------+--------|
@@ -119,7 +118,7 @@ Afterwards, the table can be exported to csv with `org-table-export`.
 
 **NOTE**: To make all of the above work, set
 
-```lisp
+``` lisp
 (setq org-clock-into-drawer nil)
 ```
 
