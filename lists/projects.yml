@@ -1,0 +1,16 @@
+title: Projects
+template: projects
+
+data:
+  - name: harg
+    link: https://github.com/alexpeits/harg
+    description: Haskell program configuration using higher kinded data
+    docs: http://alexpeits.github.io/harg
+  - name: nix-haskell-cookiecutter
+    link: https://github.com/alexpeits/haskell-nix-cookiecutter
+    description: Cookiecutter template to quickly generate haskell projects (cabal, nix, direnv)
+    docs: https://github.com/alexpeits/haskell-nix-cookiecutter/blob/master/README.md
+  - name: statue
+    link: https://github.com/alexpeits/statue
+    description: Simple static site generator using only nix
+    docs: https://github.com/alexpeits/statue/blob/master/README.md

@@ -9,8 +9,8 @@ module Peits.Types where
 
 import Data.Aeson ((.!=), (.:), (.:?), (.=))
 import qualified Data.Aeson as Ae
+import qualified Data.HashMap.Strict as HM
 import Data.List (sortOn)
-import qualified Data.Map.Strict as Map
 import Data.Maybe (isJust)
 import qualified Data.Set as Set
 import Data.String.Interpolate (i)
@@ -245,8 +245,7 @@ data Config = Config
     cCopyright :: Text,
     cHost :: Text,
     cSyntaxHighlightMethod :: SyntaxHighlightMethod,
-    cNav :: [NavItem],
-    cLists :: Map.Map Text ListPage
+    cNav :: [NavItem]
   }
 
 instance Ae.FromJSON Config where
@@ -259,7 +258,6 @@ instance Ae.FromJSON Config where
       <*> v .: "host"
       <*> v .: "syntax_highlight"
       <*> v .: "nav"
-      <*> v .: "lists"
 
 instance Ae.ToJSON Config where
   toJSON Config {..} =
@@ -273,8 +271,7 @@ instance Ae.ToJSON Config where
         "highlight_pygments" .= (cSyntaxHighlightMethod == Pygments),
         "highlight_prismjs" .= (cSyntaxHighlightMethod == PrismJS),
         "host" .= cHost,
-        "nav" .= cNav,
-        "lists" .= cLists
+        "nav" .= cNav
       ]
 
 data NavItem = NavItem
@@ -298,6 +295,7 @@ instance Ae.ToJSON NavItem where
 data ListPage = ListPage
   { lTitle :: Text,
     lTemplate :: Mu.PName,
+    lMeta :: Ae.Value,
     lData :: Ae.Value
   }
 
@@ -306,14 +304,18 @@ instance Ae.FromJSON ListPage where
     ListPage
       <$> v .: "title"
       <*> fmap Mu.PName (v .: "template")
+      <*> v .:? "meta" .!= Ae.Object mempty
       <*> v .: "data"
 
 instance Ae.ToJSON ListPage where
-  toJSON ListPage {..} =
-    Ae.object
-      [ "title" .= lTitle,
-        "data" .= lData
-      ]
+  toJSON ListPage {..} = Ae.Object $ HM.union content meta
+    where
+      (Ae.Object content) =
+        Ae.object
+          [ "title" .= lTitle,
+            "data" .= lData
+          ]
+      (Ae.Object meta) = Ae.toJSON lMeta
 
 data Feed = Feed
   { fFile :: Text,

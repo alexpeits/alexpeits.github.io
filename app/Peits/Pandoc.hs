@@ -179,7 +179,7 @@ filterPandoc Config {..} = PW.walkM bfilter
     prismjs :: Text -> Maybe Text -> [Text] -> [(Text, Text)] -> Text
     prismjs code mLang clss opts =
       let lang = maybe "language-none" ("language-" `Tx.append`) mLang
-          clss' = Tx.intercalate " " (lang:clss)
+          clss' = Tx.intercalate " " (lang : clss)
           hlLines, dataLine :: Text
           hlLines = fromMaybe "" (lookup "highlight" opts)
           dataLine = if Tx.null hlLines then "" else [i|data-line=#{hlLines}|]

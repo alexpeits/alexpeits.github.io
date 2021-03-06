@@ -12,7 +12,6 @@ import qualified Data.Aeson as Ae
 import Data.Function ((&))
 import qualified Data.HashMap.Strict as HM
 import Data.List (foldl', sortOn)
-import qualified Data.Map.Strict as Map
 import Data.Ord (Down (..))
 import qualified Data.Set as Set
 import Data.String.Interpolate (i)
@@ -75,13 +74,16 @@ main = S.shakeArgsWith S.shakeOptions shakeArgs $ \flags _targets -> (pure . Jus
     S.putNormal [i|Cleaning files in #{buildDir}|]
     S.removeFilesAfter buildDir ["//*"]
 
+  let readYaml :: Ae.FromJSON a => FilePath -> IO a
+      readYaml fp = do
+        Yaml.decodeFileEither fp >>= \case
+          Left err -> fail (Yaml.prettyPrintParseException err)
+          Right v -> pure v
+
   let configFile = "config.yml"
       readConfig :: IO Config
       readConfig = do
-        conf <-
-          Yaml.decodeFileEither configFile >>= \case
-            Left err -> fail (Yaml.prettyPrintParseException err)
-            Right c -> pure (c :: Config)
+        conf <- readYaml "config.yml"
         pure $ case optSyntaxHighlightMethod of
           Nothing -> conf
           Just meth -> conf {cSyntaxHighlightMethod = meth}
@@ -89,8 +91,6 @@ main = S.shakeArgsWith S.shakeOptions shakeArgs $ \flags _targets -> (pure . Jus
   config <- newConstCache $ do
     S.need [configFile]
     liftIO readConfig
-
-  configNoDep <- liftIO readConfig
 
   templates <- newConstCache $ do
     let templateP = "templates/*.mustache"
@@ -208,21 +208,17 @@ main = S.shakeArgsWith S.shakeOptions shakeArgs $ \flags _targets -> (pure . Jus
       [ctxTitle, ctx]
       output
 
-  -- gather all lists to generate
-  let lists = Map.keys (cLists configNoDep)
-      listFile p = buildDir </> "lists" </> p <.> "html"
-      listFiles = fmap (listFile . Tx.unpack) lists
-  S.want listFiles
+  getList <- S.newCache $ \fp -> do
+    S.need [fp]
+    liftIO $ readYaml fp
 
-  buildRoute listR $ \output -> do
+  buildRoute listPageR $ \input output -> do
     cfg <- config
     ts <- templates
-    let name = listNameFromPath output
-        listCfg = cLists cfg Map.! name
-        template = lTemplate listCfg
-        title = lTitle listCfg
-        ctxTitle = json "title" (Ae.String title)
-        ctx = Ae.toJSON listCfg
+    list <- getList input
+    let template = lTemplate list
+        ctxTitle = json "title" $ Ae.String (lTitle list)
+        ctx = Ae.toJSON list
     renderTemplate
       cfg
       ts
@@ -304,6 +300,9 @@ postListR = Fixed "index.html"
 pageR :: Route InputAndOutput
 pageR = Mapping "pages/*.md" (-<.> "html")
 
+listPageR :: Route InputAndOutput
+listPageR = Mapping "lists/*.yml" (-<.> "html")
+
 draftR :: Route InputAndOutput
 draftR = Mapping "drafts/*.md" (-<.> "html")
 
@@ -327,9 +326,6 @@ tagR = Generated "tags/*.html"
 
 tagListR :: Route OnlyOutput
 tagListR = Fixed "tags.html"
-
-listR :: Route OnlyOutput
-listR = Generated "lists/*.html"
 
 atomFeedR :: Route OnlyOutput
 atomFeedR = Fixed "atom.xml"
