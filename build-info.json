@@ -1,13 +1,13 @@
 {
-  "date": "Fri Mar 5 18:39:43 2021 +0000",
-  "sha": "e651eec430bef2c7fcf12bce5b691015eeb81387",
-  "commit_message": "Use variables in prism theme",
+  "date": "Sat Mar 6 20:50:38 2021 +0000",
+  "sha": "3d0818a1f2381b805a1ebc7eada4f6908891cf80",
+  "commit_message": "Change how lists are built",
   "home": "https://alexpeits.github.io",
   "gh_actor": "alexpeits",
   "gh_repository": "alexpeits/alexpeits.github.io",
   "gh_event_name": "push",
-  "gh_run_id": "625419652",
-  "gh_run_number": "92",
-  "gh_sha": "e651eec430bef2c7fcf12bce5b691015eeb81387",
+  "gh_run_id": "628041663",
+  "gh_run_number": "93",
+  "gh_sha": "3d0818a1f2381b805a1ebc7eada4f6908891cf80",
   "gh_ref": "refs/heads/develop"
 }
