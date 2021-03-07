@@ -173,7 +173,7 @@ filterPandoc Config {..} = PW.walkM bfilter
     pygments :: Text -> Maybe Text -> [Text] -> [(Text, Text)] -> IO Text
     pygments code mLang _clss _opts = do
       let lang = fromMaybe "text" mLang
-          args = Tx.unpack <$> ["-l", lang, "-f", "html"]
+          args = Tx.unpack <$> ["-l", lang, "-f", "html", "-O", "wrapcode"]
       Tx.pack <$> readProcess "pygmentize" args (Tx.unpack code)
 
     prismjs :: Text -> Maybe Text -> [Text] -> [(Text, Text)] -> Text
