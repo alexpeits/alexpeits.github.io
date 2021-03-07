@@ -65,7 +65,7 @@
 <p>Org-mode is a great productivity tool, and has a lot of functionality out of the box, including utilities for tracking time spent on a task/project. For example, by pressing <code>C-c C-x C-i</code> on a heading, a timer is added (clock-in), and by pressing <code>C-c C-x C-o</code> the timer stops (clock-out). Org-mode also supports adding a report with <code>org-clock-report</code> (<code>C-c C-x C-r</code>), but, even with the customization it offers, it is not ideal for having a fully custom report and be able to export it to csv and whatnot.</p>
 <p>Fortunately, newer versions of org-mode come with a utility called <em>org-element</em>, which adds the ability to parse org-mode buffers as trees. This proves really helpful to take all <code>clock</code> elements from a buffer and put them in a table.</p>
 <p>To do this, we use the following elisp code block in the respective buffer:</p>
-<div class="highlight"><pre><span></span><span class="o">#+</span><span class="nv">BEGIN_SRC</span> <span class="nv">elisp</span>
+<div class="highlight"><pre><span></span><code><span class="o">#+</span><span class="nv">BEGIN_SRC</span> <span class="nv">elisp</span>
   <span class="p">(</span><span class="nb">nconc</span>
    <span class="o">&#39;</span><span class="p">((</span><span class="s">&quot;date&quot;</span> <span class="s">&quot;project&quot;</span> <span class="s">&quot;hours&quot;</span> <span class="s">&quot;task&quot;</span><span class="p">))</span>
    <span class="o">&#39;</span><span class="p">(</span><span class="nv">hline</span><span class="p">)</span>
@@ -88,12 +88,12 @@
    <span class="o">&#39;</span><span class="p">(</span><span class="nv">hline</span><span class="p">)</span>
    <span class="o">&#39;</span><span class="p">((</span><span class="s">&quot;&quot;</span> <span class="s">&quot;total:&quot;</span> <span class="s">&quot;:=vsum(@2..@-1);T&quot;</span> <span class="s">&quot;&quot;</span><span class="p">)))</span>
 <span class="o">#+</span><span class="nv">END_SRC</span>
-</pre></div>
+</code></pre></div>
 
 <p>What this code block does is parse the buffer, and map the lambda function over all of the <code>clock</code> elements in the buffer. For each element, we get its value (which is the datetime range), and its header, which contains some properties, such as the project name. The name of the task is the header name.</p>
 <p>By prepending a list, we can also add headers. At the end, a <code>calc</code> formula can be used for adding the times to get a total. This formula sums the current column (hence the empty strings before and after), from the second row (not including the header), up to the second to last row (not including the formula itself). The <code>;T</code> after the formula instructs it to add time, rather than numbers. Finally, the <code>hline</code> function inserts a dashed line for making the table more presentable.</p>
 <p>Suppose the buffer looks like this:</p>
-<div class="highlight"><pre><span></span>#+BEGIN_SRC
+<div class="highlight"><pre><span></span><code>#+BEGIN_SRC
   * project 1
 
   ** Task 1
@@ -119,10 +119,10 @@
     :END:
     CLOCK: [2017-06-29 Thu 15:18]--[2017-06-29 Thu 18:18] =&gt;  3:00
 #+END_SRC
-</pre></div>
+</code></pre></div>
 
 <p>If the above code is wrapped in an <code>elisp</code> block and executed (<code>C-c C-c</code>), it outputs the following table:</p>
-<div class="highlight"><pre><span></span>#+BEGIN_SRC
+<div class="highlight"><pre><span></span><code>#+BEGIN_SRC
   | date          | project   |             hours | task   |
   |---------------+-----------+-------------------+--------|
   | June 24, 2017 | project_1 |              2:50 | Task 1 |
@@ -133,13 +133,13 @@
   |---------------+-----------+-------------------+--------|
   |               | total:    | :=vsum(@2..@-1);T |        |
 #+END_SRC
-</pre></div>
+</code></pre></div>
 
 <p>To run the formula, press <code>TAB</code> while in its cell.</p>
 <p>Afterwards, the table can be exported to csv with <code>org-table-export</code>.</p>
 <p><strong>NOTE</strong>: To make all of the above work, set</p>
-<div class="highlight"><pre><span></span><span class="p">(</span><span class="k">setq</span> <span class="nv">org-clock-into-drawer</span> <span class="no">nil</span><span class="p">)</span>
-</pre></div>
+<div class="highlight"><pre><span></span><code><span class="p">(</span><span class="k">setq</span> <span class="nv">org-clock-into-drawer</span> <span class="no">nil</span><span class="p">)</span>
+</code></pre></div>
 
 <p>in your config, otherwise clock entries will go into a <code>LOGBOOK</code> drawer and I haven’t yet figured out how to parse them from there.</p> </div>
   </section>
