@@ -23,6 +23,7 @@ let
   siteSrcRegex = [
     "^posts.*$"
     "^pages.*$"
+    "^lists.*$"
     "^static.*$"
     "^templates.*$"
     "^config\.yml$"
