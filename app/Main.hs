@@ -9,7 +9,6 @@ module Main where
 import Control.Monad (forM)
 import Control.Monad.IO.Class (liftIO)
 import qualified Data.Aeson as Ae
-import Data.Function ((&))
 import qualified Data.HashMap.Strict as HM
 import Data.List (foldl', sortOn)
 import Data.Ord (Down (..))
@@ -22,10 +21,10 @@ import Development.Shake ((%>))
 import qualified Development.Shake as S
 import Development.Shake.FilePath ((-<.>), (<.>), (</>))
 import qualified Development.Shake.FilePath as SF
-import Peits.Pandoc
+import Peits.Options (Options (..), getOptions, options)
+import Peits.Pandoc (parseAndRenderPage, parseAndRenderPost)
 import Peits.Types
-import Peits.Util
-import System.Console.GetOpt (ArgDescr (..), OptDescr (..))
+import Peits.Util (getMatchingFiles, json, renderTemplate)
 import qualified Text.Mustache as Mu
 
 buildDir :: FilePath
@@ -35,40 +34,9 @@ buildDir = "_build"
 
 --- $> :main
 
-data Options = Options
-  { optSyntaxHighlightMethod :: Maybe SyntaxHighlightMethod
-  }
-
-defaultOptions :: Options
-defaultOptions =
-  Options
-    { optSyntaxHighlightMethod = Nothing
-    }
-
-readSyntaxHighlightMethod :: Maybe String -> Either String (Options -> Options)
-readSyntaxHighlightMethod maybeMethod = case methodOrErr of
-  Right method -> Right (\o -> o {optSyntaxHighlightMethod = Just method})
-  Left err -> Left err
-  where
-    methodOrErr = case maybeMethod of
-      Nothing -> Right Pygments
-      Just "default" -> Right Default
-      Just "pygments" -> Right Pygments
-      Just "prismjs" -> Right PrismJS
-      Just x -> Left $ "Unknown syntax highlighting method " ++ x
-
-shakeArgs :: [OptDescr (Either String (Options -> Options))]
-shakeArgs =
-  [ Option
-      ""
-      ["highlight"]
-      (OptArg readSyntaxHighlightMethod "METHOD")
-      "Syntax highlighting method (default/pygments/prismjs)"
-  ]
-
 main :: IO ()
-main = S.shakeArgsWith S.shakeOptions shakeArgs $ \flags _targets -> (pure . Just) $ do
-  let Options {..} = foldl (&) defaultOptions flags
+main = S.shakeArgsWith S.shakeOptions options $ \flags _targets -> (pure . Just) $ do
+  let Options {..} = getOptions flags
 
   S.phony "clean" $ do
     S.putNormal [i|Cleaning files in #{buildDir}|]
