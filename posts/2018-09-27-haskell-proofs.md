@@ -207,7 +207,6 @@ plusLeftId = Refl
 
 Which, when compiled, unfortunately fails:
 
-
 ```
 • Couldn't match type ‘a’ with ‘'Z + a’
     ‘a’ is a rigid type variable bound by
@@ -528,7 +527,7 @@ plusAssoc a b SZ =
   in step1 a b ==> step2 a b
 ```
 
-Voila! Onward to the next step, the induction.
+Voilà! Onward to the next step, the induction.
 
 ``` haskell
 plusAssoc
@@ -628,8 +627,8 @@ The base case $b = 0$ is the left identity property.
 
 For the second base case $b = 1$:
 
-- First we prove it for $a = 0$, which gives $0 + 1 = 1 + 0$, the
-right identity property.
+- First we prove it for $a = 0$, which gives $0 + 1 = 1 + 0$, the right identity
+  property.
 - Then we prove inductively, assuming $a + 1 = 1 + a$:
 
 $$
@@ -690,7 +689,7 @@ reason about the length when manipulating it.
 
 One common example is appending two vectors. It is apparent that if one has
 length `n` and the other has length `m`, then the resulting vector will have
-length `n + m`. A naive first attemt would be the following:
+length `n + m`. A naive first attempt would be the following:
 
 ``` haskell
 append :: Vec n a -> Vec m a -> Vec (n + m) a
