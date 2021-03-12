@@ -346,7 +346,7 @@ a + S(b) = S (a + b) &amp;&amp; \text{(2)}\\
   <span class="kr">in</span> <span class="n">step1</span> <span class="n">a</span> <span class="n">b</span> <span class="o">==&gt;</span> <span class="n">step2</span> <span class="n">a</span> <span class="n">b</span>
 </code></pre></div>
 
-<p>Voila! Onward to the next step, the induction.</p>
+<p>Voilà! Onward to the next step, the induction.</p>
 <div class="highlight"><pre><span></span><code><span class="nf">plusAssoc</span>
   <span class="ow">::</span> <span class="kt">SNat</span> <span class="n">a</span>
   <span class="ow">-&gt;</span> <span class="kt">SNat</span> <span class="n">b</span>
@@ -470,7 +470,7 @@ a + S(b) = S (a + b) &amp;&amp; \text{(2)}\\
 </code></pre></div>
 
 <p>I’m not going to go into detail here, but the most important part is that this vector type has its length in its type as extra information, and we need to reason about the length when manipulating it.</p>
-<p>One common example is appending two vectors. It is apparent that if one has length <code>n</code> and the other has length <code>m</code>, then the resulting vector will have length <code>n + m</code>. A naive first attemt would be the following:</p>
+<p>One common example is appending two vectors. It is apparent that if one has length <code>n</code> and the other has length <code>m</code>, then the resulting vector will have length <code>n + m</code>. A naive first attempt would be the following:</p>
 <div class="highlight"><pre><span></span><code><span class="nf">append</span> <span class="ow">::</span> <span class="kt">Vec</span> <span class="n">n</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">Vec</span> <span class="n">m</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">Vec</span> <span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="n">m</span><span class="p">)</span> <span class="n">a</span>
 <span class="nf">append</span> <span class="kt">V0</span>      <span class="n">ys</span> <span class="ow">=</span> <span class="n">ys</span>
 <span class="nf">append</span> <span class="p">(</span><span class="n">x</span><span class="kt">:&gt;</span><span class="n">xs</span><span class="p">)</span> <span class="n">ys</span> <span class="ow">=</span> <span class="n">undefined</span> <span class="c1">-- let&#39;s wait for now</span>
