@@ -22,7 +22,7 @@ system, and it is of course [open source][site-source]. The idea and much of the
 code was taken from [Mark Karpov][mark-karpov]'s site.
 
 In this site you can also find a [list of some of my projects][projects] and a
-[list of talks I have given](/lists/talks.html).
+[list of talks I have given][talks].
 
 ---
 
@@ -32,7 +32,6 @@ In this site you can also find a [list of some of my projects][projects] and a
 - []{.fab .fa-linkedin-in} [alexpeits][linkedin]
 - []{.fab .fa-reddit-alien} [u/primitiveinds][reddit]
 - []{.fab .fa-keybase} [alexpeits][keybase]
-
 
 <!-- links -->
 
