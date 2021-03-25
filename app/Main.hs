@@ -3,6 +3,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE QuasiQuotes #-}
 {-# LANGUAGE RecordWildCards #-}
+{-# LANGUAGE TypeFamilies #-}
 
 module Main where
 
@@ -21,10 +22,12 @@ import Development.Shake ((%>))
 import qualified Development.Shake as S
 import Development.Shake.FilePath ((-<.>), (<.>), (</>))
 import qualified Development.Shake.FilePath as SF
+import Peits.Env (Env (..), ShellCommand (..))
 import Peits.Options (Options (..), getOptions, options)
 import Peits.Pandoc (parseAndRenderPage, parseAndRenderPost)
 import Peits.Types
 import Peits.Util (getMatchingFiles, json, renderTemplate)
+import System.Process (readProcess)
 import qualified Text.Mustache as Mu
 
 buildDir :: FilePath
@@ -41,6 +44,14 @@ main = S.shakeArgsWith S.shakeOptions options $ \flags _targets -> (pure . Just)
   S.phony "clean" $ do
     S.putNormal [i|Cleaning files in #{buildDir}|]
     S.removeFilesAfter buildDir ["//*"]
+
+  runSh <- S.addOracleCache $ \ShellCommand {..} -> do
+    let cmd = Tx.unpack shCommand
+        args = Tx.unpack <$> shArgs
+        stdin = maybe mempty Tx.unpack shStdin
+    liftIO $ Tx.pack <$> readProcess cmd args stdin
+
+  let env = Env {runShellCommand = runSh}
 
   let readYaml :: Ae.FromJSON a => FilePath -> IO a
       readYaml fp = do
@@ -69,7 +80,7 @@ main = S.shakeArgsWith S.shakeOptions options $ \flags _targets -> (pure . Just)
   getPost <- S.newCache $ \fp -> do
     S.need [fp]
     cfg <- config
-    parseAndRenderPost fp cfg
+    parseAndRenderPost env fp cfg
   -- collect all posts in a list, sorted in reverse chronological order
   allPosts <- newConstCache $ do
     files <- getMatchingFiles "posts/*.md"
@@ -108,7 +119,7 @@ main = S.shakeArgsWith S.shakeOptions options $ \flags _targets -> (pure . Just)
   getPage <- S.newCache $ \fp -> do
     S.need [fp]
     cfg <- config
-    parseAndRenderPage fp cfg
+    parseAndRenderPage env fp cfg
 
   let buildPage input output = do
         cfg <- config

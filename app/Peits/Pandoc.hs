@@ -9,7 +9,7 @@ module Peits.Pandoc where
 import Control.Applicative ((<|>))
 import Control.Monad (void)
 import Control.Monad.Combinators (manyTill)
-import Control.Monad.IO.Class (MonadIO, liftIO)
+import Control.Monad.IO.Class (liftIO)
 import qualified Data.Aeson as Ae
 import qualified Data.Bifunctor as Bi
 import Data.Maybe (fromMaybe)
@@ -20,10 +20,11 @@ import Data.Text.Encoding (encodeUtf8)
 import qualified Data.Text.IO as Tx.IO
 import Data.Void (Void)
 import qualified Data.Yaml as Yaml
+import qualified Development.Shake as S
 import Development.Shake.FilePath ((-<.>))
 import Network.URI (isRelativeReference)
+import Peits.Env (Env (..), ShellCommand (..))
 import Peits.Types
-import System.Process (readProcess)
 import qualified Text.Megaparsec as M
 import qualified Text.Megaparsec.Char as M
 import qualified Text.Pandoc as P
@@ -33,29 +34,30 @@ import Text.Pandoc.Shared (addMetaField)
 import qualified Text.Pandoc.Walk as PW
 
 parseAndRenderPost ::
-  (MonadIO m, MonadFail m) => FilePath -> Config -> m Post
-parseAndRenderPost fp config = do
-  (meta, html) <- parseAndRenderMd fp config
+  Env -> FilePath -> Config -> S.Action Post
+parseAndRenderPost env fp config = do
+  (meta, html) <- parseAndRenderMd env fp config
   let htmlFp = "/" <> fp -<.> "html"
   pure $ Post meta fp htmlFp html
 
 parseAndRenderPage ::
-  (MonadIO m, MonadFail m) => FilePath -> Config -> m Page
-parseAndRenderPage fp config = do
-  (meta, html) <- parseAndRenderMd fp config
+  Env -> FilePath -> Config -> S.Action Page
+parseAndRenderPage env fp config = do
+  (meta, html) <- parseAndRenderMd env fp config
   let htmlFp = "/" <> fp -<.> "html"
   pure $ Page meta fp htmlFp html
 
 parseAndRenderMd ::
-  (MonadIO m, MonadFail m, Ae.FromJSON meta, Toc meta, Bibliography meta) =>
+  (Ae.FromJSON meta, Toc meta, Bibliography meta) =>
+  Env ->
   FilePath ->
   Config ->
-  m (meta, Html)
-parseAndRenderMd fp config = do
+  S.Action (meta, Html)
+parseAndRenderMd env fp config = do
   (meta, _content, full) <- parseMd fp
-  (meta,) <$> renderMd meta full config
+  (meta,) <$> renderMd env meta full config
 
-parseMd :: (MonadIO m, MonadFail m, Ae.FromJSON meta) => FilePath -> m (meta, MdContent, MdFull)
+parseMd :: Ae.FromJSON meta => FilePath -> S.Action (meta, MdContent, MdFull)
 parseMd fp = do
   mdFull <- liftIO $ Tx.IO.readFile fp
   (metaStr, md) <- case partitionMd fp mdFull of
@@ -84,8 +86,13 @@ pandocTemplate tocTitle =
     |]
 
 renderMd ::
-  (MonadIO m, Toc meta, Bibliography meta) => meta -> MdFull -> Config -> m Html
-renderMd meta (MdFull md) config = liftIO $ do
+  (Toc meta, Bibliography meta) =>
+  Env ->
+  meta ->
+  MdFull ->
+  Config ->
+  S.Action Html
+renderMd env meta (MdFull md) config = do
   let readerOptions = P.def {P.readerExtensions = P.pandocExtensions}
       tocTemplate =
         either error id $
@@ -101,14 +108,23 @@ renderMd meta (MdFull md) config = liftIO $ do
             P.writerTableOfContents = usesToc meta,
             P.writerTOCDepth = getTocDepth meta
           }
-  result <- P.runIO $ do
-    doc <- setRefSectionTitle meta <$> P.readMarkdown readerOptions md
-    let citeFilters = [processCitations | usesCitations meta]
-        otherFilters = citeFilters
-        filters = (liftIO . filterPandoc config) : otherFilters
-    doc' <- foldl (>>=) (pure doc) filters
-    P.writeHtml5String writerOptions doc'
-  Html <$> P.handleError result
+  let runPandoc p = liftIO $ P.handleError =<< P.runIO p
+  doc <-
+    runPandoc $
+      setRefSectionTitle meta <$> P.readMarkdown readerOptions md
+  doc' <- runPandoc $ processCitations doc
+  doc'' <- filterPandoc env config doc'
+  html <- runPandoc $ P.writeHtml5String writerOptions doc''
+  pure $ Html html
+
+-- result <- P.runIO $ do
+--   doc <- setRefSectionTitle meta <$> P.readMarkdown readerOptions md
+--   let citeFilters = [processCitations | usesCitations meta]
+--       otherFilters = citeFilters
+--       filters = (liftIO . filterPandoc config) : otherFilters
+--   doc' <- foldl (>>=) (pure doc) filters
+--   P.writeHtml5String writerOptions doc'
+-- Html <$> P.handleError result
 
 setRefSectionTitle :: Bibliography meta => meta -> P.Pandoc -> P.Pandoc
 setRefSectionTitle meta (P.Pandoc pMeta blocks) = P.Pandoc pMeta' blocks
@@ -138,10 +154,10 @@ partitionMd fp md = Bi.first M.errorBundlePretty (M.parse parser fp md)
       b <- M.takeRest
       pure (Just a, b)
 
-filterPandoc :: Config -> P.Pandoc -> IO P.Pandoc
-filterPandoc Config {..} = PW.walkM bfilter
+filterPandoc :: Env -> Config -> P.Pandoc -> S.Action P.Pandoc
+filterPandoc env Config {..} = PW.walkM bfilter
   where
-    bfilter :: P.Block -> IO P.Block
+    bfilter :: P.Block -> S.Action P.Block
     bfilter = \case
       cb@(P.CodeBlock (_ids, clss, options) code) ->
         let (lang, classes) = splitCodeClasses clss
@@ -155,7 +171,7 @@ filterPandoc Config {..} = PW.walkM bfilter
                 pure $ P.RawBlock (P.Format "html") (prismjs code lang classes options)
       other -> PW.walkM ifilter other
 
-    ifilter :: P.Inline -> IO P.Inline
+    ifilter :: P.Inline -> S.Action P.Inline
     ifilter = \case
       (P.Link (ids, clss, options) inlines tgt@(uri, _title)) -> do
         let newClss =
@@ -170,11 +186,17 @@ filterPandoc Config {..} = PW.walkM bfilter
       [] -> (Nothing, [])
       (l : rest) -> (Just l, rest)
 
-    pygments :: Text -> Maybe Text -> [Text] -> [(Text, Text)] -> IO Text
+    pygments :: Text -> Maybe Text -> [Text] -> [(Text, Text)] -> S.Action Text
     pygments code mLang _clss _opts = do
       let lang = fromMaybe "text" mLang
-          args = Tx.unpack <$> ["-l", lang, "-f", "html", "-O", "wrapcode"]
-      Tx.pack <$> readProcess "pygmentize" args (Tx.unpack code)
+          cmd =
+            ShellCommand
+              { shCommand = "pygmentize",
+                shArgs = ["-l", lang, "-f", "html", "-O", "wrapcode"],
+                shStdin = Just code,
+                shExtra = Nothing
+              }
+      runShellCommand env cmd
 
     prismjs :: Text -> Maybe Text -> [Text] -> [(Text, Text)] -> Text
     prismjs code mLang clss opts =
