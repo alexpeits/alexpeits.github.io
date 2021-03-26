@@ -1,13 +1,13 @@
 {
-  "date": "Fri Mar 19 16:04:29 2021 +0000",
-  "sha": "b5bbafa8f51ee1db0734e7303f709aa6c3a13b0d",
-  "commit_message": "Lint",
+  "date": "Fri Mar 26 10:32:06 2021 +0000",
+  "sha": "7a8e9e0d72c6d75094b14ab4cc8e6e42368480a1",
+  "commit_message": "Update check-links script, add markdownlint config",
   "home": "https://alexpeits.github.io",
   "gh_actor": "alexpeits",
   "gh_repository": "alexpeits/alexpeits.github.io",
   "gh_event_name": "push",
-  "gh_run_id": "668509349",
-  "gh_run_number": "98",
-  "gh_sha": "b5bbafa8f51ee1db0734e7303f709aa6c3a13b0d",
+  "gh_run_id": "689650679",
+  "gh_run_number": "99",
+  "gh_sha": "7a8e9e0d72c6d75094b14ab4cc8e6e42368480a1",
   "gh_ref": "refs/heads/develop"
 }
