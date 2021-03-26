@@ -40,8 +40,10 @@ build-info-gh-actions:
 serve-watch:
 	yarn 'serve:watch'
 
-check-links:
+linkcheck:
 	yarn 'check-links:all'
 
 md-lint:
 	yarn 'md-lint'
+
+check-md: linkcheck md-lint
