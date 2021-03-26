@@ -1,15 +1,13 @@
 {
-  "date": "Fri Mar 26 11:55:46 2021 +0000",
-  "sha": "9c22076d57d0072f406b34d17b76ab7c6f1bf9af",
-  "commit_message": "Merge pull request #18 from alexpeits/cache-shell-cmd
-
-Cache shell commands using shake oracles (also module split)",
+  "date": "Fri Mar 26 12:03:48 2021 +0000",
+  "sha": "f00ea3f5fb5f36c86329cd409e3c1f169d4508a4",
+  "commit_message": "Add markdownlint, yarn script and make command",
   "home": "https://alexpeits.github.io",
   "gh_actor": "alexpeits",
   "gh_repository": "alexpeits/alexpeits.github.io",
   "gh_event_name": "push",
-  "gh_run_id": "689859097",
-  "gh_run_number": "102",
-  "gh_sha": "9c22076d57d0072f406b34d17b76ab7c6f1bf9af",
+  "gh_run_id": "689876955",
+  "gh_run_number": "103",
+  "gh_sha": "f00ea3f5fb5f36c86329cd409e3c1f169d4508a4",
   "gh_ref": "refs/heads/develop"
 }
