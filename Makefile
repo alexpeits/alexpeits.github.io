@@ -42,3 +42,6 @@ serve-watch:
 
 check-links:
 	yarn 'check-links:all'
+
+md-lint:
+	yarn 'md-lint'
