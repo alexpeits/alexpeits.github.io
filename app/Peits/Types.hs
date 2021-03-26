@@ -23,19 +23,6 @@ import qualified Data.Vector as V
 import Development.Shake.FilePath ((<.>), (</>))
 import qualified Text.Mustache as Mu
 
-data SyntaxHighlightMethod
-  = Default
-  | Pygments
-  | PrismJS
-  deriving (Eq, Show)
-
-instance Ae.FromJSON SyntaxHighlightMethod where
-  parseJSON = Ae.withText "SyntaxHighlightMethod" $ \case
-    "default" -> pure Default
-    "pygments" -> pure Pygments
-    "prismjs" -> pure PrismJS
-    other -> fail [i|Cannot parse syntax highlight method "#{other}"|]
-
 parseDate :: DateFmt -> Text -> Maybe T.UTCTime
 parseDate (DateFmt fmt) =
   TF.parseTimeM True TF.defaultTimeLocale (Tx.unpack fmt) . Tx.unpack
@@ -236,60 +223,6 @@ instance Ae.ToJSON PageMeta where
         "toc-depth" .= pgmTocDepth,
         "bibliography" .= pgmBibliography,
         "reference-section-title" .= pgmReferenceSectionTitle
-      ]
-
-data Config = Config
-  { cSiteTitle :: Text,
-    cAuthor :: Text,
-    cEmail :: Text,
-    cCopyright :: Text,
-    cHost :: Text,
-    cSyntaxHighlightMethod :: SyntaxHighlightMethod,
-    cNav :: [NavItem]
-  }
-
-instance Ae.FromJSON Config where
-  parseJSON = Ae.withObject "Config" $ \v ->
-    Config
-      <$> v .: "site_title"
-      <*> v .: "author"
-      <*> v .: "email"
-      <*> v .: "copyright"
-      <*> v .: "host"
-      <*> v .: "syntax_highlight"
-      <*> v .: "nav"
-
-instance Ae.ToJSON Config where
-  toJSON Config {..} =
-    Ae.object
-      [ "site_title" .= cSiteTitle,
-        "author" .= cAuthor,
-        "email" .= cEmail,
-        "copyright" .= cCopyright,
-        "syntax_highlight" .= ("" :: Text),
-        "highlight_default" .= (cSyntaxHighlightMethod == Default),
-        "highlight_pygments" .= (cSyntaxHighlightMethod == Pygments),
-        "highlight_prismjs" .= (cSyntaxHighlightMethod == PrismJS),
-        "host" .= cHost,
-        "nav" .= cNav
-      ]
-
-data NavItem = NavItem
-  { niName :: Text,
-    niUrl :: Text
-  }
-
-instance Ae.FromJSON NavItem where
-  parseJSON = Ae.withObject "NavItem" $ \v ->
-    NavItem
-      <$> v .: "name"
-      <*> v .: "url"
-
-instance Ae.ToJSON NavItem where
-  toJSON NavItem {..} =
-    Ae.object
-      [ "name" .= niName,
-        "url" .= niUrl
       ]
 
 data ListPage = ListPage

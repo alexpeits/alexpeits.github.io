@@ -9,7 +9,7 @@ where
 
 import Data.Function ((&))
 import Data.String.Interpolate (i)
-import Peits.Types
+import Peits.Config (SyntaxHighlightMethod (..))
 import System.Console.GetOpt (ArgDescr (..), OptDescr (..))
 
 data Options = Options
