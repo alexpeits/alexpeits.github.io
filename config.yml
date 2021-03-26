@@ -1,3 +1,4 @@
+---
 site_title: Alex's blog
 author: Alex Peitsinis
 email: alexpeitsinis@gmail.com
@@ -5,6 +6,7 @@ copyright: © 2017–present Alex Peitsinis
 host: https://alexpeits.github.io
 
 syntax_highlight: pygments
+math: mathjax
 
 nav:
   - name: Posts

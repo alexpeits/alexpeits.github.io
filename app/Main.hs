@@ -1,37 +1,33 @@
-{-# LANGUAGE GADTs #-}
 {-# LANGUAGE LambdaCase #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE QuasiQuotes #-}
 {-# LANGUAGE RecordWildCards #-}
-{-# LANGUAGE TypeFamilies #-}
 
 module Main where
 
 import Control.Monad (forM)
 import Control.Monad.IO.Class (liftIO)
 import qualified Data.Aeson as Ae
-import qualified Data.HashMap.Strict as HM
 import Data.List (foldl', sortOn)
 import Data.Ord (Down (..))
 import qualified Data.Set as Set
 import Data.String.Interpolate (i)
 import Data.Text (Text)
 import qualified Data.Text as Tx
-import qualified Data.Yaml as Yaml
-import Development.Shake ((%>))
 import qualified Development.Shake as S
-import Development.Shake.FilePath ((-<.>), (<.>), (</>))
+import Development.Shake.FilePath ((<.>), (</>))
 import qualified Development.Shake.FilePath as SF
+import Peits.Config (Config (..))
+import Peits.Constants (buildDir, configFile)
 import Peits.Env (Env (..), ShellCommand (..))
 import Peits.Options (Options (..), getOptions, options)
 import Peits.Pandoc (parseAndRenderPage, parseAndRenderPost)
+import Peits.Routes
 import Peits.Types
-import Peits.Util (getMatchingFiles, json, renderTemplate)
+import Peits.Util (getMatchingFiles, json, newConstCache, readYaml)
+import Peits.Template (renderTemplate)
 import System.Process (readProcess)
 import qualified Text.Mustache as Mu
-
-buildDir :: FilePath
-buildDir = "_build"
 
 --- $> :main clean
 
@@ -39,7 +35,7 @@ buildDir = "_build"
 
 main :: IO ()
 main = S.shakeArgsWith S.shakeOptions options $ \flags _targets -> (pure . Just) $ do
-  let Options {..} = getOptions flags
+  let opts = getOptions flags
 
   S.phony "clean" $ do
     S.putNormal [i|Cleaning files in #{buildDir}|]
@@ -53,17 +49,10 @@ main = S.shakeArgsWith S.shakeOptions options $ \flags _targets -> (pure . Just)
 
   let env = Env {runShellCommand = runSh}
 
-  let readYaml :: Ae.FromJSON a => FilePath -> IO a
-      readYaml fp = do
-        Yaml.decodeFileEither fp >>= \case
-          Left err -> fail (Yaml.prettyPrintParseException err)
-          Right v -> pure v
-
-  let configFile = "config.yml"
-      readConfig :: IO Config
+  let readConfig :: IO Config
       readConfig = do
-        conf <- readYaml "config.yml"
-        pure $ case optSyntaxHighlightMethod of
+        conf <- readYaml configFile
+        pure $ case optSyntaxHighlightMethod opts of
           Nothing -> conf
           Just meth -> conf {cSyntaxHighlightMethod = meth}
 
@@ -235,80 +224,6 @@ main = S.shakeArgsWith S.shakeOptions options $ \flags _targets -> (pure . Just)
   buildRoute imagesR S.copyFile'
   buildRoute keybaseR S.copyFile'
 
--- routes
-
-type InputAndOutput = FilePath -> FilePath -> S.Action ()
-
-type OnlyOutput = FilePath -> S.Action ()
-
-data Route f where
-  Mapping :: S.FilePattern -> (FilePath -> FilePath) -> Route InputAndOutput
-  Generated :: S.FilePattern -> Route OnlyOutput
-  Fixed :: FilePath -> Route OnlyOutput
-
-buildRoute ::
-  Route f ->
-  f ->
-  S.Rules ()
-buildRoute (Mapping pat outf) f = do
-  let mapOut x = buildDir </> outf x
-  S.action $
-    getMatchingFiles pat >>= S.need . fmap mapOut
-  inputMap <- newConstCache $ do
-    ifiles <- getMatchingFiles pat
-    pure $ HM.fromList (zip (mapOut <$> ifiles) ifiles)
-  mapOut pat %> \output -> do
-    input <- (HM.! output) <$> inputMap
-    f input output
-buildRoute (Generated pat) f = do
-  let outPat = buildDir </> pat
-  outPat %> \output ->
-    f output
-buildRoute (Fixed outFile) f = do
-  let outFile' = buildDir </> outFile
-  S.want [outFile']
-  outFile' %> \output ->
-    f output
-
-postR :: Route InputAndOutput
-postR = Mapping "posts/*.md" (-<.> "html")
-
-postListR :: Route OnlyOutput
-postListR = Fixed "index.html"
-
-pageR :: Route InputAndOutput
-pageR = Mapping "pages/*.md" (-<.> "html")
-
-listPageR :: Route InputAndOutput
-listPageR = Mapping "lists/*.yml" (-<.> "html")
-
-draftR :: Route InputAndOutput
-draftR = Mapping "drafts/*.md" (-<.> "html")
-
-draftListR :: Route OnlyOutput
-draftListR = Fixed "drafts.html"
-
-cssR :: Route InputAndOutput
-cssR = Mapping "static/css/*.css" SF.dropDirectory1
-
-jsR :: Route InputAndOutput
-jsR = Mapping "static/js/*.js" SF.dropDirectory1
-
-imagesR :: Route InputAndOutput
-imagesR = Mapping "static/images/*" SF.dropDirectory1
-
-keybaseR :: Route InputAndOutput
-keybaseR = Mapping "static/keybase.txt" SF.dropDirectory1
-
-tagR :: Route OnlyOutput
-tagR = Generated "tags/*.html"
-
-tagListR :: Route OnlyOutput
-tagListR = Fixed "tags.html"
-
-atomFeedR :: Route OnlyOutput
-atomFeedR = Fixed "atom.xml"
-
 -- helpers
 
 allTags :: [Post] -> Set.Set Tag
@@ -330,6 +245,3 @@ listNameFromPath =
   Tx.pack
     . SF.dropExtensions
     . SF.makeRelative (buildDir </> "lists")
-
-newConstCache :: S.Action v -> S.Rules (S.Action v)
-newConstCache action = fmap ($ ()) . S.newCache $ \() -> action

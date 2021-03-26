@@ -12,6 +12,7 @@ import Control.Monad.Combinators (manyTill)
 import Control.Monad.IO.Class (liftIO)
 import qualified Data.Aeson as Ae
 import qualified Data.Bifunctor as Bi
+import Data.Foldable (foldl')
 import Data.Maybe (fromMaybe)
 import Data.String.Interpolate (i, iii, __i)
 import Data.Text (Text)
@@ -23,6 +24,7 @@ import qualified Data.Yaml as Yaml
 import qualified Development.Shake as S
 import Development.Shake.FilePath ((-<.>))
 import Network.URI (isRelativeReference)
+import Peits.Config (Config (..), PandocMathMethod (..), SyntaxHighlightMethod (..))
 import Peits.Env (Env (..), ShellCommand (..))
 import Peits.Types
 import qualified Text.Megaparsec as M
@@ -94,6 +96,11 @@ renderMd ::
   S.Action Html
 renderMd env meta (MdFull md) config = do
   let readerOptions = P.def {P.readerExtensions = P.pandocExtensions}
+      mathMethod = case cPandocMathMethod config of
+        MathJax -> P.MathJax ""
+        Katex -> P.KaTeX ""
+        MathML -> P.MathML
+        PlainMath -> P.PlainMath
       tocTemplate =
         either error id $
           either (error . show) id $
@@ -103,28 +110,20 @@ renderMd env meta (MdFull md) config = do
       writerOptions =
         P.def
           { P.writerExtensions = P.pandocExtensions,
-            P.writerHTMLMathMethod = P.MathJax "",
+            P.writerHTMLMathMethod = mathMethod,
             P.writerTemplate = Just tocTemplate,
             P.writerTableOfContents = usesToc meta,
             P.writerTOCDepth = getTocDepth meta
           }
-  let runPandoc p = liftIO $ P.handleError =<< P.runIO p
-  doc <-
-    runPandoc $
-      setRefSectionTitle meta <$> P.readMarkdown readerOptions md
-  doc' <- runPandoc $ processCitations doc
-  doc'' <- filterPandoc env config doc'
-  html <- runPandoc $ P.writeHtml5String writerOptions doc''
-  pure $ Html html
+      runPandoc p = liftIO $ P.handleError =<< P.runIO p
 
--- result <- P.runIO $ do
---   doc <- setRefSectionTitle meta <$> P.readMarkdown readerOptions md
---   let citeFilters = [processCitations | usesCitations meta]
---       otherFilters = citeFilters
---       filters = (liftIO . filterPandoc config) : otherFilters
---   doc' <- foldl (>>=) (pure doc) filters
---   P.writeHtml5String writerOptions doc'
--- Html <$> P.handleError result
+  doc <- runPandoc $ do
+    mdDoc <- setRefSectionTitle meta <$> P.readMarkdown readerOptions md
+    let filters = [processCitations | usesCitations meta]
+    foldl' (>>=) (pure mdDoc) filters
+  doc' <- filterPandoc env config doc
+
+  Html <$> runPandoc (P.writeHtml5String writerOptions doc')
 
 setRefSectionTitle :: Bibliography meta => meta -> P.Pandoc -> P.Pandoc
 setRefSectionTitle meta (P.Pandoc pMeta blocks) = P.Pandoc pMeta' blocks
