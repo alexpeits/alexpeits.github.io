@@ -1,13 +1,13 @@
 {
-  "date": "Fri Mar 26 12:03:48 2021 +0000",
-  "sha": "f00ea3f5fb5f36c86329cd409e3c1f169d4508a4",
-  "commit_message": "Add markdownlint, yarn script and make command",
+  "date": "Fri Mar 26 12:06:29 2021 +0000",
+  "sha": "4e08261660e60bfb88bba123b536753d13635a88",
+  "commit_message": "Update makefile",
   "home": "https://alexpeits.github.io",
   "gh_actor": "alexpeits",
   "gh_repository": "alexpeits/alexpeits.github.io",
   "gh_event_name": "push",
-  "gh_run_id": "689876955",
-  "gh_run_number": "103",
-  "gh_sha": "f00ea3f5fb5f36c86329cd409e3c1f169d4508a4",
+  "gh_run_id": "689883491",
+  "gh_run_number": "104",
+  "gh_sha": "4e08261660e60bfb88bba123b536753d13635a88",
   "gh_ref": "refs/heads/develop"
 }
