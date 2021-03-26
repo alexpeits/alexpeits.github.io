@@ -1,0 +1,14 @@
+---
+default: true
+# allow multiple level 1 headings
+single-h1: false
+# allow fenced blocks with no language
+fenced-code-language: false
+# ordered lists should be prefixed with 1. or actually be ordered
+ol-prefix: one_or_ordered
+# allow inline html
+no-inline-html: false
+# TODO: code blocks might need to be more narrow
+line-length:
+  line_length: 80
+  code_block_line_length: 80

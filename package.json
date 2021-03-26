@@ -4,7 +4,7 @@
   "description": "alexpeits.github.io",
   "scripts": {
     "serve:watch": "browser-sync start --server _build --port 8000 --files _build/*/**",
-    "check-links:all": "find . -name '*.md' -not -path './node_modules/*' -exec markdown-link-check '{}' --config .github/config/markdown_link_check.json ';'",
+    "check-links:all": "find . \\( -name '*.md' -or -name '*.yml' \\) -and \\( -path './posts/*' -or -path './pages/*' -or -path './lists/*' -or -path './README.md' \\) -exec markdown-link-check '{}' --config .github/config/markdown_link_check.json ';'",
     "check-links": "markdown-link-check --config .github/config/markdown_link_check.json"
   },
   "repository": {
