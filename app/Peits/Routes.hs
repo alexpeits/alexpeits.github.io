@@ -49,6 +49,12 @@ tagListR = Fixed "tags.html"
 atomFeedR :: Route OnlyOutput
 atomFeedR = Fixed "atom.xml"
 
+mermaidDiagramLightR :: Route OnlyOutput
+mermaidDiagramLightR = Generated "assets/mermaid/light/*.svg"
+
+mermaidDiagramDarkR :: Route OnlyOutput
+mermaidDiagramDarkR = Generated "assets/mermaid/dark/*.svg"
+
 type InputAndOutput = FilePath -> FilePath -> S.Action ()
 
 type OnlyOutput = FilePath -> S.Action ()

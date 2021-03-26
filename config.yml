@@ -7,6 +7,9 @@ host: https://alexpeits.github.io
 
 syntax_highlight: pygments
 math: mathjax
+mermaid:
+  light_theme: default
+  dark_theme: dark
 
 nav:
   - name: Posts

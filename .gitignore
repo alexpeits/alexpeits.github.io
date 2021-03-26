@@ -24,11 +24,16 @@ cabal.project.local~
 
 result
 site/
+tmp/*
+!tmp/.gitkeep
 .shake/
 _build/
 .direnv/
 
+TAGS
+
 node_modules/
+yarn-error.log
 
 # for testing md features
 pages/test.md

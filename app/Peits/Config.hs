@@ -18,6 +18,7 @@ data Config = Config
     cHost :: Text,
     cSyntaxHighlightMethod :: SyntaxHighlightMethod,
     cPandocMathMethod :: PandocMathMethod,
+    cMermaid :: MermaidConfig,
     cNav :: [NavItem]
   }
 
@@ -31,6 +32,7 @@ instance Ae.FromJSON Config where
       <*> v .: "host"
       <*> v .:? "syntax_highlight" .!= Pygments
       <*> v .:? "math" .!= MathJax
+      <*> v .:? "mermaid" .!= defaultMermaidConfig
       <*> v .: "nav"
 
 instance Ae.ToJSON Config where
@@ -92,3 +94,35 @@ instance Ae.FromJSON PandocMathMethod where
     "mathml" -> pure MathML
     "default" -> pure PlainMath
     other -> fail [i|Cannot parse math method "#{other}"|]
+
+data MermaidConfig = MermaidConfig
+  { mcLightTheme :: MermaidTheme,
+    mcDarkTheme :: MermaidTheme
+  }
+
+defaultMermaidConfig :: MermaidConfig
+defaultMermaidConfig =
+  MermaidConfig
+    { mcLightTheme = DefaultTheme,
+      mcDarkTheme = DarkTheme
+    }
+
+instance Ae.FromJSON MermaidConfig where
+  parseJSON = Ae.withObject "MermaidConfig" $ \v ->
+    MermaidConfig
+      <$> v .:? "light_theme" .!= DefaultTheme
+      <*> v .:? "dark_theme" .!= DarkTheme
+
+data MermaidTheme
+  = DefaultTheme
+  | ForestTheme
+  | NeutralTheme
+  | DarkTheme
+
+instance Ae.FromJSON MermaidTheme where
+  parseJSON = Ae.withText "MermaidTheme" $ \case
+    "default" -> pure DefaultTheme
+    "forest" -> pure ForestTheme
+    "neutral" -> pure NeutralTheme
+    "dark" -> pure DarkTheme
+    other -> fail [i|Cannot parse mermaid theme "#{other}"|]
