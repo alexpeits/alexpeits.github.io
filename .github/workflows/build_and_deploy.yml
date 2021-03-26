@@ -1,41 +1,48 @@
-name: "Deploy to gh pages"
+---
+name: 'Deploy to gh pages'
 on:
   pull_request:
     branches:
-    - develop
+      - develop
   push:
     branches:
-    - develop
+      - develop
 jobs:
   build-and-deploy:
     name: Build and deploy
     runs-on: ubuntu-latest
     env:
       GIT_COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
+      DEBUG: true
     steps:
-    - name: Checkout
-      uses: actions/checkout@v2.3.4
-      with:
-        persist-credentials: false
-    - name: Check markdown links
-      uses: gaurav-nelson/github-action-markdown-link-check@1.0.12
-      with:
-        config-file: .github/config/markdown_link_check.json
-    - name: Install nix
-      uses: cachix/install-nix-action@v12
-    - name: Setup cachix
-      uses: cachix/cachix-action@v8
-      with:
-        name: alexpeits-gh-actions
-        signingKey: '${{ secrets.CACHIX_SIGNING_KEY }}'
-    - name: Build site
-      run: |
-        nix-build -A site
-        make copy-nix-files
-        make build-info-gh-actions
-    - name: Deploy
-      if: ${{ github.event_name == 'push' }}
-      uses: JamesIves/github-pages-deploy-action@4.1.0
-      with:
-        BRANCH: master
-        FOLDER: site
+      - name: Checkout
+        uses: actions/checkout@v2.3.4
+        with:
+          persist-credentials: false
+      - name: Lint markdown files
+        uses: avto-dev/markdown-lint@v1
+        with:
+          config: '.markdownlint.yml'
+          args: './posts/*.md ./pages/*.md README.md'
+      - name: Check markdown links
+        uses: gaurav-nelson/github-action-markdown-link-check@1.0.12
+        with:
+          config-file: '.github/config/markdown_link_check.json'
+      - name: Install nix
+        uses: cachix/install-nix-action@v12
+      - name: Setup cachix
+        uses: cachix/cachix-action@v8
+        with:
+          name: alexpeits-gh-actions
+          signingKey: '${{ secrets.CACHIX_SIGNING_KEY }}'
+      - name: Build site
+        run: |
+          nix-build -A site
+          make copy-nix-files
+          make build-info-gh-actions
+      - name: Deploy
+        if: ${{ github.event_name == 'push' }}
+        uses: JamesIves/github-pages-deploy-action@4.1.0
+        with:
+          BRANCH: master
+          FOLDER: site
