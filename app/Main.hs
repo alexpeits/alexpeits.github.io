@@ -17,15 +17,15 @@ import qualified Data.Text as Tx
 import qualified Development.Shake as S
 import Development.Shake.FilePath ((<.>), (</>))
 import qualified Development.Shake.FilePath as SF
-import Peits.Config (Config (..))
+import Peits.Config (Config (..), MermaidConfig (..), MermaidTheme (..))
 import Peits.Constants (buildDir, configFile)
 import Peits.Env (Env (..), ShellCommand (..))
 import Peits.Options (Options (..), getOptions, options)
 import Peits.Pandoc (parseAndRenderPage, parseAndRenderPost)
 import Peits.Routes
+import Peits.Template (renderTemplate)
 import Peits.Types
 import Peits.Util (getMatchingFiles, json, newConstCache, readYaml)
-import Peits.Template (renderTemplate)
 import System.Process (readProcess)
 import qualified Text.Mustache as Mu
 
@@ -221,6 +221,27 @@ main = S.shakeArgsWith S.shakeOptions options $ \flags _targets -> (pure . Just)
   buildRoute cssR minify
   buildRoute jsR minify
 
+  let buildMermaid theme = \output -> do
+        mCfg <- cMermaid <$> config
+        let subdir = case theme of
+              Light -> "light"
+              Dark -> "dark"
+            mTheme = mermaidThemeCli $ case theme of
+              Light -> mcLightTheme mCfg
+              Dark -> mcDarkTheme mCfg
+            name =
+              SF.dropExtensions $
+                SF.makeRelative (buildDir </> "assets" </> "mermaid" </> subdir) output
+            input = "tmp" </> name <.> "mmd"
+        S.need [input]
+        S.command_
+          []
+          "mmdc"
+          ["-i", input, "-o", output, "--theme", mTheme]
+
+  buildRoute mermaidDiagramLightR $ buildMermaid Light
+  buildRoute mermaidDiagramDarkR $ buildMermaid Dark
+
   buildRoute imagesR S.copyFile'
   buildRoute keybaseR S.copyFile'
 
@@ -245,3 +266,10 @@ listNameFromPath =
   Tx.pack
     . SF.dropExtensions
     . SF.makeRelative (buildDir </> "lists")
+
+mermaidThemeCli :: MermaidTheme -> String
+mermaidThemeCli = \case
+  DefaultTheme -> "default"
+  ForestTheme -> "forest"
+  NeutralTheme -> "neutral"
+  DarkTheme -> "dark"

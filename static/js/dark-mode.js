@@ -23,10 +23,12 @@ function toggleDarkMode() {
   if (darkMode) {
     setLightMode();
     updateIcon(false);
+    setPicturesThemed("light");
     setUserPreference(false);
   } else {
     setDarkMode();
     updateIcon(true);
+    setPicturesThemed("dark");
     setUserPreference(true);
   }
 }
@@ -70,6 +72,23 @@ function shouldDarkMode() {
   }
 }
 
+function resetPicturesThemed() {
+  document.querySelectorAll("source[data-cloned-theme='true']").forEach(el => {
+    el.remove();
+  })
+}
+
+function setPicturesThemed(mode = undefined) {
+  resetPicturesThemed();
+  document.querySelectorAll(`picture > source[media*="(prefers-color-scheme: ${mode})"]`).forEach(el => {
+    const cloned = el.cloneNode();
+    cloned.removeAttribute('media');
+    cloned.setAttribute('data-cloned-theme', 'true');
+    el.parentNode.prepend(cloned);
+  });
+}
+
+
 if (shouldDarkMode()) {
   setDarkMode();
 } else {
@@ -79,18 +98,22 @@ if (shouldDarkMode()) {
 window.onload = function () {
   if (shouldDarkMode()) {
     updateIcon(true);
+    setPicturesThemed("dark");
   } else {
     updateIcon(false);
+    setPicturesThemed("light");
   }
 
   window.matchMedia(systemPrefersMatch).addEventListener("change", event => {
     if (event.matches) {
       clearUserPreference();
       setDarkMode();
+      resetPicturesThemed();
       updateIcon(true);
     } else {
       clearUserPreference();
       setLightMode();
+      resetPicturesThemed();
       updateIcon(false);
     }
   });

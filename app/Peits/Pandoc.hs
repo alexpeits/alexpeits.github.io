@@ -14,7 +14,7 @@ import qualified Data.Aeson as Ae
 import qualified Data.Bifunctor as Bi
 import Data.Foldable (foldl')
 import Data.Maybe (fromMaybe)
-import Data.String.Interpolate (i, iii, __i)
+import Data.String.Interpolate (i, __i)
 import Data.Text (Text)
 import qualified Data.Text as Tx
 import Data.Text.Encoding (encodeUtf8)
@@ -22,11 +22,14 @@ import qualified Data.Text.IO as Tx.IO
 import Data.Void (Void)
 import qualified Data.Yaml as Yaml
 import qualified Development.Shake as S
-import Development.Shake.FilePath ((-<.>))
+import Development.Shake.FilePath ((-<.>), (<.>), (</>))
 import Network.URI (isRelativeReference)
 import Peits.Config (Config (..), PandocMathMethod (..), SyntaxHighlightMethod (..))
+import Peits.Constants (buildDir)
 import Peits.Env (Env (..), ShellCommand (..))
+import qualified Peits.Html as Html
 import Peits.Types
+import Peits.Util (hashText)
 import qualified Text.Megaparsec as M
 import qualified Text.Megaparsec.Char as M
 import qualified Text.Pandoc as P
@@ -69,24 +72,6 @@ parseMd fp = do
   meta <- liftIO $ Yaml.decodeThrow metaStr
   pure (meta, MdContent md, MdFull mdFull)
 
-pandocTemplate :: Text -> Text
-pandocTemplate tocTitle =
-  [iii|
-    $if(toc)$
-    <div id="toc">
-      <div class="toc-title">
-        #{tocTitle}
-      </div>
-      <div class="toc-contents">
-        $table-of-contents$
-      </div>
-    </div>
-    $endif$
-    <div id="main">
-      $body$
-    </div>
-    |]
-
 renderMd ::
   (Toc meta, Bibliography meta) =>
   Env ->
@@ -106,7 +91,7 @@ renderMd env meta (MdFull md) config = do
           either (error . show) id $
             P.runPure $
               P.runWithDefaultPartials $
-                P.compileTemplate "" (pandocTemplate (getTocTitle meta))
+                P.compileTemplate "" (Html.layout (getTocTitle meta))
       writerOptions =
         P.def
           { P.writerExtensions = P.pandocExtensions,
@@ -158,16 +143,11 @@ filterPandoc env Config {..} = PW.walkM bfilter
   where
     bfilter :: P.Block -> S.Action P.Block
     bfilter = \case
-      cb@(P.CodeBlock (_ids, clss, options) code) ->
+      P.CodeBlock (ids, clss, options) code ->
         let (lang, classes) = splitCodeClasses clss
-         in case cSyntaxHighlightMethod of
-              Default ->
-                pure $
-                  P.Div ("", ["skylighting"], []) [cb]
-              Pygments ->
-                P.RawBlock (P.Format "html") <$> pygments code lang classes options
-              PrismJS ->
-                pure $ P.RawBlock (P.Format "html") (prismjs code lang classes options)
+         in case lang of
+              Just "mermaid" -> P.RawBlock (P.Format "html") <$> mermaid code options
+              _ -> syntaxHighlight lang classes ids options code
       other -> PW.walkM ifilter other
 
     ifilter :: P.Inline -> S.Action P.Inline
@@ -180,10 +160,37 @@ filterPandoc env Config {..} = PW.walkM bfilter
         pure $ P.Link (ids, newClss, options) inlines tgt
       other -> pure other
 
+    syntaxHighlight lang classes ids options code =
+      case cSyntaxHighlightMethod of
+        Default ->
+          pure $
+            P.Div ("", ["skylighting"], []) [P.CodeBlock (ids, classes, options) code]
+        Pygments ->
+          P.RawBlock (P.Format "html") <$> pygments code lang classes options
+        PrismJS ->
+          pure $ P.RawBlock (P.Format "html") (prismjs code lang classes options)
+
     splitCodeClasses :: [Text] -> (Maybe Text, [Text])
     splitCodeClasses = \case
       [] -> (Nothing, [])
       (l : rest) -> (Just l, rest)
+
+    mermaid :: Text -> [(Text, Text)] -> S.Action Text
+    mermaid code options = do
+      let name =
+            Tx.unpack $
+              fromMaybe (hashText code) (lookup "name" options)
+          mmd = "tmp" </> name <.> "mmd"
+          mermaidDir = buildDir </> "assets" </> "mermaid"
+          srcPrefix = "/assets" </> "mermaid"
+          svg theme = theme </> name <.> "svg"
+          svgPath theme = mermaidDir </> svg theme
+          svgSrc theme = srcPrefix </> svg theme
+
+      S.writeFileChanged mmd (Tx.unpack code)
+      S.need [svgPath "light", svgPath "dark"]
+
+      pure $ Html.picture (svgSrc "light") (svgSrc "dark")
 
     pygments :: Text -> Maybe Text -> [Text] -> [(Text, Text)] -> S.Action Text
     pygments code mLang _clss _opts = do

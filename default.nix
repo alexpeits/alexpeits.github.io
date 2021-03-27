@@ -41,15 +41,13 @@ let
         src = nixpkgs.lib.sourceByRegex ./. appSrcRegex;
         drv = self.callCabal2nix "peits" src { };
       in
-      hsPkgs // { peits = drv; };
+        hsPkgs // { peits = drv; };
   };
 
-  yarn = nixpkgs.yarn.override { nodejs = nixpkgs.nodejs-12_x; };
   deps = [
     nixpkgs.python37Packages.pygments
     nixpkgs.minify
-    nixpkgs.nodejs-12_x
-    yarn
+    nixpkgs.nodePackages.mermaid-cli
   ];
 
   site = nixpkgs.stdenv.mkDerivation {
@@ -75,11 +73,14 @@ let
 
   inotify = if isDarwin then [ nixpkgs.entr ] else [ nixpkgs.inotify-tools ];
 
+  yarn = nixpkgs.yarn.override { nodejs = nixpkgs.nodejs-12_x; };
   shell = haskellPackages.shellFor {
     packages = ps: [ ps.peits ];
     buildInputs = deps ++ inotify ++ [
       haskellPackages.ghcid
       haskellPackages.cabal-install
+      nixpkgs.nodejs-12_x
+      yarn
     ];
     withHoogle = true;
   };

@@ -24,6 +24,7 @@ executable peits
         Peits.Config
         Peits.Constants
         Peits.Env
+        Peits.Html
         Peits.Options
         Peits.Pandoc
         Peits.Routes
@@ -55,4 +56,5 @@ executable peits
         process >=1.6.9 && <1.7,
         shake >=0.19.4 && <0.20,
         stache >=2.2.0 && <2.3,
-        yaml >=0.11.5 && <0.12
+        yaml >=0.11.5 && <0.12,
+        cryptonite -any

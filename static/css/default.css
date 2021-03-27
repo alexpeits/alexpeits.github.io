@@ -130,6 +130,13 @@ ul.task-list{
   list-style: none;
 }
 
+/* images */
+img {
+  max-width: 100%;
+  display: block;
+  margin: auto;
+}
+
 /* nav */
 
 header {
