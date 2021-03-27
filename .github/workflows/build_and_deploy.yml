@@ -36,7 +36,7 @@ jobs:
           signingKey: '${{ secrets.CACHIX_SIGNING_KEY }}'
       - name: Build site
         run: |
-          nix-build -A site
+          nix-build --option sandbox false -A site
           make copy-nix-files
           make build-info-gh-actions
       - name: Deploy
