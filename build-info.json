@@ -1,15 +1,13 @@
 {
-  "date": "Sat Mar 27 14:15:10 2021 +0000",
-  "sha": "b7d814da24cf0ae14ed631e393b66da09be70dcf",
-  "commit_message": "Merge pull request #20 from alexpeits/mermaid
-
-Auto render mermaid diagrams with mmdc",
+  "date": "Sat Mar 27 14:50:40 2021 +0000",
+  "sha": "818134e4bffe404f270442414ee81979738cb1f6",
+  "commit_message": "disable nix-build sandbox for mmdc to work on CI",
   "home": "https://alexpeits.github.io",
   "gh_actor": "alexpeits",
   "gh_repository": "alexpeits/alexpeits.github.io",
   "gh_event_name": "push",
-  "gh_run_id": "692974820",
-  "gh_run_number": "118",
-  "gh_sha": "b7d814da24cf0ae14ed631e393b66da09be70dcf",
+  "gh_run_id": "693034209",
+  "gh_run_number": "119",
+  "gh_sha": "818134e4bffe404f270442414ee81979738cb1f6",
   "gh_ref": "refs/heads/develop"
 }
