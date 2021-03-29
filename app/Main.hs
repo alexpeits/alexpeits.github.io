@@ -237,7 +237,7 @@ main = S.shakeArgsWith S.shakeOptions options $ \flags _targets -> (pure . Just)
         S.command_
           []
           "mmdc"
-          ["-i", input, "-o", output, "--theme", mTheme]
+          ["-i", input, "-o", output, "--theme", mTheme, "-b", "transparent"]
 
   buildRoute mermaidDiagramLightR $ buildMermaid Light
   buildRoute mermaidDiagramDarkR $ buildMermaid Dark

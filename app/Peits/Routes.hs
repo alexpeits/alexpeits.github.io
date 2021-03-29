@@ -50,10 +50,10 @@ atomFeedR :: Route OnlyOutput
 atomFeedR = Fixed "atom.xml"
 
 mermaidDiagramLightR :: Route OnlyOutput
-mermaidDiagramLightR = Generated "assets/mermaid/light/*.svg"
+mermaidDiagramLightR = Generated "assets/mermaid/light/*"
 
 mermaidDiagramDarkR :: Route OnlyOutput
-mermaidDiagramDarkR = Generated "assets/mermaid/dark/*.svg"
+mermaidDiagramDarkR = Generated "assets/mermaid/dark/*"
 
 type InputAndOutput = FilePath -> FilePath -> S.Action ()
 

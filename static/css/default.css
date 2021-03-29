@@ -133,8 +133,10 @@ ul.task-list{
 /* images */
 img {
   max-width: 100%;
-  display: block;
-  margin: auto;
+}
+
+.wide img {
+  width: 100%;
 }
 
 /* nav */

@@ -24,12 +24,15 @@ layout tocTitle =
     </div>
     |]
 
-picture :: FilePath -> FilePath -> Text
-picture light dark =
+picture :: Bool -> FilePath -> FilePath -> Text
+picture wide light dark =
   [iii|
-    <picture>
+    <picture #{cls}>
       <source srcset="#{light}" media="(prefers-color-scheme: light)">
       <source srcset="#{dark}" media="(prefers-color-scheme: dark)">
       <img src="#{light}">
     </picture>
   |]
+  where
+    cls :: Text
+    cls = if wide then "class=\"wide\"" else ""

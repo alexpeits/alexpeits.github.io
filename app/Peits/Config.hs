@@ -96,22 +96,35 @@ instance Ae.FromJSON PandocMathMethod where
     other -> fail [i|Cannot parse math method "#{other}"|]
 
 data MermaidConfig = MermaidConfig
-  { mcLightTheme :: MermaidTheme,
+  { mcExt :: MermaidExt,
+    mcLightTheme :: MermaidTheme,
     mcDarkTheme :: MermaidTheme
   }
 
 defaultMermaidConfig :: MermaidConfig
 defaultMermaidConfig =
   MermaidConfig
-    { mcLightTheme = DefaultTheme,
+    { mcExt = MermaidSvg,
+      mcLightTheme = DefaultTheme,
       mcDarkTheme = DarkTheme
     }
 
 instance Ae.FromJSON MermaidConfig where
   parseJSON = Ae.withObject "MermaidConfig" $ \v ->
     MermaidConfig
-      <$> v .:? "light_theme" .!= DefaultTheme
+      <$> v .:? "ext" .!= MermaidSvg
+      <*> v .:? "light_theme" .!= DefaultTheme
       <*> v .:? "dark_theme" .!= DarkTheme
+
+data MermaidExt
+  = MermaidSvg
+  | MermaidPng
+
+instance Ae.FromJSON MermaidExt where
+  parseJSON = Ae.withText "MermaidExt" $ \case
+    "svg" -> pure MermaidSvg
+    "png" -> pure MermaidPng
+    other -> fail [i|Cannot parse mermaid output extension "#{other}"|]
 
 data MermaidTheme
   = DefaultTheme

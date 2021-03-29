@@ -24,7 +24,13 @@ import qualified Data.Yaml as Yaml
 import qualified Development.Shake as S
 import Development.Shake.FilePath ((-<.>), (<.>), (</>))
 import Network.URI (isRelativeReference)
-import Peits.Config (Config (..), PandocMathMethod (..), SyntaxHighlightMethod (..))
+import Peits.Config
+  ( Config (..),
+    MermaidConfig (..),
+    MermaidExt (..),
+    PandocMathMethod (..),
+    SyntaxHighlightMethod (..),
+  )
 import Peits.Constants (buildDir)
 import Peits.Env (Env (..), ShellCommand (..))
 import qualified Peits.Html as Html
@@ -180,17 +186,24 @@ filterPandoc env Config {..} = PW.walkM bfilter
       let name =
             Tx.unpack $
               fromMaybe (hashText code) (lookup "name" options)
+          wide = case lookup "wide" options of
+            Just "true" -> True
+            Just "True" -> True
+            _ -> False
           mmd = "tmp" </> name <.> "mmd"
           mermaidDir = buildDir </> "assets" </> "mermaid"
           srcPrefix = "/assets" </> "mermaid"
-          svg theme = theme </> name <.> "svg"
-          svgPath theme = mermaidDir </> svg theme
-          svgSrc theme = srcPrefix </> svg theme
+          ext = case mcExt cMermaid of
+            MermaidSvg -> "svg"
+            MermaidPng -> "png"
+          img theme = theme </> name <.> ext
+          imgPath theme = mermaidDir </> img theme
+          imgSrc theme = srcPrefix </> img theme
 
       S.writeFileChanged mmd (Tx.unpack code)
-      S.need [svgPath "light", svgPath "dark"]
+      S.need [imgPath "light", imgPath "dark"]
 
-      pure $ Html.picture (svgSrc "light") (svgSrc "dark")
+      pure $ Html.picture wide (imgSrc "light") (imgSrc "dark")
 
     pygments :: Text -> Maybe Text -> [Text] -> [(Text, Text)] -> S.Action Text
     pygments code mLang _clss _opts = do
