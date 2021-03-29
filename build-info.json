@@ -1,13 +1,13 @@
 {
-  "date": "Sat Mar 27 14:50:40 2021 +0000",
-  "sha": "818134e4bffe404f270442414ee81979738cb1f6",
-  "commit_message": "disable nix-build sandbox for mmdc to work on CI",
+  "date": "Mon Mar 29 09:08:32 2021 +0100",
+  "sha": "2cfcdbf80e87d17bee87ec370c9b5a9ddc0a5df2",
+  "commit_message": "set nix-build sandbox to relaxed",
   "home": "https://alexpeits.github.io",
   "gh_actor": "alexpeits",
   "gh_repository": "alexpeits/alexpeits.github.io",
   "gh_event_name": "push",
-  "gh_run_id": "693034209",
-  "gh_run_number": "119",
-  "gh_sha": "818134e4bffe404f270442414ee81979738cb1f6",
+  "gh_run_id": "697130751",
+  "gh_run_number": "120",
+  "gh_sha": "2cfcdbf80e87d17bee87ec370c9b5a9ddc0a5df2",
   "gh_ref": "refs/heads/develop"
 }
