@@ -1,13 +1,13 @@
 {
-  "date": "Mon Mar 29 17:11:36 2021 +0100",
-  "sha": "7d7ede1ce9b13f0bd1bb6c7d80e165d96117bd95",
-  "commit_message": "update watch.sh",
+  "date": "Tue Mar 30 11:13:28 2021 +0100",
+  "sha": "c6d4c7a3a0057408734df95f9af3ac1b7aee0978",
+  "commit_message": "Fix cabal",
   "home": "https://alexpeits.github.io",
   "gh_actor": "alexpeits",
   "gh_repository": "alexpeits/alexpeits.github.io",
   "gh_event_name": "push",
-  "gh_run_id": "698476421",
-  "gh_run_number": "123",
-  "gh_sha": "7d7ede1ce9b13f0bd1bb6c7d80e165d96117bd95",
+  "gh_run_id": "701031612",
+  "gh_run_number": "125",
+  "gh_sha": "c6d4c7a3a0057408734df95f9af3ac1b7aee0978",
   "gh_ref": "refs/heads/develop"
 }
