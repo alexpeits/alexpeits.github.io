@@ -36,8 +36,8 @@ In this site you can also find a [list of some of my projects][projects] and a
 <!-- links -->
 
 <!-- site -->
-[projects]: </lists/projects.html>
-[talks]: </lists/talks.html>
+[projects]: </pages/projects.html>
+[talks]: </pages/talks.html>
 
 <!-- repos -->
 [emacs.d]: <https://github.com/alexpeits/emacs.d>

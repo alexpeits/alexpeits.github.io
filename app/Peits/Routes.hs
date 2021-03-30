@@ -16,11 +16,9 @@ postR = Mapping "posts/*.md" (-<.> "html")
 postListR :: Route OnlyOutput
 postListR = Fixed "index.html"
 
+-- | builds markdown and yaml files in pages/
 pageR :: Route InputAndOutput
-pageR = Mapping "pages/*.md" (-<.> "html")
-
-listPageR :: Route InputAndOutput
-listPageR = Mapping "lists/*.yml" (-<.> "html")
+pageR = Mapping "pages/*" (-<.> "html")
 
 draftR :: Route InputAndOutput
 draftR = Mapping "drafts/*.md" (-<.> "html")

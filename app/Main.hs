@@ -23,7 +23,7 @@ import Peits.Env (Env (..), ShellCommand (..))
 import Peits.Options (Options (..), getOptions, options)
 import Peits.Pandoc (parseAndRenderPage, parseAndRenderPost)
 import Peits.Routes
-import qualified Peits.Template as Tmpl -- (renderTemplate)
+import qualified Peits.Template as Tmpl
 import Peits.Types
 import Peits.Util (getMatchingFiles, json, newConstCache, readYaml)
 import System.Process (readProcess)
@@ -110,7 +110,16 @@ main = S.shakeArgsWith S.shakeOptions options $ \flags _targets -> (pure . Just)
     cfg <- config
     parseAndRenderPage env fp cfg
 
-  let buildPage input output = do
+  getList <- S.newCache $ \fp -> do
+    S.need [fp]
+    liftIO $ readYaml fp
+
+  let buildPage input output = case SF.takeExtension input of
+        ".md" -> buildMdPage input output
+        ".yml" -> buildYmlPage input output
+        ".yaml" -> buildYmlPage input output
+        other -> fail [i|Unrecognized extension #{other} in pages/|]
+      buildMdPage input output = do
         page <- getPage input
         let content = unHtml $ pageRendered page
             ctx = Ae.toJSON $ pageMeta page
@@ -119,10 +128,20 @@ main = S.shakeArgsWith S.shakeOptions options $ \flags _targets -> (pure . Just)
           (Just content)
           [ctx]
           output
+      buildYmlPage input output = do
+        list <- getList input
+        let template = lTemplate list
+            ctxTitle = json "title" $ Ae.String (lTitle list)
+            ctx = Ae.toJSON list
+        renderTemplate
+          [template, "default"]
+          Nothing
+          [ctxTitle, ctx]
+          output
 
   buildRoute pageR buildPage
 
-  buildRoute draftR buildPage
+  buildRoute draftR buildMdPage
 
   allDrafts <- newConstCache $ do
     files <- getMatchingFiles "drafts/*.md"
@@ -156,21 +175,6 @@ main = S.shakeArgsWith S.shakeOptions options $ \flags _targets -> (pure . Just)
         ctxTitle = json "title" (Ae.String "Tags")
     renderTemplate
       ["tag_list", "default"]
-      Nothing
-      [ctxTitle, ctx]
-      output
-
-  getList <- S.newCache $ \fp -> do
-    S.need [fp]
-    liftIO $ readYaml fp
-
-  buildRoute listPageR $ \input output -> do
-    list <- getList input
-    let template = lTemplate list
-        ctxTitle = json "title" $ Ae.String (lTitle list)
-        ctx = Ae.toJSON list
-    renderTemplate
-      [template, "default"]
       Nothing
       [ctxTitle, ctx]
       output
@@ -236,12 +240,6 @@ tagFromPath =
     . Tx.pack
     . SF.dropExtensions
     . SF.makeRelative (buildDir </> "tags")
-
-listNameFromPath :: FilePath -> Text
-listNameFromPath =
-  Tx.pack
-    . SF.dropExtensions
-    . SF.makeRelative (buildDir </> "lists")
 
 mermaidThemeCli :: MermaidTheme -> String
 mermaidThemeCli = \case
