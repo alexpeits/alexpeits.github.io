@@ -1,13 +1,13 @@
 {
-  "date": "Tue Mar 30 17:07:26 2021 +0100",
-  "sha": "7ad35bba670cc72a25e1d7f6c4cd4d3cbf3c61e1",
-  "commit_message": "enable Ext_emoji",
+  "date": "Tue Mar 30 17:30:46 2021 +0100",
+  "sha": "6ac657320c4ee37e2d622205fb288786e19e4830",
+  "commit_message": "convenience wrapper around renderTemplate",
   "home": "https://alexpeits.github.io",
   "gh_actor": "alexpeits",
   "gh_repository": "alexpeits/alexpeits.github.io",
   "gh_event_name": "push",
-  "gh_run_id": "702062312",
-  "gh_run_number": "126",
-  "gh_sha": "7ad35bba670cc72a25e1d7f6c4cd4d3cbf3c61e1",
+  "gh_run_id": "702128046",
+  "gh_run_number": "127",
+  "gh_sha": "6ac657320c4ee37e2d622205fb288786e19e4830",
   "gh_ref": "refs/heads/develop"
 }
