@@ -23,7 +23,7 @@ import Peits.Env (Env (..), ShellCommand (..))
 import Peits.Options (Options (..), getOptions, options)
 import Peits.Pandoc (parseAndRenderPage, parseAndRenderPost)
 import Peits.Routes
-import Peits.Template (renderTemplate)
+import qualified Peits.Template as Tmpl -- (renderTemplate)
 import Peits.Types
 import Peits.Util (getMatchingFiles, json, newConstCache, readYaml)
 import System.Process (readProcess)
@@ -65,6 +65,14 @@ main = S.shakeArgsWith S.shakeOptions options $ \flags _targets -> (pure . Just)
     getMatchingFiles templateP >>= S.need
     liftIO (Mu.compileMustacheDir "default" (SF.takeDirectory templateP))
 
+  let -- wrapper around Peits.Template.renderTemplate
+      renderTemplate ::
+        [Mu.PName] -> Maybe Text -> [Ae.Value] -> FilePath -> S.Action ()
+      renderTemplate tmpls content ctx output = do
+        cfg <- config
+        ts <- templates
+        Tmpl.renderTemplate cfg ts tmpls content ctx output
+
   -- get a post by file path
   getPost <- S.newCache $ \fp -> do
     S.need [fp]
@@ -77,29 +85,21 @@ main = S.shakeArgsWith S.shakeOptions options $ \flags _targets -> (pure . Just)
     fmap (sortOn sortFn) . forM files $ \fp -> do
       getPost fp
   buildRoute postR $ \input output -> do
-    cfg <- config
-    ts <- templates
     post <- getPost input
     let content = unHtml $ postRendered post
         ctx = Ae.toJSON $ postMeta post
     renderTemplate
-      cfg
-      ts
       ["post", "default"]
       (Just content)
       [ctx]
       output
   buildRoute postListR $ \output -> do
-    cfg <- config
-    ts <- templates
     posts <- allPosts
     let tags = allTags posts
     S.need $ tagToPath <$> Set.toList tags
     let ctx = Ae.toJSON (PostList posts)
         ctxTitle = json "title" (Ae.String "Posts")
     renderTemplate
-      cfg
-      ts
       ["post_list", "default"]
       Nothing
       [ctxTitle, ctx]
@@ -111,14 +111,10 @@ main = S.shakeArgsWith S.shakeOptions options $ \flags _targets -> (pure . Just)
     parseAndRenderPage env fp cfg
 
   let buildPage input output = do
-        cfg <- config
-        ts <- templates
         page <- getPage input
         let content = unHtml $ pageRendered page
             ctx = Ae.toJSON $ pageMeta page
         renderTemplate
-          cfg
-          ts
           ["page", "default"]
           (Just content)
           [ctx]
@@ -133,44 +129,32 @@ main = S.shakeArgsWith S.shakeOptions options $ \flags _targets -> (pure . Just)
     forM files getPage
 
   buildRoute draftListR $ \output -> do
-    cfg <- config
-    ts <- templates
     drafts <- allDrafts
     let ctx = Ae.toJSON (PageList drafts)
         ctxTitle = json "title" (Ae.String "Drafts")
     renderTemplate
-      cfg
-      ts
       ["draft_list", "default"]
       Nothing
       [ctxTitle, ctx]
       output
 
   buildRoute tagR $ \output -> do
-    cfg <- config
     let tag = tagFromPath output
-    ts <- templates
     posts <- filter (Set.member tag . mTags . postMeta) <$> allPosts
     let ctx = Ae.toJSON (PostList posts)
         title = [i|Posts tagged "#{unTag tag}"|]
         ctxTitle = json "title" (Ae.String title)
     renderTemplate
-      cfg
-      ts
       ["post_list_tag", "default"]
       Nothing
       [ctxTitle, ctx]
       output
   buildRoute tagListR $ \output -> do
-    cfg <- config
-    ts <- templates
     posts <- allPosts
     let tags = Set.unions $ map (mTags . postMeta) posts
         ctx = Ae.toJSON $ mkTagList tags
         ctxTitle = json "title" (Ae.String "Tags")
     renderTemplate
-      cfg
-      ts
       ["tag_list", "default"]
       Nothing
       [ctxTitle, ctx]
@@ -181,23 +165,17 @@ main = S.shakeArgsWith S.shakeOptions options $ \flags _targets -> (pure . Just)
     liftIO $ readYaml fp
 
   buildRoute listPageR $ \input output -> do
-    cfg <- config
-    ts <- templates
     list <- getList input
     let template = lTemplate list
         ctxTitle = json "title" $ Ae.String (lTitle list)
         ctx = Ae.toJSON list
     renderTemplate
-      cfg
-      ts
       [template, "default"]
       Nothing
       [ctxTitle, ctx]
       output
 
   buildRoute atomFeedR $ \output -> do
-    cfg <- config
-    ts <- templates
     posts <- allPosts
     let ctxPosts = Ae.toJSON (PostList posts)
         feedFile = Tx.pack (SF.dropDirectory1 output)
@@ -205,8 +183,6 @@ main = S.shakeArgsWith S.shakeOptions options $ \flags _targets -> (pure . Just)
         feed = Feed feedFile feedUpdated
         ctxFeed = Ae.toJSON feed
     renderTemplate
-      cfg
-      ts
       ["atom_feed"]
       Nothing
       [ctxFeed, ctxPosts]
