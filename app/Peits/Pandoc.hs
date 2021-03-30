@@ -86,7 +86,11 @@ renderMd ::
   Config ->
   S.Action Html
 renderMd env meta (MdFull md) config = do
-  let readerOptions = P.def {P.readerExtensions = P.pandocExtensions}
+  let readerOptions =
+        P.def
+          { P.readerExtensions =
+              P.enableExtension P.Ext_emoji P.pandocExtensions
+          }
       mathMethod = case cPandocMathMethod config of
         MathJax -> P.MathJax ""
         Katex -> P.KaTeX ""
