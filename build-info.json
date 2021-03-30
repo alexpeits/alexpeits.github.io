@@ -1,13 +1,13 @@
 {
-  "date": "Tue Mar 30 17:30:46 2021 +0100",
-  "sha": "6ac657320c4ee37e2d622205fb288786e19e4830",
-  "commit_message": "convenience wrapper around renderTemplate",
+  "date": "Tue Mar 30 20:42:11 2021 +0100",
+  "sha": "baea4fc06612100a11c4d1f11c48a2984f59196f",
+  "commit_message": "Render yaml lists and pages from same dir",
   "home": "https://alexpeits.github.io",
   "gh_actor": "alexpeits",
   "gh_repository": "alexpeits/alexpeits.github.io",
   "gh_event_name": "push",
-  "gh_run_id": "702128046",
-  "gh_run_number": "127",
-  "gh_sha": "6ac657320c4ee37e2d622205fb288786e19e4830",
+  "gh_run_id": "702634144",
+  "gh_run_number": "128",
+  "gh_sha": "baea4fc06612100a11c4d1f11c48a2984f59196f",
   "gh_ref": "refs/heads/develop"
 }
