@@ -1,13 +1,13 @@
 {
-  "date": "Tue Mar 30 11:13:28 2021 +0100",
-  "sha": "c6d4c7a3a0057408734df95f9af3ac1b7aee0978",
-  "commit_message": "Fix cabal",
+  "date": "Tue Mar 30 17:07:26 2021 +0100",
+  "sha": "7ad35bba670cc72a25e1d7f6c4cd4d3cbf3c61e1",
+  "commit_message": "enable Ext_emoji",
   "home": "https://alexpeits.github.io",
   "gh_actor": "alexpeits",
   "gh_repository": "alexpeits/alexpeits.github.io",
   "gh_event_name": "push",
-  "gh_run_id": "701031612",
-  "gh_run_number": "125",
-  "gh_sha": "c6d4c7a3a0057408734df95f9af3ac1b7aee0978",
+  "gh_run_id": "702062312",
+  "gh_run_number": "126",
+  "gh_sha": "7ad35bba670cc72a25e1d7f6c4cd4d3cbf3c61e1",
   "gh_ref": "refs/heads/develop"
 }
