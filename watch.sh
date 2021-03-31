@@ -8,7 +8,7 @@ if command -v inotifywait; then
       app/*.hs \
       config.yml \
       posts/*.md \
-      pages/*.md \
+      pages/* \
       drafts/*.md \
       templates/*.mustache \
       static/**/*; do
@@ -20,7 +20,7 @@ elif command -v entr; then
       -wholename './app/*.hs' \
       -or -wholename './config.yml' \
       -or -wholename './posts/*.md' \
-      -or -wholename './pages/*.md' \
+      -or -wholename './pages/*' \
       -or -wholename './drafts/*.md' \
       -or -wholename './templates/*.mustache' \
       -or -wholename './static/*/**' | entr -d -c sh -c "cabal new-build; cabal new-exec peits -- $@"
