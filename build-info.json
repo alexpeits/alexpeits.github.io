@@ -1,15 +1,13 @@
 {
-  "date": "Wed Mar 31 09:42:37 2021 +0100",
-  "sha": "3bac767cd505a541a5950485be14e88c82dac895",
-  "commit_message": "Revert renderTemplate wrapper
-
-It was messing with re-rendering for some reason",
+  "date": "Wed Mar 31 10:05:12 2021 +0100",
+  "sha": "5deb38427244d87e364a521ac5d0f76c37e62ec3",
+  "commit_message": "update watch.sh",
   "home": "https://alexpeits.github.io",
   "gh_actor": "alexpeits",
   "gh_repository": "alexpeits/alexpeits.github.io",
   "gh_event_name": "push",
-  "gh_run_id": "704348993",
-  "gh_run_number": "129",
-  "gh_sha": "3bac767cd505a541a5950485be14e88c82dac895",
+  "gh_run_id": "704412595",
+  "gh_run_number": "130",
+  "gh_sha": "5deb38427244d87e364a521ac5d0f76c37e62ec3",
   "gh_ref": "refs/heads/develop"
 }
