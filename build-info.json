@@ -1,13 +1,15 @@
 {
-  "date": "Tue Mar 30 20:42:11 2021 +0100",
-  "sha": "baea4fc06612100a11c4d1f11c48a2984f59196f",
-  "commit_message": "Render yaml lists and pages from same dir",
+  "date": "Wed Mar 31 09:42:37 2021 +0100",
+  "sha": "3bac767cd505a541a5950485be14e88c82dac895",
+  "commit_message": "Revert renderTemplate wrapper
+
+It was messing with re-rendering for some reason",
   "home": "https://alexpeits.github.io",
   "gh_actor": "alexpeits",
   "gh_repository": "alexpeits/alexpeits.github.io",
   "gh_event_name": "push",
-  "gh_run_id": "702634144",
-  "gh_run_number": "128",
-  "gh_sha": "baea4fc06612100a11c4d1f11c48a2984f59196f",
+  "gh_run_id": "704348993",
+  "gh_run_number": "129",
+  "gh_sha": "3bac767cd505a541a5950485be14e88c82dac895",
   "gh_ref": "refs/heads/develop"
 }
