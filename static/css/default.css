@@ -493,7 +493,7 @@ hr {
 }
 
 li:target {
-  background-color: var(--color-info-bg);
+  background-color: var(--color-blue-bg);
 }
 
 .monospace {

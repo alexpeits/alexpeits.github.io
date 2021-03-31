@@ -36,11 +36,11 @@ compiled otherwise.
 One disclaimer: I am definitely not an expert so many things might not be
 correct. This post's style is informal and more of a braindump, much like some
 of my [favourite posts](https://artyom.me/lens-over-tea-1) out there. If you
-find any errors or if you have any question or comment, feel free to leave a
-comment below, drop me an email (`alexpeitsinis [at] gmail [dot] com`) or find
-me at fpslack (`@alexpeits`). What follows is also most definitely not suitable
-for "production use". However I believe it's a good application of using
-dependent types and some more exotic language extensions.
+find any errors or if you have any question or comment, feel free to drop me an
+email (`alexpeitsinis [at] gmail [dot] com`) or find me at fpslack
+(`@alexpeits`). What follows is also most definitely not suitable for
+"production use". However I believe it's a good application of using dependent
+types and some more exotic language extensions.
 
 [mads]: <https://www.madsbuch.com/proving-stuff-in-haskell/>
 
