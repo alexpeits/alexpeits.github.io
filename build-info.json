@@ -1,13 +1,13 @@
 {
-  "date": "Thu Apr 1 15:59:12 2021 +0100",
-  "sha": "a6a9227ebf9e927f5b4986958d98c93d58ae2cff",
-  "commit_message": "Add preprocessor step with mustache templating for md",
+  "date": "Thu Apr 1 20:47:01 2021 +0100",
+  "sha": "5a8f33fbc7938102aea00099e79fd5febd281b13",
+  "commit_message": "pass whole config in stache context for md tmpls",
   "home": "https://alexpeits.github.io",
   "gh_actor": "alexpeits",
   "gh_repository": "alexpeits/alexpeits.github.io",
   "gh_event_name": "push",
-  "gh_run_id": "708913441",
-  "gh_run_number": "132",
-  "gh_sha": "a6a9227ebf9e927f5b4986958d98c93d58ae2cff",
+  "gh_run_id": "709654710",
+  "gh_run_number": "133",
+  "gh_sha": "5a8f33fbc7938102aea00099e79fd5febd281b13",
   "gh_ref": "refs/heads/develop"
 }
