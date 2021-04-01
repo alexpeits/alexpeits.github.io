@@ -19,7 +19,8 @@ data Config = Config
     cSyntaxHighlightMethod :: SyntaxHighlightMethod,
     cPandocMathMethod :: PandocMathMethod,
     cMermaid :: MermaidConfig,
-    cNav :: [NavItem]
+    cNav :: [NavItem],
+    cRaw :: Ae.Value
   }
 
 instance Ae.FromJSON Config where
@@ -34,6 +35,7 @@ instance Ae.FromJSON Config where
       <*> v .:? "math" .!= MathJax
       <*> v .:? "mermaid" .!= defaultMermaidConfig
       <*> v .: "nav"
+      <*> pure (Ae.Object v)
 
 instance Ae.ToJSON Config where
   toJSON Config {..} =

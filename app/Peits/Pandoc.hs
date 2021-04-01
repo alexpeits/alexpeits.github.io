@@ -11,6 +11,7 @@ import Control.Monad (void)
 import Control.Monad.Combinators (manyTill)
 import Control.Monad.IO.Class (liftIO)
 import qualified Data.Aeson as Ae
+import Data.Aeson ((.=))
 import qualified Data.Bifunctor as Bi
 import Data.Foldable (foldl')
 import Data.Maybe (fromMaybe)
@@ -37,7 +38,7 @@ import Peits.Constants (buildDir)
 import Peits.Env (Env (..), ShellCommand (..))
 import qualified Peits.Html as Html
 import Peits.Types
-import Peits.Util (hashText)
+import Peits.Util (hashText, mergeJSON)
 import qualified Text.Megaparsec as M
 import qualified Text.Megaparsec.Char as M
 import qualified Text.Mustache as Mu
@@ -81,6 +82,18 @@ parseMd fp = do
   meta <- liftIO $ Yaml.decodeThrow metaStr
   pure (meta, MdContent md, MdFull mdFull)
 
+pandocReaderExtraExts :: [P.Extension]
+pandocReaderExtraExts = [P.Ext_emoji]
+
+pandocWriterExtraExts :: [P.Extension]
+pandocWriterExtraExts = []
+
+addPandocExts :: P.Extensions -> [P.Extension] -> P.Extensions
+addPandocExts = foldl (flip P.enableExtension)
+
+pandocExtsWith :: [P.Extension] -> P.Extensions
+pandocExtsWith = addPandocExts P.pandocExtensions
+
 renderMd ::
   IsMeta meta =>
   Env ->
@@ -91,8 +104,7 @@ renderMd ::
 renderMd env meta md config = do
   let readerOptions =
         P.def
-          { P.readerExtensions =
-              P.enableExtension P.Ext_emoji P.pandocExtensions
+          { P.readerExtensions = pandocExtsWith pandocReaderExtraExts
           }
       mathMethod = case cPandocMathMethod config of
         MathJax -> P.MathJax ""
@@ -107,7 +119,7 @@ renderMd env meta md config = do
                 P.compileTemplate "" (Html.layout (getTocTitle meta))
       writerOptions =
         P.def
-          { P.writerExtensions = P.pandocExtensions,
+          { P.writerExtensions = pandocExtsWith pandocWriterExtraExts,
             P.writerHTMLMathMethod = mathMethod,
             P.writerTemplate = Just tocTemplate,
             P.writerTableOfContents = usesToc meta,
@@ -115,9 +127,7 @@ renderMd env meta md config = do
           }
       runPandoc p = liftIO $ P.handleError =<< P.runIO p
 
-  let (MdFull finalMd) = case getData meta of
-        Nothing -> md
-        Just dt -> preprocessMd (getId meta) dt md
+  let (MdFull finalMd) = maybePreprocessMd meta config md
 
   doc <- runPandoc $ do
     mdDoc <-
@@ -128,14 +138,25 @@ renderMd env meta md config = do
 
   Html <$> runPandoc (P.writeHtml5String writerOptions doc')
 
+maybePreprocessMd ::
+  IsMeta meta =>
+  meta ->
+  Config ->
+  MdFull ->
+  MdFull
+maybePreprocessMd meta config md = case getData meta of
+  Nothing -> md
+  Just dt -> preprocessMd (getId meta) (dataAndConfig dt) md
+  where
+    configObj = Ae.object [ "config" .= Ae.toJSON (cRaw config) ]
+    dataAndConfig dt = mergeJSON [configObj, dt]
+
 preprocessMd :: Text -> Ae.Value -> MdFull -> MdFull
 preprocessMd pId dt (MdFull md) =
   MdFull $ Tx.L.toStrict $ Mu.renderMustache tmpl dt
   where
     pname = fromString (Tx.unpack pId)
-    tmpl = case Mu.compileMustacheText pname md of
-      Left err -> error (show err)
-      Right t -> t
+    tmpl = either (error . show) id $ Mu.compileMustacheText pname md
 
 setRefSectionTitle :: IsMeta meta => meta -> P.Pandoc -> P.Pandoc
 setRefSectionTitle meta (P.Pandoc pMeta blocks) = P.Pandoc pMeta' blocks
