@@ -14,11 +14,13 @@ import qualified Data.Aeson as Ae
 import qualified Data.Bifunctor as Bi
 import Data.Foldable (foldl')
 import Data.Maybe (fromMaybe)
+import Data.String (fromString)
 import Data.String.Interpolate (i, __i)
 import Data.Text (Text)
 import qualified Data.Text as Tx
 import Data.Text.Encoding (encodeUtf8)
 import qualified Data.Text.IO as Tx.IO
+import qualified Data.Text.Lazy as Tx.L
 import Data.Void (Void)
 import qualified Data.Yaml as Yaml
 import qualified Development.Shake as S
@@ -38,6 +40,7 @@ import Peits.Types
 import Peits.Util (hashText)
 import qualified Text.Megaparsec as M
 import qualified Text.Megaparsec.Char as M
+import qualified Text.Mustache as Mu
 import qualified Text.Pandoc as P
 import Text.Pandoc.Builder (ToMetaValue)
 import Text.Pandoc.Citeproc (processCitations)
@@ -59,7 +62,7 @@ parseAndRenderPage env fp config = do
   pure $ Page meta fp htmlFp html
 
 parseAndRenderMd ::
-  (Ae.FromJSON meta, Toc meta, Bibliography meta) =>
+  (Ae.FromJSON meta, IsMeta meta) =>
   Env ->
   FilePath ->
   Config ->
@@ -79,13 +82,13 @@ parseMd fp = do
   pure (meta, MdContent md, MdFull mdFull)
 
 renderMd ::
-  (Toc meta, Bibliography meta) =>
+  IsMeta meta =>
   Env ->
   meta ->
   MdFull ->
   Config ->
   S.Action Html
-renderMd env meta (MdFull md) config = do
+renderMd env meta md config = do
   let readerOptions =
         P.def
           { P.readerExtensions =
@@ -112,15 +115,29 @@ renderMd env meta (MdFull md) config = do
           }
       runPandoc p = liftIO $ P.handleError =<< P.runIO p
 
+  let (MdFull finalMd) = case getData meta of
+        Nothing -> md
+        Just dt -> preprocessMd (getId meta) dt md
+
   doc <- runPandoc $ do
-    mdDoc <- setRefSectionTitle meta <$> P.readMarkdown readerOptions md
+    mdDoc <-
+      setRefSectionTitle meta <$> P.readMarkdown readerOptions finalMd
     let filters = [processCitations | usesCitations meta]
     foldl' (>>=) (pure mdDoc) filters
   doc' <- filterPandoc env config doc
 
   Html <$> runPandoc (P.writeHtml5String writerOptions doc')
 
-setRefSectionTitle :: Bibliography meta => meta -> P.Pandoc -> P.Pandoc
+preprocessMd :: Text -> Ae.Value -> MdFull -> MdFull
+preprocessMd pId dt (MdFull md) =
+  MdFull $ Tx.L.toStrict $ Mu.renderMustache tmpl dt
+  where
+    pname = fromString (Tx.unpack pId)
+    tmpl = case Mu.compileMustacheText pname md of
+      Left err -> error (show err)
+      Right t -> t
+
+setRefSectionTitle :: IsMeta meta => meta -> P.Pandoc -> P.Pandoc
 setRefSectionTitle meta (P.Pandoc pMeta blocks) = P.Pandoc pMeta' blocks
   where
     refSectionTitle = getReferenceSectionTitle meta

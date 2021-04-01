@@ -74,7 +74,8 @@ data Meta = Meta
     mTocTitle :: Text,
     mTocDepth :: Int,
     mBibliography :: Maybe Ae.Value,
-    mReferenceSectionTitle :: Text
+    mReferenceSectionTitle :: Text,
+    mData :: Maybe Ae.Value
   }
   deriving (Show)
 
@@ -95,6 +96,7 @@ instance Ae.FromJSON Meta where
     mBibliography <- v .:? "bibliography"
     mReferenceSectionTitle <-
       v .:? "reference-section-title" .!= defaultReferenceSectionTitle
+    mData <- v .:? "data"
     pure Meta {..}
 
 instance Ae.ToJSON Meta where
@@ -111,7 +113,8 @@ instance Ae.ToJSON Meta where
         "toc-title" .= mTocTitle,
         "toc-depth" .= mTocDepth,
         "bibliography" .= mBibliography,
-        "reference-section-title" .= mReferenceSectionTitle
+        "reference-section-title" .= mReferenceSectionTitle,
+        "data" .= mData
       ]
 
 newtype Tag = Tag {unTag :: Text}
@@ -201,7 +204,8 @@ data PageMeta = PageMeta
     pgmTocTitle :: Text,
     pgmTocDepth :: Int,
     pgmBibliography :: Maybe Ae.Value,
-    pgmReferenceSectionTitle :: Text
+    pgmReferenceSectionTitle :: Text,
+    pgmData :: Maybe Ae.Value
   }
 
 instance Ae.FromJSON PageMeta where
@@ -214,6 +218,7 @@ instance Ae.FromJSON PageMeta where
       <*> v .:? "toc-depth" .!= defaultTocDepth
       <*> v .:? "bibliography"
       <*> v .:? "reference-section-title" .!= defaultReferenceSectionTitle
+      <*> v .:? "data"
 
 instance Ae.ToJSON PageMeta where
   toJSON PageMeta {..} =
@@ -224,7 +229,8 @@ instance Ae.ToJSON PageMeta where
         "toc-title" .= pgmTocTitle,
         "toc-depth" .= pgmTocDepth,
         "bibliography" .= pgmBibliography,
-        "reference-section-title" .= pgmReferenceSectionTitle
+        "reference-section-title" .= pgmReferenceSectionTitle,
+        "data" .= pgmData
       ]
 
 data ListPage = ListPage
@@ -264,32 +270,47 @@ instance Ae.ToJSON Feed where
         "feed_updated" .= showDateIso fUpdated
       ]
 
-class Toc a where
+class IsMeta a where
+  getTitle :: a -> Text
+  getId :: a -> Text
+
   usesToc :: a -> Bool
   getTocTitle :: a -> Text
   getTocDepth :: a -> Int
 
-instance Toc Meta where
-  usesToc = mToc
-  getTocTitle = mTocTitle
-  getTocDepth = mTocDepth
-
-instance Toc PageMeta where
-  usesToc = pgmToc
-  getTocTitle = pgmTocTitle
-  getTocDepth = pgmTocDepth
-
-class Bibliography a where
   getBibliography :: a -> Maybe Ae.Value
   getReferenceSectionTitle :: a -> Text
 
   usesCitations :: a -> Bool
   usesCitations = isJust . getBibliography
 
-instance Bibliography Meta where
+  usesData :: a -> Bool
+  usesData = isJust . getData
+
+  getData :: a -> Maybe Ae.Value
+
+instance IsMeta Meta where
+  getTitle = mTitle
+  getId = mId
+
+  usesToc = mToc
+  getTocTitle = mTocTitle
+  getTocDepth = mTocDepth
+
   getBibliography = mBibliography
   getReferenceSectionTitle = mReferenceSectionTitle
 
-instance Bibliography PageMeta where
+  getData = mData
+
+instance IsMeta PageMeta where
+  getTitle = pgmTitle
+  getId = pgmId
+
+  usesToc = pgmToc
+  getTocTitle = pgmTocTitle
+  getTocDepth = pgmTocDepth
+
   getBibliography = pgmBibliography
   getReferenceSectionTitle = pgmReferenceSectionTitle
+
+  getData = pgmData
