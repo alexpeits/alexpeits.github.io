@@ -1,15 +1,15 @@
 {
-  "date": "Fri Apr 9 11:23:25 2021 +0100",
-  "sha": "202ac5236778186cdff0bc2ad9c90d5d82b652ac",
-  "commit_message": "Merge pull request #21 from alexpeits/dependabot/github_actions/JamesIves/github-pages-deploy-action-4.1.1
+  "date": "Fri Apr 9 11:23:37 2021 +0100",
+  "sha": "1b0342c67339ac67ab2e88262fda8b1eab1dfc92",
+  "commit_message": "Merge pull request #23 from alexpeits/dependabot/github_actions/cachix/install-nix-action-v13
 
-Bump JamesIves/github-pages-deploy-action from 4.1.0 to 4.1.1",
+Bump cachix/install-nix-action from v12 to v13",
   "home": "https://alexpeits.github.io",
   "gh_actor": "alexpeits",
   "gh_repository": "alexpeits/alexpeits.github.io",
   "gh_event_name": "push",
-  "gh_run_id": "732706164",
-  "gh_run_number": "138",
-  "gh_sha": "202ac5236778186cdff0bc2ad9c90d5d82b652ac",
+  "gh_run_id": "732706725",
+  "gh_run_number": "139",
+  "gh_sha": "1b0342c67339ac67ab2e88262fda8b1eab1dfc92",
   "gh_ref": "refs/heads/develop"
 }
