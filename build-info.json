@@ -1,15 +1,15 @@
 {
-  "date": "Fri Apr 9 11:23:37 2021 +0100",
-  "sha": "1b0342c67339ac67ab2e88262fda8b1eab1dfc92",
-  "commit_message": "Merge pull request #23 from alexpeits/dependabot/github_actions/cachix/install-nix-action-v13
+  "date": "Fri Apr 9 11:27:37 2021 +0100",
+  "sha": "b9f27a0eb16d5f4404ec571b25afa60c11bd4ef0",
+  "commit_message": "Merge pull request #24 from alexpeits/dependabot/github_actions/cachix/cachix-action-v10
 
-Bump cachix/install-nix-action from v12 to v13",
+Bump cachix/cachix-action from v8 to v10",
   "home": "https://alexpeits.github.io",
   "gh_actor": "alexpeits",
   "gh_repository": "alexpeits/alexpeits.github.io",
   "gh_event_name": "push",
-  "gh_run_id": "732706725",
-  "gh_run_number": "139",
-  "gh_sha": "1b0342c67339ac67ab2e88262fda8b1eab1dfc92",
+  "gh_run_id": "732716827",
+  "gh_run_number": "141",
+  "gh_sha": "b9f27a0eb16d5f4404ec571b25afa60c11bd4ef0",
   "gh_ref": "refs/heads/develop"
 }
