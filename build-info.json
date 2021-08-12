@@ -1,15 +1,15 @@
 {
-  "date": "Fri Apr 9 11:27:37 2021 +0100",
-  "sha": "b9f27a0eb16d5f4404ec571b25afa60c11bd4ef0",
-  "commit_message": "Merge pull request #24 from alexpeits/dependabot/github_actions/cachix/cachix-action-v10
+  "date": "Thu Aug 12 11:55:39 2021 +0100",
+  "sha": "4519b38875a746e0a44ef3671dc408f33d991419",
+  "commit_message": "Merge pull request #28 from alexpeits/dependabot/npm_and_yarn/ws-7.4.6
 
-Bump cachix/cachix-action from v8 to v10",
+Bump ws from 7.4.4 to 7.4.6",
   "home": "https://alexpeits.github.io",
   "gh_actor": "alexpeits",
   "gh_repository": "alexpeits/alexpeits.github.io",
   "gh_event_name": "push",
-  "gh_run_id": "732716827",
-  "gh_run_number": "141",
-  "gh_sha": "b9f27a0eb16d5f4404ec571b25afa60c11bd4ef0",
+  "gh_run_id": "1123604684",
+  "gh_run_number": "148",
+  "gh_sha": "4519b38875a746e0a44ef3671dc408f33d991419",
   "gh_ref": "refs/heads/develop"
 }
