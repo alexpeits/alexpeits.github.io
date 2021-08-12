@@ -1,15 +1,15 @@
 {
-  "date": "Thu Aug 12 11:55:39 2021 +0100",
-  "sha": "4519b38875a746e0a44ef3671dc408f33d991419",
-  "commit_message": "Merge pull request #28 from alexpeits/dependabot/npm_and_yarn/ws-7.4.6
+  "date": "Thu Aug 12 12:03:39 2021 +0100",
+  "sha": "63a47404944ba6c74308e2fe23c0d20ea369b9e9",
+  "commit_message": "Merge pull request #30 from alexpeits/dependabot/github_actions/gaurav-nelson/github-action-markdown-link-check-1.0.13
 
-Bump ws from 7.4.4 to 7.4.6",
+Bump gaurav-nelson/github-action-markdown-link-check from 1.0.12 to 1.0.13",
   "home": "https://alexpeits.github.io",
   "gh_actor": "alexpeits",
   "gh_repository": "alexpeits/alexpeits.github.io",
   "gh_event_name": "push",
-  "gh_run_id": "1123604684",
-  "gh_run_number": "148",
-  "gh_sha": "4519b38875a746e0a44ef3671dc408f33d991419",
+  "gh_run_id": "1123626905",
+  "gh_run_number": "149",
+  "gh_sha": "63a47404944ba6c74308e2fe23c0d20ea369b9e9",
   "gh_ref": "refs/heads/develop"
 }
