@@ -28,7 +28,7 @@ jobs:
         with:
           config-file: '.github/config/markdown_link_check.json'
       - name: Install nix
-        uses: cachix/install-nix-action@v13
+        uses: cachix/install-nix-action@v14
       - name: Setup cachix
         uses: cachix/cachix-action@v10
         with:
