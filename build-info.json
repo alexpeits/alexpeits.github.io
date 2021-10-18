@@ -1,15 +1,13 @@
 {
-  "date": "Mon Oct 18 10:29:46 2021 +0100",
-  "sha": "197341362f16e563e2e461747b068f10a6264f53",
-  "commit_message": "Merge pull request #34 from alexpeits/dependabot/github_actions/actions/checkout-2.3.5
-
-Bump actions/checkout from 2.3.4 to 2.3.5",
+  "date": "Mon Oct 18 10:30:38 2021 +0100",
+  "sha": "10ac81408f881b5023a65fddb398058503128f15",
+  "commit_message": "Add strava",
   "home": "https://alexpeits.github.io",
   "gh_actor": "alexpeits",
   "gh_repository": "alexpeits/alexpeits.github.io",
   "gh_event_name": "push",
-  "gh_run_id": "1353992229",
-  "gh_run_number": "156",
-  "gh_sha": "197341362f16e563e2e461747b068f10a6264f53",
+  "gh_run_id": "1353996969",
+  "gh_run_number": "157",
+  "gh_sha": "10ac81408f881b5023a65fddb398058503128f15",
   "gh_ref": "refs/heads/develop"
 }
