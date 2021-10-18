@@ -1,15 +1,15 @@
 {
-  "date": "Thu Aug 12 12:03:39 2021 +0100",
-  "sha": "63a47404944ba6c74308e2fe23c0d20ea369b9e9",
-  "commit_message": "Merge pull request #30 from alexpeits/dependabot/github_actions/gaurav-nelson/github-action-markdown-link-check-1.0.13
+  "date": "Mon Oct 18 10:29:23 2021 +0100",
+  "sha": "86289a822527ed77e5a837c1e14101b5f722706d",
+  "commit_message": "Merge pull request #31 from alexpeits/dependabot/github_actions/JamesIves/github-pages-deploy-action-4.1.5
 
-Bump gaurav-nelson/github-action-markdown-link-check from 1.0.12 to 1.0.13",
+Bump JamesIves/github-pages-deploy-action from 4.1.1 to 4.1.5",
   "home": "https://alexpeits.github.io",
   "gh_actor": "alexpeits",
   "gh_repository": "alexpeits/alexpeits.github.io",
   "gh_event_name": "push",
-  "gh_run_id": "1123626905",
-  "gh_run_number": "149",
-  "gh_sha": "63a47404944ba6c74308e2fe23c0d20ea369b9e9",
+  "gh_run_id": "1353990919",
+  "gh_run_number": "154",
+  "gh_sha": "86289a822527ed77e5a837c1e14101b5f722706d",
   "gh_ref": "refs/heads/develop"
 }
