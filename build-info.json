@@ -1,13 +1,13 @@
 {
-  "date": "Mon Oct 18 10:30:38 2021 +0100",
-  "sha": "10ac81408f881b5023a65fddb398058503128f15",
-  "commit_message": "Add strava",
+  "date": "Mon Oct 18 10:33:37 2021 +0100",
+  "sha": "d80834c02ebc5bd3cf41626afc57047ac1f304fe",
+  "commit_message": "yarn upgrade",
   "home": "https://alexpeits.github.io",
   "gh_actor": "alexpeits",
   "gh_repository": "alexpeits/alexpeits.github.io",
   "gh_event_name": "push",
-  "gh_run_id": "1353996969",
-  "gh_run_number": "157",
-  "gh_sha": "10ac81408f881b5023a65fddb398058503128f15",
+  "gh_run_id": "1354007198",
+  "gh_run_number": "159",
+  "gh_sha": "d80834c02ebc5bd3cf41626afc57047ac1f304fe",
   "gh_ref": "refs/heads/develop"
 }
