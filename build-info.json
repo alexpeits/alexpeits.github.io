@@ -1,15 +1,15 @@
 {
-  "date": "Mon Oct 18 10:29:37 2021 +0100",
-  "sha": "be6850e29abd4fe71f3abd731c57c8c28286a5a1",
-  "commit_message": "Merge pull request #33 from alexpeits/dependabot/github_actions/cachix/install-nix-action-14.1
+  "date": "Mon Oct 18 10:29:46 2021 +0100",
+  "sha": "197341362f16e563e2e461747b068f10a6264f53",
+  "commit_message": "Merge pull request #34 from alexpeits/dependabot/github_actions/actions/checkout-2.3.5
 
-Bump cachix/install-nix-action from 13 to 14.1",
+Bump actions/checkout from 2.3.4 to 2.3.5",
   "home": "https://alexpeits.github.io",
   "gh_actor": "alexpeits",
   "gh_repository": "alexpeits/alexpeits.github.io",
   "gh_event_name": "push",
-  "gh_run_id": "1353991755",
-  "gh_run_number": "155",
-  "gh_sha": "be6850e29abd4fe71f3abd731c57c8c28286a5a1",
+  "gh_run_id": "1353992229",
+  "gh_run_number": "156",
+  "gh_sha": "197341362f16e563e2e461747b068f10a6264f53",
   "gh_ref": "refs/heads/develop"
 }
