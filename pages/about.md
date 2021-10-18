@@ -27,11 +27,12 @@ In this site you can also find a [list of some of my projects][projects] and a
 ---
 
 - []{.fas .fa-at} `alexpeitsinis [at] gmail [dot] com`
-- []{.fab .fa-github} [alexpeits][github]
-- []{.fab .fa-twitter} [\@alexpeits][twitter]
-- []{.fab .fa-linkedin-in} [alexpeits][linkedin]
-- []{.fab .fa-reddit-alien} [u/primitiveinds][reddit]
-- []{.fab .fa-keybase} [alexpeits][keybase]
+- []{.fab .fa-github} [github][github]
+- []{.fab .fa-twitter} [twitter][twitter]
+- []{.fab .fa-linkedin-in} [linkedin][linkedin]
+- []{.fab .fa-reddit-alien} [reddit][reddit]
+- []{.fab .fa-keybase} [keybase][keybase]
+- []{.fab .fa-strava} [strava][strava]
 
 <!-- links -->
 
@@ -59,3 +60,4 @@ In this site you can also find a [list of some of my projects][projects] and a
 [linkedin]: <https://www.linkedin.com/in/alexandros-peitsinis/>
 [reddit]: <https://reddit.com/u/primitiveinds>
 [keybase]: <https://keybase.io/alexpeits>
+[strava]: <https://www.strava.com/athletes/85995561>
