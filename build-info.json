@@ -1,13 +1,15 @@
 {
-  "date": "Mon Oct 18 10:33:37 2021 +0100",
-  "sha": "d80834c02ebc5bd3cf41626afc57047ac1f304fe",
-  "commit_message": "yarn upgrade",
+  "date": "Mon Oct 18 10:37:18 2021 +0100",
+  "sha": "4b27792456f80f5a9fde5a4d7ffc407de8dd86ed",
+  "commit_message": "Merge pull request #26 from alexpeits/dependabot/github_actions/avto-dev/markdown-lint-1.5.0
+
+Bump avto-dev/markdown-lint from 1 to 1.5.0",
   "home": "https://alexpeits.github.io",
   "gh_actor": "alexpeits",
   "gh_repository": "alexpeits/alexpeits.github.io",
   "gh_event_name": "push",
-  "gh_run_id": "1354007198",
-  "gh_run_number": "159",
-  "gh_sha": "d80834c02ebc5bd3cf41626afc57047ac1f304fe",
+  "gh_run_id": "1354020751",
+  "gh_run_number": "160",
+  "gh_sha": "4b27792456f80f5a9fde5a4d7ffc407de8dd86ed",
   "gh_ref": "refs/heads/develop"
 }
