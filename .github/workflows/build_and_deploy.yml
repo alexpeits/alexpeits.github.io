@@ -41,7 +41,7 @@ jobs:
           make build-info-gh-actions
       - name: Deploy
         if: ${{ github.event_name == 'push' }}
-        uses: JamesIves/github-pages-deploy-action@4.1.5
+        uses: JamesIves/github-pages-deploy-action@4.1.6
         with:
           BRANCH: master
           FOLDER: site
