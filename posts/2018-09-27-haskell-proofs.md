@@ -890,7 +890,7 @@ This was a lengthy blog post, and the ideas presented fall into the obscure side
 of things. Should there be a need to resort to dependent types, the above might
 prove useful. Nevertheless, it's a fun way to explore both dependent types and
 translating mathematical proofs to Haskell. After all, as someone said in the
-[functional programming slack](https://fpchat-invite.herokuapp.com/),
+[functional programming slack](https://functionalprogramming.slack.com/),
 
 > A relatively large number of people making zygosynchroid semi-applicative
 > plesiofunctors, one madman pushing the type system to its limits, and like
