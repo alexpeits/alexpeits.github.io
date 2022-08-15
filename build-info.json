@@ -1,15 +1,15 @@
 {
-  "date": "Mon Aug 15 11:03:45 2022 +0100",
-  "sha": "b93fd9950db74f871d9091f537d202483ccd0660",
-  "commit_message": "Merge pull request #52 from alexpeits/dependabot/github_actions/cachix/install-nix-action-17
+  "date": "Mon Aug 15 11:04:58 2022 +0100",
+  "sha": "9dac51a4a5b4c5346010cb4de41cddd85a6be630",
+  "commit_message": "Merge pull request #49 from alexpeits/dependabot/github_actions/gaurav-nelson/github-action-markdown-link-check-1.0.14
 
-Bump cachix/install-nix-action from 14.1 to 17",
+Bump gaurav-nelson/github-action-markdown-link-check from 1.0.13 to 1.0.14",
   "home": "https://alexpeits.github.io",
   "gh_actor": "alexpeits",
   "gh_repository": "alexpeits/alexpeits.github.io",
   "gh_event_name": "push",
-  "gh_run_id": "2859902066",
-  "gh_run_number": "195",
-  "gh_sha": "b93fd9950db74f871d9091f537d202483ccd0660",
+  "gh_run_id": "2859909373",
+  "gh_run_number": "196",
+  "gh_sha": "9dac51a4a5b4c5346010cb4de41cddd85a6be630",
   "gh_ref": "refs/heads/develop"
 }
