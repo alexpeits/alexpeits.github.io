@@ -66,7 +66,7 @@ I'll also try to note why and when an extension should be enabled.
 I've already given some spoilers, so here it is: to achieve what we want to do
 I'm going to use whatever Haskell offers to simulate a dependently typed
 language. To better understand the what and how of dependent types, I suggest
-taking a look at any work by [Richard Eisenberg](https://cs.brynmawr.edu/~rae/),
+taking a look at any work by [Richard Eisenberg](https://richarde.dev/),
 especially the extremely well written [*Stitch*][stitch] functional pearl
 [@eisenberg-2020-stitch]. Another great resource for everything type-level
 related is the book ["Thinking with Types"][thinking-with-types] by [Sandy
@@ -77,7 +77,7 @@ what needs to be done differently in Haskell and how.
 Many of the following do not require dependent types and can probably be modeled
 using e.g. type classes, but I'm going to use dependent types here.
 
-[stitch]: <https://cs.brynmawr.edu/~rae/papers/2018/stitch/stitch.pdf>
+[stitch]: <https://richarde.dev/papers/2018/stitch/stitch.pdf>
 [thinking-with-types]: <https://thinkingwithtypes.com/>
 [Sandy-maguire]: <http://reasonablypolymorphic.com/>
 [idris]: <http://docs.idris-lang.org/en/latest/tutorial/typesfuns.html>
