@@ -9,7 +9,7 @@ module Peits.Types where
 
 import Data.Aeson ((.!=), (.:), (.:?), (.=))
 import qualified Data.Aeson as Ae
-import qualified Data.HashMap.Strict as HM
+import qualified Data.Aeson.KeyMap as KM
 import Data.List (sortOn)
 import Data.Maybe (isJust)
 import qualified Data.Set as Set
@@ -249,7 +249,7 @@ instance Ae.FromJSON ListPage where
       <*> v .: "data"
 
 instance Ae.ToJSON ListPage where
-  toJSON ListPage {..} = Ae.Object $ HM.union content meta
+  toJSON ListPage {..} = Ae.Object $ KM.union content meta
     where
       (Ae.Object content) =
         Ae.object

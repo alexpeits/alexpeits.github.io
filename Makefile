@@ -1,4 +1,4 @@
-NIXPKGS?=nixpkgs
+NIXPKGS?=nixos
 HOOGLE_PORT?=8888
 PORT?=8080
 EXE?=peits
@@ -24,6 +24,10 @@ serve:
 
 watch: clean
 	./watch.sh --highlight=prismjs
+
+format:
+	nixpkgs-fmt default.nix
+	ormolu ${ORMOLU_ARGS} -i $$(find app/ -name '*.hs')
 
 copy-nix-files:
 	mkdir -p site

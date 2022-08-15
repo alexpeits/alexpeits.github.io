@@ -2,7 +2,7 @@
 let
   nixpkgs =
     if isNull pkgs then
-      import (import ./nix/sources.nix).nixpkgs { }
+      import (import ./nix/sources.nix).nixos { }
     else if builtins.typeOf pkgs == "set" then
       pkgs
     else
@@ -40,13 +40,24 @@ let
         src = nixpkgs.lib.sourceByRegex ./. appSrcRegex;
         drv = self.callCabal2nix "peits" src { };
       in
-        hsPkgs // { peits = drv; };
+      hsPkgs // { peits = drv; };
   };
 
+  isMac =
+    builtins.any
+      (arch: builtins.currentSystem == arch)
+      [ "x86_64-darwin" ];
+
+  inotify = if isMac then [ nixpkgs.entr ] else [ nixpkgs.inotify-tools ];
+
+  nodejs = nixpkgs.nodejs-16_x;
+  mermaid-cli = nixpkgs.nodePackages.mermaid-cli.override { nodejs = nodejs; };
+  yarn = nixpkgs.yarn.override { nodejs = nodejs; };
+
   deps = [
-    nixpkgs.python37Packages.pygments
+    nixpkgs.python310Packages.pygments
     nixpkgs.minify
-    nixpkgs.nodePackages.mermaid-cli
+    # mermaid-cli
   ];
 
   site = nixpkgs.stdenv.mkDerivation {
@@ -65,20 +76,13 @@ let
     '';
   };
 
-  isDarwin =
-    builtins.any
-      (arch: builtins.currentSystem == arch)
-      [ "x86_64-darwin" ];
-
-  inotify = if isDarwin then [ nixpkgs.entr ] else [ nixpkgs.inotify-tools ];
-
-  yarn = nixpkgs.yarn.override { nodejs = nixpkgs.nodejs-12_x; };
   shell = haskellPackages.shellFor {
     packages = ps: [ ps.peits ];
     buildInputs = deps ++ inotify ++ [
       haskellPackages.ghcid
       haskellPackages.cabal-install
-      nixpkgs.nodejs-12_x
+      haskellPackages.ormolu
+      nodejs
       yarn
     ];
     withHoogle = true;

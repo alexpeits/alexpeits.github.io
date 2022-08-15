@@ -10,8 +10,8 @@ import Control.Applicative ((<|>))
 import Control.Monad (void)
 import Control.Monad.Combinators (manyTill)
 import Control.Monad.IO.Class (liftIO)
-import qualified Data.Aeson as Ae
 import Data.Aeson ((.=))
+import qualified Data.Aeson as Ae
 import qualified Data.Bifunctor as Bi
 import Data.Foldable (foldl')
 import Data.Maybe (fromMaybe)
@@ -148,7 +148,7 @@ maybePreprocessMd meta config md = case getData meta of
   Nothing -> md
   Just dt -> preprocessMd (getId meta) (dataAndConfig dt) md
   where
-    configObj = Ae.object [ "config" .= Ae.toJSON (cRaw config) ]
+    configObj = Ae.object ["config" .= Ae.toJSON (cRaw config)]
     dataAndConfig dt = mergeJSON [configObj, dt]
 
 preprocessMd :: Text -> Ae.Value -> MdFull -> MdFull

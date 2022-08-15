@@ -7,8 +7,8 @@ module Peits.Util where
 import qualified Crypto.Hash as Crypto
 import Data.Aeson ((.=))
 import qualified Data.Aeson as Ae
+import qualified Data.Aeson.KeyMap as KM
 import Data.ByteString (ByteString)
-import qualified Data.HashMap.Strict as HM
 import Data.List (foldl1')
 import Data.String.Interpolate (i)
 import Data.Text (Text)
@@ -37,13 +37,13 @@ hashText = Tx.pack . show . hash . encodeUtf8
     hash :: ByteString -> Crypto.Digest Crypto.SHA1
     hash = Crypto.hash
 
-json :: Ae.ToJSON v => Text -> v -> Ae.Value
+json :: Ae.ToJSON v => Ae.Key -> v -> Ae.Value
 json k v = Ae.object [k .= Ae.toJSON v]
 
 mergeJSON :: [Ae.Value] -> Ae.Value
 mergeJSON = foldl1' merge
   where
-    merge (Ae.Object l) (Ae.Object r) = Ae.Object (HM.union l r)
+    merge (Ae.Object l) (Ae.Object r) = Ae.Object (KM.union l r)
     merge _ _ = error "Cannot merge non-object values"
 
 newConstCache :: S.Action v -> S.Rules (S.Action v)
