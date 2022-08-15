@@ -1,15 +1,15 @@
 {
-  "date": "Mon Aug 15 11:05:14 2022 +0100",
-  "sha": "b97ecca890b4b3bbcbbd0b5660172643e7ec5061",
-  "commit_message": "Merge pull request #55 from alexpeits/dependabot/github_actions/actions/checkout-3.0.2
+  "date": "Mon Aug 15 11:06:26 2022 +0100",
+  "sha": "50be9a862aa43bc54f811772c044a3454e217b3e",
+  "commit_message": "Merge pull request #46 from alexpeits/dependabot/npm_and_yarn/follow-redirects-1.14.8
 
-Bump actions/checkout from 2.3.5 to 3.0.2",
+Bump follow-redirects from 1.14.4 to 1.14.8",
   "home": "https://alexpeits.github.io",
   "gh_actor": "alexpeits",
   "gh_repository": "alexpeits/alexpeits.github.io",
   "gh_event_name": "push",
-  "gh_run_id": "2859910821",
-  "gh_run_number": "198",
-  "gh_sha": "b97ecca890b4b3bbcbbd0b5660172643e7ec5061",
+  "gh_run_id": "2859917590",
+  "gh_run_number": "200",
+  "gh_sha": "50be9a862aa43bc54f811772c044a3454e217b3e",
   "gh_ref": "refs/heads/develop"
 }
