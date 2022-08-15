@@ -1,15 +1,15 @@
 {
-  "date": "Mon Aug 15 11:04:58 2022 +0100",
-  "sha": "9dac51a4a5b4c5346010cb4de41cddd85a6be630",
-  "commit_message": "Merge pull request #49 from alexpeits/dependabot/github_actions/gaurav-nelson/github-action-markdown-link-check-1.0.14
+  "date": "Mon Aug 15 11:05:14 2022 +0100",
+  "sha": "b97ecca890b4b3bbcbbd0b5660172643e7ec5061",
+  "commit_message": "Merge pull request #55 from alexpeits/dependabot/github_actions/actions/checkout-3.0.2
 
-Bump gaurav-nelson/github-action-markdown-link-check from 1.0.13 to 1.0.14",
+Bump actions/checkout from 2.3.5 to 3.0.2",
   "home": "https://alexpeits.github.io",
   "gh_actor": "alexpeits",
   "gh_repository": "alexpeits/alexpeits.github.io",
   "gh_event_name": "push",
-  "gh_run_id": "2859909373",
-  "gh_run_number": "196",
-  "gh_sha": "9dac51a4a5b4c5346010cb4de41cddd85a6be630",
+  "gh_run_id": "2859910821",
+  "gh_run_number": "198",
+  "gh_sha": "b97ecca890b4b3bbcbbd0b5660172643e7ec5061",
   "gh_ref": "refs/heads/develop"
 }
